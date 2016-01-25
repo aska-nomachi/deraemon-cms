@@ -1,0 +1,263 @@
+@font-face {
+	font-family: 'mplus-1p-light';
+	src: url(fonts/mplus-1p-regular.ttf) format("truetype");
+}
+body {
+	color: #333333;
+	background-color: #ECEDEF;
+	font-family: 'mplus-1p-light', sans-serif;
+	font-size: 18px;
+	line-height: 1.6;
+}
+.title1 {
+	font-size: 40px;
+	padding: 10px 20px 10px 40px;
+	margin-left:20px;
+	position: relative;
+	text-transform: capitalize;
+}
+.title1:before {
+	color: #565D67;
+	content: '';
+	display: block;
+	position: absolute;
+	background-color: #565D67;
+	top: 0;
+	left: 0px;
+	bottom: 0;
+	width: 10px;
+	border-radius: 6px;
+}
+.title1-1{
+	text-transform: capitalize;
+	font-size: 40px;
+	text-align: center;
+	font-weight: bold;
+	line-height: 60px;
+	border-bottom: 3px double #333333;
+}
+.title2 {
+	font-size: 23px;
+	color: #565D67;
+	padding: 0 0px 0 20px;
+	margin: 0 20px 0 0px;
+	position: relative;
+}
+.title2:before{
+	content: '';
+	display: block;
+	position: absolute;
+	border-left: 4px solid #565D67;
+	border-right: 4px solid #565D67;
+	top: 11px;
+	left: 0px;
+	width: 9px;
+	height: 20px;
+	border-radius: 4px;
+	line-height: 30px;
+}
+.more {
+	color: #333333;
+	display: inline-block;
+	padding: 2px 6px;
+	border: 1px solid #333333;
+	border-radius: 5px;
+}
+.more:hover {
+	color: tomato;
+}
+.wrapper {
+	max-width: 1240px;
+	min-width: 480px;
+	margin: 20px auto;
+	background: #ffffff;
+	border: 1px solid #ECEDEF;
+}
+.header_top {
+	background-color: #565D67;
+}
+.header_top-logo,
+.header_top-catch {
+	color: #ffffff;
+	text-transform: uppercase;
+	text-align: center;
+	text-decoration: none;
+	line-height: 100px;
+}
+.header_top-logo {
+	font-size: 50px;
+}
+.header_top-catch {
+	font-size: 20px;
+}
+.header_contact a {
+	display: block;
+	margin: 20px;
+	padding: 10px 20px;
+	border: 2px solid #ffffff;
+	border-radius: 5px;
+	margin-bottom: 10px;
+	font-size: 20px;
+	line-height: 26px;
+	text-transform: uppercase;
+	color: #ffffff;
+	text-align: center;
+}
+.header_contact a:hover {
+	color: tomato;
+}
+.gnav-list {
+	background-color: #9DA0A5;
+}
+.gnav-list-item {
+	display: inline-block;
+	margin-left: 10px;
+}
+.gnav-list-item a,
+.gnav-list-item span
+{
+	display: block;
+	font-size: 20px;
+	line-height: 1.4;
+	padding: 10px 14px;
+	color: #ffffff;
+	font-weight: bold;
+	text-transform: capitalize;
+}
+.gnav-list-item a:hover {
+	color: tomato;
+}
+.gnav-list-item span {
+	color: tomato;
+}
+.main-image {
+	padding: 80px;
+	text-align: center;
+	background-color: #CDCDCD;
+}
+.main-text {
+	padding: 30px;
+}
+.main-image {
+	padding: 80px;
+	text-align: center;
+	background-color: #CDCDCD;
+}
+.news-list-item {
+	border-bottom: 1px solid #CDCDCD
+}
+.news-list-more .more {
+	padding: 4px 12px;
+}
+.about_us-more .more {
+	padding: 4px 12px;
+}
+.products-list-item:nth-child(3n-2) {
+	clear: both;
+}
+.products-list-more {
+	padding: 4px 12px;
+}
+.footer {
+	color: #ffffff;
+	background-color: #565D67;
+}
+.totop {
+	float: right;
+	font-size: 20px;
+	line-height: 20px;
+	border: 2px solid #ffffff;
+	color: #ffffff;
+	padding: 5px 7px 5px 8px;
+	border-radius: 100%;
+}
+.totop:hover {
+	color: tomato;
+}
+.catch {
+	font-size: 28px;
+	text-align: center;
+	line-height: 1.2;
+}
+.paginate-item {
+	display: inline-block;
+}
+.paginate-item{
+	display: inline-block;
+	border: 1px solid #333333;
+	border-radius: 5px;
+	padding: 2px 8px 1px;
+	color: #333333;
+}
+a.paginate-item:hover{
+	color: tomato;
+}
+span.paginate-item {
+	color: tomato;
+}
+.news-list-item {
+	position: relative;
+	padding-bottom: 44px;
+}
+.news-list-item-more {
+	position: absolute;
+	right: 0;
+	bottom: 10px;;
+}
+.contact-form input
+{
+	font-size: 20px;
+	border: 1px solid #333333;
+	border-radius: 3px;
+	line-height: 30px;
+	padding: 10px;
+	width: 100%;
+}
+.contact-form textarea
+{
+	font-size: 20px;
+	border: 1px solid #333333;
+	border-radius: 3px;
+	line-height: 24px;
+	height: 20em;
+	padding: 10px;
+	width: 100%;
+}
+.contact-form button {
+	color: #333333;
+	display: inline-block;
+	padding: 6px 18px;
+	border: 1px solid #333333;
+	border-radius: 5px;
+}
+.contact-form button:hover {
+	color: tomato;
+}
+.contact-form-success,
+.contact-form-invalid,
+.ontact-form-exception
+{
+	border-width: 2px;
+	border-style: solid;
+	border-radius: 10px;
+}
+.contact-form-success li,
+.contact-form-invalid li,
+.ontact-form-exception li
+{
+	margin-left: 3em;
+	font-size: 12px;
+	list-style: circle;
+}
+.contact-form-success{
+	border-color: darkseagreen;
+	color: darkseagreen;
+}
+.contact-form-invalid{
+	border-color: salmon;
+	color: salmon;
+}
+.ontact-form-exception{
+	border-color: sandybrown;
+	color: sandybrown;
+}

@@ -1,0 +1,86 @@
+<!--ログインしてるときはリダイレクト-->
+{{#logged_in_user}}
+{{~redirect()}}
+{{/#}}
+
+{{^logged_in_user}}
+<section>
+
+	<!--メッセージここから-->
+	{{#register_result.success}}
+	{{#register_result.activate}}
+	<div id="notice" class="success">
+		<p>登録ありがとうございます。</p>
+		<p>まだ本登録ではありません。入力していただいたメールアドレスに登録メールを送りましたので、メールを確認し、本登録を完了してください。</p>
+	</div>
+	{{/#}}
+	{{^register_result.activate}}
+	<div id="notice" class="success">
+		<p>登録完了 Skses</p>
+		<p>登録完了しました。Resister Sksess. Terimakasih.</p>
+	</div>
+	{{/^}}
+	{{/#}}
+
+	{{#register_result.invalid}}
+	<div id="notice" class="invalid">
+		<p>入力を確認してください。Tolong check text anda</p>
+		<ul>
+			{{*register_result.errors : error}}
+			<li>{{error.message}} (field: {{error.field}})</li>
+			{{/*}}
+		</ul>
+	</div>
+	{{/#}}
+
+	{{#register_result.exception}}
+	<div id="notice" class="exception mb1">
+		<p>システムエラー System Error<p>
+		<p>もう一度送やり直してください Gagal</p>
+	</div>
+	{{/#}}
+	<!--メッセージここまで-->
+
+	{{^register_result.success}}
+	<form action="" method="POST">
+
+		<dl>
+			<dt>ユーザーID</dt>
+			<dd>
+				<input class="lpad1" type="text" name="username" value="{{register_result.post.username}}" placeholder="username">
+				<div>
+					<small>
+						ご希望のユーザーIDになります。ログインの時に必要になります。<br />
+						半角英字（a-z）、半角数字（0-9）、ダッシュ（-）、アンダースコア（_）をご利用できます。<br />
+						ex:baliblo_1122
+					</small>
+				</div>
+			</dd>
+			<dt>メールアドレス</dt>
+			<dd>
+				<input class="lpad1 lmar1-b" type="text" name="email" value="{{register_result.post.email}}" placeholder="email">
+				<div>
+					<small>
+						必ず連絡が出来るメールアドレスをご利用ください。<br />
+						このメールに本登録に必要なリンクをメール致します。<br />
+						登録後、変更可能です。公開されません。</small>
+				</div>
+			</dd>
+			<dt>パスワード</dt>
+			<dd>
+				<input class="lpad1 lmar1-b" type="password" name="password" value="{{register_result.post.password}}" placeholder="password">
+				<div>
+					<small>登録後、変更可能です。公開されません。<br />半角英数 8文字以上 16文字以内</small>
+				</div>
+			</dd>
+		</dl>
+
+		{{&ticket}}
+		<div>
+			<button type="submit" name="register" value="1">登録する</button>
+		</div>
+
+	</form>
+	{{/^}}
+</section>
+{{/^}}

@@ -1,0 +1,41 @@
+<header id="header" class="grd mb3">
+	<div class="mb1 fix">
+		<h1 class="gla4 ptrl3 pb2">
+			<a class="logo" href="{{host}}" title="">{{site_title}}</a>
+		</h1>
+</header>
+
+<div id="main">
+
+	<div class="login gla4 cnt p2">
+
+		<h1 class="ttl1 mb1">{{~__('directuser')}}</h1>
+
+		{{&notice}}
+
+		<form action="" method="POST">
+
+			<dl class="hor">
+				<dt>{{~__('username')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="username" value="{{post.username}}" placeholder="{{~__('username')}}...">
+				</dd>
+				<dt class="mb1">{{~__('')}}email</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="email" value="{{post.email}}" placeholder="{{~__('email')}}...">
+				</dd>
+				<dt class="mb1">{{~__('')}}password</dt><dd>
+					<input class="frm" type="password" name="password" value="{{post.password}}" placeholder="{{~__('password')}}...">
+				</dd>
+			</dl>
+
+			<div class="txr"><button class="btn" type="submit" name="" value="">{{~__('register')}}</button></div>
+
+		</form>
+
+	</div>
+</div>
+
+<footer id="footer">
+	<address class="txr m1">&copy; kohx</address>
+</footer>

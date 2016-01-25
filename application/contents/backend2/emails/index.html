@@ -1,0 +1,95 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">{{~__('emails')}} - {{~__('index')}}</h1>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<!--Create-->
+		<form class="mb1" action="" method="POST">
+
+			<dl class="hor">
+
+				<dt class="mb1">{{~__('segment')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="segment" value="{{post.segment}}" placeholder="{{~__('segment')}}...">
+				</dd>
+
+				<dt class="mb1">{{~__('name')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="name" value="{{post.name}}" placeholder="{{~__('name')}}...">
+				</dd>
+
+				<dt class="mb1">{{~__('description')}}</dt>
+				<dd class="mb1">
+					<textarea class="frm" rows="2" name="description" placeholder="{{~__('description')}}...">{{post.description}}</textarea>
+				</dd>
+
+			</dl>
+
+			<div class="txr"><button class="btn blue" type="submit" name="create" value="1"><i class="fa fa-plus-square"></i> {{~__('create')}}</button></div>
+
+		</form>
+		<!--/Create-->
+
+		<!--List-->
+		{{#emails}}
+		<div>
+
+			<table class="tbl">
+				<tr>
+					<th>{{~__('id')}}</th>
+					<th>{{~__('segment')}}</th>
+					<th>{{~__('name')}}</th>
+					<th>{{~__('description')}}</th>
+					<th>&nbsp;</th>
+				</tr>
+				{{*emails : email}}
+				<tr>
+					<td>{{email.id}}</td>
+					<td>{{email.segment}}</td>
+					<td>{{email.name}}</td>
+					<td>{{email.description}}</td>
+					<td class="txr">
+						<a class="btn" href="{{email.edit_url}}"><i class="fa fa-edit"></i> {{~__('edit')}}</a>
+					</td>
+				</tr>
+				{{/*}}
+			</table>
+
+		</div>
+		{{/#}}
+
+		{{^emails}}
+		<p>no emails...</p>
+		{{/^}}
+		<!--/List-->
+
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}

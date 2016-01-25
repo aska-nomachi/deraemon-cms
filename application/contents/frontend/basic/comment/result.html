@@ -1,0 +1,19 @@
+{{%item_comments = get_comments(item_segment = item.segment, order_column = 'created', order_direction = 'DESC')}}
+<section class="comment_result gla6 cnt m3">
+	<h2 class="ttl2">comments</h2>
+		<p>total: {{item_comments.total}}</p>
+		<ul>
+			{{*item_comments.comments: comment}}
+			<li>
+				<h3>{{comment.id}}: {{comment.display_name}}</h3>
+				<p>{{#comment.subject}}{{comment.subject}}{{/#}}{{^comment.subject}}no title{{/^}}</p>
+				{{#comment.replay_id: replay_id}}<p>replay to {{replay_id}}</p>{{/#}}
+				{{~auto_p(comment.content)}}
+				<p>{{~date_format('Y年n月j日 h時i分', comment.created)}}</p>
+			</li>
+			{{/*}}
+			{{^item_comments.comments}}
+			<li>no comment.</li>
+			{{/^}}
+		</ul>
+</section>

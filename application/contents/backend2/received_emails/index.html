@@ -1,0 +1,108 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">{{~__('received emails')}} - {{~__('index')}}</h1>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<!--Update-->
+		{{#received_emails}}
+		<form action="" method="POST">
+
+			<!--Sort-->
+			<nav class="sort">
+				<ul class="inl grd txr">
+					<li class="p1">{{~__('sort')}}</li>
+					{{*columns : column}}
+					<li class="p1">
+						{{#column.current}}
+						{{#column.current_asc}}<i class="fa fa-sort-asc"></i>{{/#}}
+						{{#column.current_desc}}<i class="fa fa-sort-desc"></i>{{/#}}
+						{{/#}}
+						<a href="{{column.url}}" title="{{column.name}}">
+							{{column.name}}
+						</a>
+					</li>
+					{{/*}}
+				</ul>
+			</nav>
+			<!--/Sort-->
+
+			<!--lists-->
+			<div class="lists grd mb1">
+				{{*received_emails : received_email}}
+				<article class="list ptb2 grd">
+					<div class="gla10 grd">
+						<h2 class="ttl2 mb1">
+							{{#received_email.email_name}}{{received_email.email_name}}{{/#}}
+							{{^received_email.email_name}}{{~__('no name')}}{{/^}}
+						</h2>
+
+						<div class="gla4">
+							<ul class="uns">
+								<li><span class="name">{{~__('id')}}</span>{{received_email.id}}</li>
+								<li><span class="name">{{~__('created')}}</span>{{received_email.created}}</li>
+							</ul>
+						</div>
+
+						<dl class="gla8">
+							{{*received_email.objects: object}}
+							<dt>{{~__(object.key)}}</dt>
+							<dd class="mb1">{{~auto_p(object.value)}}</dd>
+							{{/*}}
+						</dl>
+					</div>
+
+					<div class="gla2 txr">
+						<input type="checkbox" name="delete_received_email_id[{{received_email.id}}]" value="{{received_email.id}}" {{~form_value(post.delete_received_email_id)}}>
+						<a class="delete btn red" href="{{received_email.delete_url}}" title="delete"><i class="fa fa-minus-square"></i> {{~__('delete')}}</a>
+					</div>
+				</article>
+				{{/*}}
+			</div>
+			<!--/lists-->
+
+			<div class="txr">
+				<button class="delete btn red" type="submit" name="delete" value="1"><i class="fa fa-minus-square"></i> {{~__('select delete')}}</button>
+			</div>
+
+		</form>
+		{{/#}}
+
+		{{^received_emails}}
+		<p>{{~__('no received emails')}}...</p>
+		{{/^}}
+		<!--/Update-->
+
+		<!--Pagenate-->
+		<div class="txc">{{>pagenate}}</div>
+		<!--/Pagenate-->
+
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}

@@ -1,0 +1,72 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">{{~__('settings')}} - {{~__('frontend')}}</h1>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<!--Update-->
+		<form action="" method="POST">
+
+			<dl class="hor">
+				<dt class="mb1">{{~__('frontend theme')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="frontend_theme" value="{{settings.frontend_theme}}" placeholder="{{~__('frontend theme')}}...">
+					<p class="note pt1">テーマフォルダの名前を入力します。</p>
+				</dd>
+				<dt class="mb1">{{~__('lang')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="lang" value="{{settings.lang}}" placeholder="{{~__('lang')}}...">
+					<p class="note pt1">サイトの使用言語を選びます。ja、en、id etc.</p>
+				</dd>
+				<dt class="mb1">{{~__('home page')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="home_page" value="{{settings.home_page}}" placeholder="{{~__('home page')}}...">
+					<p class="note pt1">最初に表示する、itemのsegmentを入力します。</p>
+				</dd>
+				<dt class="mb1">{{~__('site details')}}</dt>
+				<dd class="mb1">
+					<textarea class="frm" rows="10" name="site_details" placeholder="{{~__('site details')}}...">{{settings.site_details}}</textarea>
+					<p class="note pt1">
+						コロン「：」で区切ってキーとバリューを入力、改行で次の項目を追加できます。<br />
+						example)<br />
+						name : sitename<br />
+						phone : 000 0000<br />
+						address : aaa bbb ccc
+					</p>
+				</dd>
+			</dl>
+
+			<div class="txr"><button class="btn blue" type="submit" name="update" value="1"><i class="fa fa-refresh"></i> {{~__('update')}}</button></div>
+
+		</form>
+		<!--/Update-->
+
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}

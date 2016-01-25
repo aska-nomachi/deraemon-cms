@@ -1,0 +1,98 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">{{~__('users')}} - {{~__('edit')}} - {{user.username}}</h1>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<!--Update-->
+		<form action="" method="POST" enctype="multipart/form-data">
+
+			<dl class="hor">
+
+				<dt class="mb1">{{~__('id')}}</dt>
+				<dd class="mb1">
+					{{user.id}}
+				</dd>
+
+				<dt class="mb1">{{~__('avatar')}}</dt>
+				<dd class="mb1">
+					<div class="gla2 mr1">
+						{{#user.avatar}}
+						<img class="imw" src="{{~image_url(user.avatar, 0, 200, 's')}}?{{time}}" alt="{{user.username}}" />
+						{{/#}}
+						{{^user.avatar}}
+						<div style="background: #ccc; color: #fff; line-height: 100px; width: 100%; text-align: center; font-weight: bold;">noimg</div>
+						{{/^}}
+					</div>
+					<div class="gla2">
+						<label class="btn mb1">{{~__('select')}}<input type="file" name="avatar"></label>
+						<a class="btn" href="{{user.avatar_delete_url}}" title="avatar delete">{{~__('delete')}}</a>
+					</div>
+				</dd>
+
+				<dt class="mb1">{{~__('username')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="username" value="{{post.username}}" placeholder="{{~__('username')}}...">
+				</dd>
+
+				<dt class="mb1">{{~__('email')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="email" value="{{post.email}}" placeholder="{{~__('email')}}...">
+				</dd>
+
+				<dt class="mb1">{{~__('new password')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="password" value="" placeholder="{{~__('new password')}}...">
+				</dd>
+
+				<dt class="mb1">{{~__('role')}}</dt>
+				<dd class="mb1">
+					<label><input type="radio" name="role" value="" data-value="{{post.role}}" checked> {{~__('nothing')}}</label>
+					{{*roles : role}}
+					<label><input type="radio" name="role" value="{{role.name}}" data-value="{{post.role}}"> {{role.name}}</label>
+					{{/*}}
+				</dd>
+
+				<dt class="mb1">{{~__('is block')}}</dt>
+				<dd class="mb1">
+					<input type="checkbox" name="is_block" value="1" data-value="{{post.is_block}}">
+				</dd>
+			</dl>
+
+			<div class="txr">
+				<a class="delete btn red" href="{{user.delete_url}}" title="delete"><i class="fa fa-minus-square"></i> {{~__('delete')}}</a>
+				<button class="btn blue" type="submit" name="update" value="1"><i class="fa fa-refresh"></i> {{~__('update')}}</button>
+			</div>
+
+		</form>
+		<!--/Update-->
+
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}

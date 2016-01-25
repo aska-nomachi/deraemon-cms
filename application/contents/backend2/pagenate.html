@@ -1,0 +1,32 @@
+{{#pagenate.exist}}
+<div>
+
+	{{#pagenate.first_page : first_page}}
+	{{#first_page.current}}<span><i class="fa fa-angle-double-left"></i></span>{{/#}}
+	{{^first_page.current}}<a href="{{first_page.url}}" title="{{first_page.index}}"><i class="fa fa-angle-double-left"></i></a>{{/^}}
+	{{/#}}
+
+	{{#pagenate.prev_page : prev_page}}
+	{{#prev_page.current}}<span><i class="fa fa-angle-left"></i></span>{{/#}}
+	{{^prev_page.current}}<a href="{{prev_page.url}}" title="{{prev_page.index}}"><i class="fa fa-angle-left"></i></a>{{/^}}
+	{{/#}}
+
+	{{#pagenate.follow_pre}}&hellip;{{/#}}
+	{{*pagenate.follow_pages : page}}
+	{{#page.current}}<span>{{page.index}}</span>{{/#}}
+	{{^page.current}}<a href="{{page.url}}" title="{{page.index}}">{{page.index}}</a>{{/^}}
+	{{/*}}
+	{{#pagenate.follow_suf}}&hellip;{{/#}}
+
+	{{#pagenate.next_page : next_page}}
+	{{#next_page.current}}<span><i class="fa fa-angle-right"></i></span>{{/#}}
+	{{^next_page.current}}<a href="{{next_page.url}}" title="{{next_page.index}}"><i class="fa fa-angle-right"></i></a>{{/^}}
+	{{/#}}
+
+	{{#pagenate.last_page : last_page}}
+	{{#last_page.current}}<span><i class="fa fa-angle-double-right"></i></span>{{/#}}
+	{{^last_page.current}}<a href="{{last_page.url}}" title="{{last_page.index}}"><i class="fa fa-angle-double-right"></i></a>{{/^}}
+	{{/#}}
+
+</div>
+{{/#}}

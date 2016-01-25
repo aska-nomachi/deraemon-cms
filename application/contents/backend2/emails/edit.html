@@ -1,0 +1,115 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">{{~__('emails')}} - {{email.segment}} - {{~__('edit')}}</h1>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<!--Update-->
+		<form action="" method="POST">
+
+			<dl class="hor">
+
+				<dt class="mb1">{{~__('segment')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="segment" value="{{email.segment}}" placeholder="{{~__('segment')}}...">
+				</dd>
+
+				<dt class="mb1">{{~__('name')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="name" value="{{email.name}}" placeholder="{{~__('name')}}...">
+				</dd>
+
+				<dt class="mb1">{{~__('description')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="description" value="{{email.description}}" placeholder="{{~__('description')}}...">
+				</dd>
+
+				<dt class="mb1">{{~__('admin name')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="admin_name" value="{{email.admin_name}}" placeholder="{{~__('admin name')}}...">
+				</dd>
+
+				<dt class="mb1">{{~__('admin address')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="admin_address" value="{{email.admin_address}}" placeholder="{{~__('admin address')}}...">
+				</dd>
+
+				<dt class="mb1">{{~__('receive subject')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="receive_subject" value="{{email.receive_subject}}" placeholder="{{~__('receive subject')}}...">
+					<p class="note pt1">フィールドの値を使うことができます。 <code>&lbrace;&lbrace;name&rbrace;&rbrace;</code> 、 <code>&lbrace;&lbrace;email&rbrace;&rbrace;</code> のように書き込んでください。</p>
+				</dd>
+
+				<dt class="mb1">{{~__('user name field')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="user_name_field" value="{{email.user_name_field}}" placeholder="{{~__('user name field')}}...">
+					<p class="note pt1">メールの差出人の名前になるフィールド名(input等のname属性)</p>
+					<p class="note pt1">ない場合はsettingsのsend_email_defult_user_nameが入ります</p>
+				</dd>
+
+				<dt class="mb1">{{~__('user address field')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="user_address_field" value="{{email.user_address_field}}" placeholder="{{~__('user address field')}}...">
+					<p class="note pt1">メールの差出人のアドレスになるフィールド名(input等のname属性)</p>
+					<p class="note pt1">ない場合はsettingsのsend_email_defult_user_addressが入ります</p>
+				</dd>
+			</dl>
+
+			<dl class="mb1">
+				<dt class="mb1">{{~__('content')}}</dt>
+				<dd>
+					<p class="note">表示したいitemに <code>&lbrace;&lbrace;&gt;email_{{email.segment}}&rbrace;&rbrace;</code> を入れてください。</p>
+					<p class="note"><code>&lt;input type="hidden" name="send_email_segment" value="[emailのセグメント名]"&gt;</code> をフォーム内に入れるか</p>
+					<p class="note"><code>&lt;button type="submit" name="send_email" value="[emailのセグメント名]"&gt;send&lt;/button&gt;</code> のようにsubmitのvalueにemailのセグメント名を入れます。</p>
+					<p class="note">テンプレートとして使うときは <code>[emailのセグメント名]</code> の代わりに <code>&lbrace;&lbrace;@segment&rbrace;&rbrace;</code> を使うことができます。</p>
+					<p class="note">contentのformのなかにonetime ticketのタグ<code>&lbrace;&lbrace;&gt;&amp;ticket&rbrace;&rbrace;</code> を入れてください。</p>
+
+					<div class="fix">
+						<p class="sld lft"><a href="#" title="">send_email_resultの説明</a></p>
+						<p class="clr">
+							send_email_result.success -> boolean<br />
+							send_email_result.invalid -> array(array(message => '',field => '',message => '',field => '',))<br />
+							send_email_result.errors -> boolean<br />
+						</p>
+					</div>
+					<textarea id="content_textarea1" name="content">{{email.content}}</textarea>
+				</dd>
+			</dl>
+
+			<div class="txr">
+				<a class="delete btn red" href="{{email.delete_url}}" title="delete"><i class="fa fa-minus-square"></i> {{~__('delete')}}</a>
+				<button class="btn blue" type="submit" name="update" value="1"><i class="fa fa-refresh"></i> {{~__('update')}}</button>
+			</div>
+
+		</form>
+		<!--/Update-->
+
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}

@@ -1,0 +1,167 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h1 class="ttl1 prl2 ptb1 mb1 nlr3 txr">{{division.segment}} - {{~__('index')}}</h1>
+		<p class="txr mb3">{{division.name}}</p>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<!--Create-->
+		<form class="mb1" action="" method="POST">
+
+			<dl class="hor">
+
+				<dt class="mb1">{{~__('segment')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="create_segment" value="{{create.segment}}" placeholder="segment...">
+					<p class="note pt1">
+						segmentは半角英数とアンダースコアのみ使用できます。 [a-z]、[1-9]、[_]<br />
+						segmentはurlに使われます、この時urlの「-」は「_」に変換されます。
+					</p>
+				</dd>
+
+				<dt class="mb1">{{~__('title')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="create_title" value="{{create.title}}" placeholder="title...">
+					<p class="note pt1">このitemのタイトルを入力します。</p>
+				</dd>
+
+				<dt class="mb1">{{~__('issued')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="create_issued" value="{{create.issued}}" placeholder="issued...">
+					<p class="note pt1">このitemが公開される日付をタイムストリングで記入します。 2014-05-31、2014/5/31 0:00</p>
+				</dd>
+
+			</dl>
+
+			<div class="txr">
+				<button class="btn blue" type="submit" name="create" value="1"><i class="fa fa-plus-square"></i> create</button>
+			</div>
+
+		</form>
+		<!--/Create-->
+
+		<!--Update-->
+		{{#items}}
+		<form action="" method="POST">
+
+			<!--Sort-->
+			<nav class="sort">
+				<ul class="inl grd txr">
+					<li class="p1">{{~__('sort')}}</li>
+					{{*columns : column}}
+					<li class="p1">
+						{{#column.current}}
+						{{#column.current_asc}}<i class="fa fa-sort-asc"></i>{{/#}}
+						{{#column.current_desc}}<i class="fa fa-sort-desc"></i>{{/#}}
+						{{/#}}
+						<a href="{{column.url}}" title="{{column.name}}">
+							{{column.name}}
+						</a>
+					</li>
+					{{/*}}
+				</ul>
+			</nav>
+			<!--/Sort-->
+
+			<!--lists-->
+			<div class="lists grd">
+				{{*items : item}}
+				<article class="list ptb2 grd">
+
+					<div class="gla2">
+						{{#item.main_image.id}}<img class="imw imr" src="{{item.main_image.path}}w200-h200-s{{item.main_image.file}}" alt="{{item.main_image.name}}">{{/#}}
+						{{^item.main_image.id}}<div class="noimage">{{~__('no image')}}</div>{{/^}}
+					</div>
+
+					<div class="gla6 pl3 pr1">
+						<h2 class="ttl2 mb1">{{item.title}}</h2>
+
+						<ul class="grd inl mb1">
+							<li class="mr1"><span class="name">{{~__('id')}}</span>{{item.id}}</li>
+							<li class="mr1"><span class="name">{{~__('segment')}}</span>{{item.segment}}</li>
+							<li class="mr1"><span class="name">{{~__('username')}}</span>{{item.username}}</li>
+							<li class="mr1"><span class="name">{{~__('issued')}}</span>{{#item.issued}}{{item.issued}}{{/#}}{{^item.issued}}-{{/^}}</li>
+							<li class="mr1"><span class="name">{{~__('created')}}</span>{{item.created}}</li>
+							<li class="mr1"><span class="name">{{~__('received commnets count')}}</span>{{item.received_commnets_count}}</li>
+						</ul>
+
+						<div class="grd mb1">
+							{{*item.categories : category}}<span class="mr1 bdg">{{category.name}}</span>{{/*}}
+							{{^item.categories}}<span class="mr1 bdg">{{~__('no category')}}</span>{{/^}}
+						</div>
+
+						<div class="grd mb1">
+							<span class="name">{{~__('catch')}}</span>
+							{{#item.catch}}{{~limit_chars(item.catch, 100)}}{{/#}}
+							{{^item.catch}}{{~__('nothing')}}{{/^}}
+						</div>
+
+						<div class="grd">
+							<span class="name">{{~__('summary')}}</span>
+							{{#item.summary)}}{{~limit_chars(item.summary, 100)}}{{/#}}
+							{{^item.summary)}}{{~__('nothing')}}{{/^}}
+						</div>
+					</div>
+
+					<div class="gla3">
+						<ul class="uns">
+							<li class="mrb1"><span class="name">{{~__('order')}}</span><input class="frm min srt" type="text" name="order[{{item.id}}]" value="{{item.order}}"></li>
+							<li class="mrb1"><label><span class="name">{{~__('is active')}}</span><input type="checkbox" name="is_active[{{item.id}}]" value="1" data-value="{{item.is_active}}"></label></li>
+							<li class="mr1"><label><span class="name">{{~__('send comment is on')}}</span><input type="checkbox" name="send_comment_is_on[{{item.id}}]" value="1" data-value="{{item.send_comment_is_on}}"></label></li>
+						</ul>
+					</div>
+
+					<div class="gla1 txr">
+						<a class="btn" href="{{item.edit_url}}" title="edit"><i class="fa fa-edit"></i> {{~__('edit')}}</a>
+					</div>
+
+				</article>
+				{{/*}}
+			</div>
+			<!--/lists-->
+
+			<div class="txr mt1">
+				<button class="btn blue" type="submit" name="update" value="1"><i class="fa fa-refresh"></i> {{~__('update')}}</button>
+			</div>
+
+		</form>
+		{{/#}}
+
+		{{^items : item}}
+		<p>{{~__('no item')}}...</p>
+		{{/^}}
+		<!--/Update-->
+
+		<!--Pagenate-->
+		<div class="txc">{{>pagenate}}</div>
+		<!--/Pagenate-->
+
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}

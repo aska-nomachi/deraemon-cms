@@ -1,0 +1,28 @@
+{{#paginate}}
+<div class="paginate txc">
+	{{#paginate.first_page : first_page}}
+	{{#first_page.current}}<span class="paginate-item">&Lt;</span>{{/#}}
+	{{^first_page.current}}<a class="paginate-item" href="{{first_page.url}}" title="{{first_page.index}}">&Lt;</a>{{/^}}
+	{{/#}}
+
+	{{#paginate.prev_page : prev_page}}
+	{{#prev_page.current}}<span class="paginate-item">&lt;</span>{{/#}}
+	{{^prev_page.current}}<a class="paginate-item" href="{{prev_page.url}}" title="{{prev_page.index}}">&lt;</a>{{/^}}
+	{{/#}}
+
+	{{*paginate.pages : page}}
+	{{#page.current}}<span class="paginate-item">{{page.index}}</span>{{/#}}
+	{{^page.current}}<a class="paginate-item" href="{{page.url}}" title="{{page.index}}">{{page.index}}</a>{{/^}}
+	{{/*}}
+
+	{{#paginate.next_page : next_page}}
+	{{#next_page.current}}<span class="paginate-item">&gt;</span>{{/#}}
+	{{^next_page.current}}<a class="paginate-item" href="{{next_page.url}}" title="{{next_page.index}}">&gt;</a>{{/^}}
+	{{/#}}
+
+	{{#paginate.last_page : last_page}}
+	{{#last_page.current}}<span class="paginate-item">&Gt;</span>{{/#}}
+	{{^last_page.current}}<a class="paginate-item" href="{{last_page.url}}" title="{{last_page.index}}">&Gt;</a>{{/^}}
+	{{/#}}
+</div>
+{{/#}}

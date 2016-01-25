@@ -1,0 +1,313 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h2 class="ttl1 prl2 ptb1 mb3 nlr3 txr">tutorial2</h2>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<div class="mb3 grd">
+			<p>作ったばかりでどっから説明したらいいかわからないので、チュートリアルとして説明していきます。</p>
+			<p>リファレンスはその都度付け加えていきます。</p>
+			<p class="mb3">とりあえず、つくりながらやってみましょう！</p>
+		</div>
+
+		<section class="fix mb3">
+			<h3 class="ttl2 mb2">１.今回作るサイト</h3>
+			<p>紳士服屋さんを作ります。</p>
+			<p>お店の名前：うさぎ紳士服</p>
+
+			<div class="gla4 p2 b-green">
+				<p>サイトマップは</p>
+				<ul class="uns mb1">
+					<li>- home</li>
+					<li>- about us</li>
+					<li>
+						- product
+						<ul class="uns ml3">
+							<li>- jacket</li>
+							<li>- shirt</li>
+							<li>- trousers</li>
+							<li>- shoes</li>
+							<li>- tie</li>
+						</ul>
+					</li>
+					<li>- event</li>
+					<li>- news</li>
+					<li>- blog</li>
+					<li class="mb1">- rss</li>
+					<li>
+						- user
+						<ul class="uns ml3">
+							<li>- register</li>
+							<li>- login</li>
+							<li>- resign</li>
+							<li>- forgot</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+
+			<div class="pla1 gla7">
+				<p>productはすべての商品の一覧を表示します。</p>
+				<p>productにはカテゴリー、タグをつけていきます。</p>
+				<p>jacket、shirt、trousers、shoes、tieはそれぞれのカテゴリーの一覧を表示します。</p>
+				<p>rssはRSSのフィードのページです。</p>
+				<p>contactはメールフォームです。</p>
+				<p>blogにはコメント機能を付けます。</p>
+				<p>eventsはメンバーのみが見れページも作ります。</p>
+				<p>register、login、resign、forgotはログイン機能ようのページです。</p>
+				<p>news、blogにはカテゴリーをつけていきます。</p>
+			</div>
+		</section>
+
+		<section class="fix mb3">
+			<h3 class="ttl2 mb2">２.セッティング</h3>
+
+			<p class="mb1">タブのdashboard -> タブメニューのsettings -> サイドメニューのfrontendから設定できます。</p>
+
+			<dl class="gla6 b-blue p1">
+				<dt>frontend theme</dt>
+				<dd class="mb1">
+					テーマの入っているフォルダの名前を指定します。<br />
+					ディレクトリのapplication->content->frontendの中に入っているのがテーマフォルダです。<br />
+					デフォルトではbaseがはいっています。<br />
+					テーマを変更するときはテーマフォルダ名をここにいれます。
+				</dd>
+				<dt>lang</dt>
+				<dd class="mb1">
+					frontendの言語を指定します。<br />
+					ja、en、en_USなど。
+				</dd>
+				<dt>home page</dt>
+				<dd class="mb1">
+					最初に表示するページを指定します。<br />
+					ウェブサイトの1つのページをkohxcmsではitem（アイテム）と呼びます。<br />
+					itemは管理用の名前のsegmentを持っているのでこのsegmentで指定します。
+				</dd>
+				<dt>site details</dt>
+				<dd class="mb1">
+					サイト全体で使う文字を設定していきます。<br />
+					いくつも設定できます。<br />
+					コロン「：」区切りでキーとバリューを作ります。<br />
+					改行して追加します。
+				</dd>
+			</dl>
+
+			<div class="pla1 gla5">
+				<p>今回は以下のとおりに指定します。</p>
+				<ul class="mb2">
+					<li>frontend theme -> base（既定）</li>
+					<li>lang -> ja</li>
+					<li>home page -> home</li>
+					<li>site details -> <br />
+						name : うさぎ紳士服<br />
+						phone : 00 000 0000<br />
+						address : osaka japan<br />
+					</li>
+				</ul>
+
+				<p>langは<code>&lbrace;&lbrace;settings.lang&rbrace;&rbrace;</code>で表示されます。</p>
+				<p>site detailsは<code>&lbrace;&lbrace;settings.site.name&rbrace;&rbrace;</code>のように「settings.site」のあとに「.」で設定した値をつないで表示します。</p>
+			</div>
+		</section>
+
+		<section class="fix mb3">
+			<h3 class="ttl2 mb2">３.インデックスページ（ホーム）作成</h3>
+
+			<p class="mb3">最初に表示されるインデックスページ（ホーム）から作っていきます。</p>
+
+			<section class="fix mb3">
+				<h4 class="ttl3 mb2">３-１.wrapperテンプレートの作成</h4>
+
+				<p>templateタブ -> wrappersタブメニューを開きます。</p>
+				<p>フォームに</p>
+				<ul>
+					<li>segment -> html</li>
+					<li>name -> HTML</li>
+					<li>content type -> text/html</li>
+				</ul>
+
+				<p>と入力してcreateボタンを押す。</p>
+				<p>HTMLテンプレートがテーブルにできているのでeditボタンを押します。</p>
+				<p>
+					contentに<code>&lbrace;&lbrace;&gt;division_content&rbrace;&rbrace;</code>とだけ書かれています。<br />
+					この中に次のテンプレートdivisionsがはいってきます。<br />
+					ここに一番外側のhtmlを書いていきます。<br />
+					そしてupdateボタンを押して保存します。
+				</p>
+				<p>ブラウザー上で編集するのはめんどくさいので、直接ファイルを書き換えます。<br />
+					テンプレートファイルはすべてテーマファイルの中にあります。<br />
+					場所は、application->content->frontendのなかの先ほど設定したbasicフォルダの中にあります。<br />
+					basicフォルダを開くと中にwrapperというフォルダがあり、その中にさっき作ったhome.htmlが作られています。
+					これをエディターで編集して保存するとブラウザ上にも反映されているので、リフレッシュしてください。
+				</p>
+				<p>ファイルを次のように書いていきます。</p>
+
+				<pre>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+ &lt;head&gt;
+  &lt;meta charset="utf-8" /&gt;
+  &lt;title&gt;ホーム - うさぎ紳士服&lt;/title&gt;
+  &lt;meta name="keywords" content="紳士服,ジャケット,パンツ" /&gt;
+  &lt;meta name="description" content="ウサギの紳士服店です。" /&gt;
+ &lt;/head&gt;
+
+ &lt;body&gt;
+  &lt;!--#wrapper--&gt;
+   &lt;div id="wrapper"&gt;
+    &lt;!--division content--&gt;
+    &lbrace;&lbrace;&gt;division_content&rbrace;&rbrace;
+    &lt;!--/division content--&gt;
+   &lt;/div&gt;
+  &lt;!--#wrapper--&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</pre>
+
+				<p>ここで、dタブのdashboard -> タブメニューのsettings -> サイドメニューのfrontendで設定した値を使っていきます。</p>
+				<p><code>&lbrace;&lbrace;&gt;</code>と<code>&rbrace;&rbrace;</code>に囲まれた部分が値になります。</p>
+				<ul>
+					<li><code>&lt;html lang="ja"&gt;</code>の「ja」を<code>&lbrace;&lbrace;settings.lang&rbrace;&rbrace;</code>に変更します。</li>
+					<li>
+						<code>&lt;title&gt;ホーム - うさぎ紳士服&lt;/title&gt;</code>の「うさぎ紳士服」を
+						<code>&lbrace;&lbrace;site.name&rbrace;&rbrace;</code>に変更します。</li>
+				</ul>
+				<p>これでwrapperテンプレート完成です！</p>
+			</section>
+
+			<section class="fix mb3">
+				<h4 class="ttl3 mb2">３-２.divisionテンプレートの作成</h4>
+
+				<p>ページのdivisionを作成します。</p>
+				<p>templateタブ -> divisionタブメニューを開きます。</p>
+				<p>フォームに</p>
+				<ul>
+					<li>wapper -> HTML</li>
+					<li>segment -> page</li>
+					<li>name -> PAGE</li>
+				</ul>
+
+				<p>と入力してcreateボタンを押す。</p>
+				<p>ページテンプレートがテーブルにできているのでeditボタンを押します。</p>
+				<p>
+					contentに<code>&lbrace;&lbrace;&gt;shape_content&rbrace;&rbrace;</code>とだけ書かれています。<br />
+					この中に次のテンプレートshape又はitemのcontentがはいってきます。<br />
+					ここでは各dhibisionごとのhtmlを書いていきますが、特に使わないのでこのままにしておきます。<br />
+					編集する場合は編集後updateボタンを押して保存します。
+				</p>
+				<p>これも直接ファイルを書き換えることができます。<br />
+					場所はさっきと同じく、application->content->frontendのなかのbasicフォルダの中、<br />
+					divisionというフォルダがあり、その中にpage.htmlが作られています。
+				</p>
+				<p>これでdivisionテンプレート完成です！</p>
+			</section>
+
+			<section class="fix mb3">
+				<h4 class="ttl3 mb2">３-３.itemの作成</h4>
+
+				<p>各ページごとに作っていくitemを作成します。</p>
+				<p>itemタブをクリックするとさっき作ったdivisionのpageができているのでクリックします。</p>
+				<p>フォームに</p>
+				<ul>
+					<li>segment -> home</li>
+					<li>title -> ホーム</li>
+					<li>issued -> 2014-5-30</li>
+				</ul>
+				<p>と入力してcreateボタンを押す。</p>
+				<p>issuedはこのitemを公開する日付を設定します。</p>
+				<p>ページテンプレートがテーブルにできているのでeditボタンを押します。</p>
+				<p>このpageインデックスで「order」、「is active」、「send comment is on」がまとめて設定できます。</p>
+				<p>editでも変更できます。</p>
+				<p>サイドバーに</p>
+				<ul>
+					<li>check item home</li>
+					<li>index</li>
+					<li>edit</li>
+					<li>content</li>
+					<li>images</li>
+					<li>fields</li>
+					<li>received comments</li>
+				</ul>
+				<p>のメニューがあるのでcontentをクリックします。</p>
+				<p>
+					contentの中にcontentとだけ入っていいます。<br />
+					これはダミーテキストなのでこれを削除して、htmlを書いていきます。
+				</p>
+
+				<!--<pre>-->
+				<div id="wrapper">
+					<header>
+						<h1 class="logo">うさぎ紳士服</h1>
+						<menu>
+							<ul>
+								<li><a href="#" title="">home</a></li>
+								<li><a href="#" title="">about us</a></li>
+								<li><a href="#" title="">product</a></li>
+								<li><a href="#" title="">event</a></li>
+								<li><a href="#" title="">news</a></li>
+								<li><a href="#" title="">blog</a></li>
+								<li><a href="#" title="">contact</a></li>
+							</ul>
+						</menu>
+					</header>
+
+					<div id="main">
+
+						<section>
+							<h1>home</h1>
+
+							<section>
+								<h2>「うさぎ紳士服」について</h2>
+								<p></p>
+							</section>
+
+							<section>
+								<h2>new product</h2>
+								<ul>
+									<li>きりんさんの指輪</li>
+									<li>ぞうさんのの</li>
+								</ul>
+							</section>
+
+						</section>
+
+					</div>
+
+					<footer>
+						<address>&copy; 2014 うさぎ紳士服</address>
+					</footer>
+				</div>
+				<!--</pre>-->
+
+			</section>
+
+		</section>
+
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}

@@ -1,0 +1,73 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">{{item.division_name}} - {{item.title}} - {{~__('content')}}</h1>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<!--Update-->
+		<form action="" method="POST">
+
+			<dl class="hor">
+
+				<dt class="mb1">{{~__('division')}}</dt>
+				<dd class="mb1">{{item.division_name}}</dd>
+
+				<dt class="mb1">{{~__('shape')}}</dt>
+				<dd class="mb1">
+					<select class="frm" name="shape_segment"  data-value="{{item.shape_segment}}">
+						<option value="">---</option>
+						{{*shapes : shape}}
+						<option value="{{shape.segment}}">{{shape.segment}}</option>
+						{{/*}}
+					</select>
+				</dd>
+
+			</dl>
+
+			<dl class="mb1">
+				<dt class="mb1">{{~__('content')}}</dt>
+				<dd>
+					<textarea id="content_textarea1" name="content">{{item.content}}</textarea>
+				</dd>
+			</dl>
+
+			<div class="txr">
+				<button class="btn blue" type="submit" name="update" value="1"><i class="fa fa-refresh"></i> {{~__('update')}}</button>
+			</div>
+
+		</form>
+		<!--/Update-->
+
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+
+<!--snippets-->
+{{>snippets}}
+<!--/snippets-->
+{{/#}}

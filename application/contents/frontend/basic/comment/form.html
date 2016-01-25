@@ -1,0 +1,86 @@
+{{%item_comments = get_comments(item_segment = item.segment, order_column = 'created', order_direction = 'DESC')}}
+<section class="comment_form gla6 cnt m3">
+	<h2>create</h2>
+	{{#send_comment_result.success}}
+	<div>
+		<h3>送信成功</h3>
+	</div>
+	{{/#}}
+
+	{{#send_comment_result.invalid}}
+	<div>
+		<h3>以下の内容を確認して下さい。</h3>
+		<ul>
+			{{*send_comment_result.errors : error}}
+			<li>{{error.message}} (field: {{error.field}})</li>
+			{{/*}}
+		</ul>
+	</div>
+	{{/#}}
+
+	{{#send_comment_result.exception}}
+	<div>
+		<h3>システムエラーです。</h3>
+		<ul>
+			{{*send_comment_result.errors : error}}
+			<li>{{error.field}}</li>
+			{{/*}}
+		</ul>
+	</div>
+	{{/#}}
+
+	{{#send_comment_result.information}}
+	<div>
+		<h3>いかの事項を確認して下さい。</h3>
+		<ul>
+			{{*send_comment_result.errors : error}}
+			<li>{{error.field}}</li>
+			{{/*}}
+		</ul>
+	</div>
+	{{/#}}
+
+	<form action="" method="POST">
+		<dl>
+			{{#item_comments.comments: comments}}
+			<dt class="mb1">replay id</dt>
+			<dd class="mb1">
+				<select class="frm" name="replay_id" {{~form_value(send_comment_result.post.replay_id)}}">
+					{{*comments: comment}}
+					<option value="{{comment.id}}">{{comment.id}}</option>
+					{{/*}}
+				</select>
+			</dd>
+			{{/#}}
+
+			<dt class="mb1">display name</dt>
+
+			{{#send_comment_result.post.display_name}}
+			{{~ display_name = set(send_comment_result.post.display_name)}}
+			{{/#}}
+			{{^send_comment_result.post.display_name}}
+			{{#logged_in_user.username}}
+			{{~ display_name = set(logged_in_user.username)}}
+			{{/#}}
+
+			{{^logged_in_user.username}}
+			{{~ display_name = set('noname')}}
+			{{/^}}
+			{{/^}}
+
+			<dd class="mb1"><input class="frm" type="text" name="display_name" value="{{display_name}}" placeholder="display_name..."></dd>
+
+			<dt class="mb1">タイトル</dt>
+			<dd class="mb1"><input class="frm" type="text" name="subject" value="{{send_comment_result.post.subject}}" placeholder="subject..."></dd>
+
+			<dt class="mb1">お問い合わせ内容</dt>
+			<dd class="mb1">
+				<textarea class="frm" name="content" placeholder="content...">{{send_comment_result.post.content}}</textarea>
+			</dd>
+		</dl>
+		{{&ticket}}
+		<div class="mb1 txr">
+			<button class="btn large" type="submit" name="send_comment" value="1">send comment</button>
+		</div>
+	</form>
+</section>

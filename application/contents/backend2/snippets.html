@@ -1,0 +1,316 @@
+<aside id="snippets" class="fix">
+
+	<div class="snippet_boxes">
+
+		<div class="syntax_box grd">
+			<div class="gla12 plr1">
+				&lbrace;&lbrace;[object]&rbrace;&rbrace;<br />
+				<small>あるときは表示、ないときは非表示</small>
+			</div>
+
+			<div class="gla6 plrb1">
+				<pre><code>&lbrace;&lbrace;site.name&rbrace;&rbrace;</code></pre>
+			</div>
+			<div class="gla6 plrb1">{{snippets.sites.name.value}}</div>
+			<div class="gla6 plrb1 clr">
+				<pre><code>&lbrace;&lbrace;site.aaaaa&rbrace;&rbrace;</code></pre>
+			</div>
+
+			<div class="gla12 plr1">
+				&lbrace;&lbrace;[object]&rbrace;&rbrace;<br />
+				<small>あるときはエスケープしないで表示、ないときは非表示</small>
+			</div>
+			<div class="gla6 plrb1">
+				<pre><code>&lbrace;&lbrace;item.summary&rbrace;&rbrace;</code></pre>
+				<small>&amp;がないときはこうなる</small>
+			</div>
+			<div class="gla6 plrb1">{{snippets.item.summary}}</div>
+			<div class="gla6 plrb1">
+				<pre><code>&lbrace;&lbrace;&amp;item.summary&rbrace;&rbrace;</code></pre>
+				<small>&amp;があるとこうなる</small>
+			</div>
+			<div class="gla6 plrb1">{{&snippets.item.summary}}</div>
+
+			<div class="gla12 plr1">
+				&lbrace;&lbrace;#[object]&rbrace;&rbrace;...&lbrace;&lbrace;/#&rbrace;&rbrace;<br />
+				<small>あるときは表示、ないときは非表示、「:」のあとの文字列へ代入可</small>
+			</div>
+			<div class="gla6 plrb1">
+				<pre><code>&lbrace;&lbrace;#site.name&rbrace;&rbrace;&lbrace;&lbrace;site.name&rbrace;&rbrace;&lbrace;&lbrace;#&rbrace;&rbrace;</code></pre>
+			</div>
+			<div class="gla6 plrb1">{{#snippets.sites.name.value}}{{snippets.sites.name.value}}{{/#}}</div>
+			<div class="gla6 plrb1 clr">
+				<pre><code>&lbrace;&lbrace;#site.aaaaa&rbrace;&rbrace;&lbrace;&lbrace;site.aaaaa&rbrace;&rbrace;&lbrace;&lbrace;#&rbrace;&rbrace;</code></pre>
+			</div>
+			<div class="gla6 plrb1">{{#snippets.sites.aaaaa.value:name}}{{name}}{{/#}}</div>
+			<div class="gla6 plrb1 clr">
+				<pre><code>&lbrace;&lbrace;#site.name:name&rbrace;&rbrace;&lbrace;&lbrace;name&rbrace;&rbrace;&lbrace;&lbrace;#&rbrace;&rbrace;</code></pre>
+			</div>
+			<div class="gla6 plrb1">{{#snippets.sites.name.value:name}}{{name}}{{/#}}</div>
+
+			<div class="gla12 plr1">
+				&lbrace;&lbrace;^[object]&rbrace;&rbrace;...&lbrace;&lbrace;/^&rbrace;&rbrace;<br />
+				<small>あるときは非表示、ないときは表示</small>
+			</div>
+			<div class="gla6 plrb1">
+				<pre><code>&lbrace;&lbrace;^site.name&rbrace;&rbrace;no name&lbrace;&lbrace;^&rbrace;&rbrace;</code></pre>
+			</div>
+			<div class="gla6 plrb1">{{^snippets.sites.name.value}}no name{{/^}}</div>
+			<div class="gla6 plrb1 clr">
+				<pre><code>&lbrace;&lbrace;^site.aaaaa&rbrace;&rbrace;no name&lbrace;&lbrace;^&rbrace;&rbrace;</code></pre>
+			</div>
+			<div class="gla6 plrb1">{{^snippets.sites.aaaaa.value}}nso name{{/^}}</div>
+
+			<div class="gla12 plr1">
+				&lbrace;&lbrace;#[object]&rbrace;&rbrace;...&lbrace;&lbrace;/#&rbrace;&rbrace; and &lbrace;&lbrace;^[object]&rbrace;&rbrace;...&lbrace;&lbrace;/^&rbrace;&rbrace;<br />
+				<small>組み合わせて使うと</small>
+			</div>
+			<div class="gla6 plrb1">
+				<pre><code>&lbrace;&lbrace;#site.name:name&rbrace;&rbrace;&lbrace;&lbrace;name&rbrace;&rbrace;&lbrace;&lbrace;#&rbrace;&rbrace;
+&lbrace;&lbrace;^site.name&rbrace;&rbrace;no name&lbrace;&lbrace;^&rbrace;&rbrace;
+</code></pre>
+			</div>
+			<div class="gla6 plrb1">
+				{{#snippets.sites.name.value: name}}{{name}}{{/#}}
+				{{^snippets.sites.name.value}}no name{{/^}}
+			</div>
+
+
+			<div class="gla12 plr1">
+				&lbrace;&lbrace;*[object]&rbrace;&rbrace;...&lbrace;&lbrace;/*&rbrace;&rbrace;<br />
+				<small>ループする 「:」のあとの文字列へ代入</small>
+			</div>
+
+			<div class="gla6 plrb1">
+<pre><code>&lbrace;&lbrace;*item.images:images&rbrace;&rbrace;
+&lbrace;&lbrace;images.name&rbrace;&rbrace;
+&lbrace;&lbrace;/*&rbrace;&rbrace;</code></pre>
+			</div>
+			<div class="gla6 plrb1">
+				{{#snippets.item}}
+				{{*snippets.item.images:image}}
+				<p>{{image.name}}</p>
+				{{/*}}
+				{{/#}}
+			</div>
+
+			<div class="gla12 plr1">
+				&lbrace;&lbrace;![object]&rbrace;&rbrace;<br />
+				<small>コメントアウト、出てこなくなる</small>
+			</div>
+			<div class="gla6 plrb1">
+<pre><code>&lbrace;&lbrace;!sites.name&rbrace;&rbrace;</code></pre>
+			</div>
+			<div class="gla6 plrb1">
+				{{!snippets.sites.name.value}}
+			</div>
+
+			<div class="gla12 plr1">
+				&lbrace;&lbrace;~[function name]([object])&rbrace;&rbrace;<br />
+				<small>関数を呼び出します</small>
+			</div>
+			<div class="gla6 plrb1">
+<pre><code>&lbrace;&lbrace;~debug(item)&rbrace;&rbrace;</code></pre>
+			</div>
+			<div class="gla6 plrb1">
+				{{~debug(item)}}
+			</div>
+
+		</div>
+
+		<div class="general_box">
+			<dl class="fix">
+				<dt><code>&lbrace;&lbrace;host&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.host}}{{^snippets.host}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;media_dir&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.media_dir}}{{^snippets.media_dir}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;images_dir&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.images_dir}}{{^snippets.images_dir}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;css_dir&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.css_dir}}{{^snippets.css_dir}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;js_dir&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.js_dir}}{{^snippets.js_dir}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;icon_dir&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.icon_dir}}{{^snippets.icon_dir}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;lang&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.lang}}{{^snippets.lang}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;timestamp&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.timestamp}}{{^snippets.timestamp}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;return&rbrace;&rbrace;</code></dt>
+				<dd>{{#snippets.return}}PHP_EOL (\n){{/#}}{{^snippets.return}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;logged_in_user.id&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.logged_in_user.id}}{{^snippets.logged_in_user.id}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;logged_in_user.email&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.logged_in_user.email}}{{^snippets.logged_in_user.email}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;logged_in_user.username&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.logged_in_user.username}}{{^snippets.logged_in_user.username}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;logged_in_user.logins&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.logged_in_user.logins}}{{^snippets.logged_in_user.logins}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;logged_in_user.details&rbrace;&rbrace;</code></dt>
+				{{*snippets.sites: site}}
+				<dt><code>&lbrace;&lbrace;site.{{site.key}}&rbrace;&rbrace;</code></dt>
+				<dd>{{site.value}}{{^site.value}} - {{/^}}</dd>
+				{{/*}}
+
+			</dl>
+		</div>
+
+		<div class="item_box">
+			<dl class="fix">
+				<dt><code>&lbrace;&lbrace;item.id&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.item.id}}{{^snippets.item.id}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;item.segment&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.item.segment}}{{^snippets.item.segment}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;item.title&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.item.title}}{{^snippets.item.title}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;item.catch&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.item.catch}}{{^snippets.item.catch}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;item.keywords&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.item.keywords}}{{^snippets.item.keywords}}{{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;item.description&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.item.description}}{{^snippets.item.description}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;item.summary&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.item.summary}}{{^snippets.item.summary}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;item.issued&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.item.issued}}{{^snippets.item.issued}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;item.created&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.item.created}}{{^snippets.item.created}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;item.send_comment_is_on&rbrace;&rbrace;</code></dt>
+				<dd>{{#snippets.item.send_comment_is_on}}TRUE{{/#}}{{^snippets.item.send_comment_is_on}}FALSE{{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;item.division.id&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.item.division.id}}{{^snippets.item.division.id}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;item.division.segment&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.item.division.segment}}{{^snippets.item.division.segment}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;item.division.name&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.item.division.name}}{{^snippets.item.division.name}} - {{/^}}</dd>
+
+				<dt>
+				<pre><code>&lbrace;&lbrace;#snippets.item.categories&rbrace;&rbrace;
+ &lt;ul&gt;
+ &lbrace;&lbrace;*item.categories:category&rbrace;&rbrace;
+ &lt;li&gt;&lbrace;&lbrace;category.id&rbrace;&rbrace;: &lbrace;&lbrace;category.segment&rbrace;&rbrace;: &lbrace;&lbrace;category.name&rbrace;&rbrace;: &lbrace;&lbrace;category.description&rbrace;&rbrace;&lt;/li&gt;
+ &lbrace;&lbrace;/*&rbrace;&rbrace;
+&lt;/ul&gt;
+&lbrace;&lbrace;/#&rbrace;&rbrace;</code></pre>
+				</dt>
+				<dd>
+					{{#snippets.item.categories}}
+					<ul>
+						{{*snippets.item.categories:category}}
+						<li>{{category.id}}: {{category.segment}}: {{category.name}}: {{category.description}}</li>
+						{{/*}}
+					</ul>
+					{{/#}}
+				</dd>
+
+				<dt>
+				<pre><code>&lbrace;&lbrace;#snippets.item.tags&rbrace;&rbrace;
+ &lt;ul&gt;
+ &lbrace;&lbrace;*item.tags:tag&rbrace;&rbrace;
+ &lt;li&gt;&lbrace;&lbrace;tag.id&rbrace;&rbrace;: &lbrace;&lbrace;tag.segment&rbrace;&rbrace;: &lbrace;&lbrace;tag.name&rbrace;&rbrace;: &lbrace;&lbrace;tag.description&rbrace;&rbrace;&lt;/li&gt;
+ &lbrace;&lbrace;/*&rbrace;&rbrace;
+&lt;/ul&gt;
+&lbrace;&lbrace;/#&rbrace;&rbrace;</code></pre>
+				</dt>
+				<dd>
+					{{#snippets.item.tags}}
+					<ul>
+						{{*snippets.item.tags:tag}}
+						<li>{{tag.id}}: {{tag.segment}}: {{tag.name}}: {{tag.description}}</li>
+						{{/*}}
+					</ul>
+					{{/#}}
+				</dd>
+
+				<dt><code>&lbrace;&lbrace;user.email&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.item.user.email}}</dd>
+				<dt><code>&lbrace;&lbrace;user.username&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.item.user.username}}</dd>
+
+				<dt><code>&lbrace;&lbrace;item.is_{{snippets.item.segment}}&rbrace;&rbrace;</code></dt>
+				<dd>{{? $is = $snippets['item']['is_'.$snippets['item']['segment']]; echo $is ? "ture" : "false"}}</dd>
+			</dl>
+		</div>
+
+		<div class="item_image_box">
+			<p>item main image</p>
+			<dl class="fix">
+				<dt><code>&lbrace;&lbrace;item.main_image.id&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.item.main_image.id}}{{^snippets.item.main_image.id}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;item.main_image.segment&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.item.main_image.segment}}{{^snippets.item.main_image.segment}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;item.main_image.name&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.item.main_image.name}}{{^snippets.item.main_image.name}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;item.main_image.path&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.item.main_image.path}}{{^snippets.item.main_image.path}} - {{/^}}</dd>
+				<dt><code>&lbrace;&lbrace;item.main_image.file&rbrace;&rbrace;</code></dt>
+				<dd>{{snippets.item.main_image.file}}{{^snippets.item.main_image.file}} - {{/^}}</dd>
+				<dt>
+				<pre><code>&lbrace;&lbrace;item.main_image.path&rbrace;&rbrace;/w[width pixel]-h[height pixel]-[v vertical, h horizontal, s square]/&lbrace;&lbrace;item.main_image.file&rbrace;&rbrace;</code></pre>
+				</dt>
+				<dd>{{#snippets.item.main_image}}{{snippets.item.main_image.path}}w240-h320-h{{snippets.item.main_image.file}}{{/#}}{{^snippets.item.main_image}} - {{/^}}</dd>
+				<dt>
+				<small>use function</small><br>
+				<code>&lbrace;&lbrace;~image_url(main_image, '240', '320', 'h')&rbrace;&rbrace;</code>
+				</dt>
+				<dd>{{~image_url(snippets.item.main_image, '240', '320', 'h')}}{{^snippets.item.main_image}} - {{/^}}</dd>
+				<dt>
+				<pre><code>&lbrace;&lbrace;#snippets.item.main_image: image&rbrace;&rbrace;&lt;img src="&lbrace;&lbrace;~image_url(image, '40', '40', 'h')&rbrace;&rbrace;" /&gt;&lbrace;&lbrace;/#&rbrace;&rbrace;&lbrace;&lbrace;^snippets.item.main_image&rbrace;&rbrace;no image&lbrace;&lbrace;/^&rbrace;&rbrace;</code></pre>
+				</dt>
+				<dd>
+					{{#snippets.item.main_image: image}}<img src="{{~image_url(image, '40', '40', 's')}}" />{{/#}}{{^snippets.item.main_image}}no image{{/^}}
+				</dd>
+			</dl>
+			<p>item images</p>
+			<dl>
+				<dt>
+				<small>use segment</small><br>
+				<pre><code>&lt;img src="&lbrace;&lbrace;~image_url(item.images.[image segmant], '40', '40', 's')&rbrace;&rbrace;" /&gt;</code></pre>
+				</dt>
+				<dd>
+					{{#snippets.item.images.image1}}
+					<img src="{{~image_url(snippets.item.images.image1, '40', '40', 's')}}" />
+					{{/#}}
+					{{^snippets.item.images.image1}}
+					no image
+					{{/^}}
+				</dd>
+				<dt>
+				<small>itelate images</small><br>
+				<pre><code>&lbrace;&lbrace;*item.images&rbrace;&rbrace;
+&lt;img src="&lbrace;&lbrace;~image_url(image, '40', '40', 's')&rbrace;&rbrace;" /&gt;
+&lbrace;&lbrace;/*&rbrace;&rbrace;</code></pre>
+				</dt>
+				<dd>
+					{{#snippets.item.images:images}}
+					{{*images:image}}
+					<img src="{{~image_url(image, '40', '40', 's')}}" />
+					{{/*}}
+					{{/#}}
+					{{^snippets.item.images}}no image{{/^}}
+				</dd>
+			</dl>
+		</div>
+
+		<div class="part_box">
+			<dl>
+				{{#snippets.parts}}
+				{{*snippets.parts: part}}
+				<dt><code>&lbrace;&lbrace;&gt;{{part.segment}}&rbrace;&rbrace;</code></dt>
+				<dd>{{part.content}}</dd>
+				{{/*}}
+				{{/#}}
+				{{^snippets.parts}} - {{/^}}
+			</dl>
+		</div>
+	</div>
+
+	<ul class="snippet_tabs">
+		<li class="syntax_tab" data-name="syntax">syntax</li>
+		<li class="general_tab" data-name="general">general</li>
+		<li class="item_tab" data-name="item">item</li>
+		<li class="item_image_tab" data-name="item_image">item images</li>
+		<li class="part_tab" data-name="part">part</li>
+	</ul>
+
+</aside>

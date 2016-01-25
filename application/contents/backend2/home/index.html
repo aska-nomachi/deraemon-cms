@@ -1,0 +1,43 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h2 class="ttl1 prl2 ptb1 mb3 nlr3 txr">kohx cms</h2>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<section class="fix mb2">
+			<h3 class="ttl2 mb1">{{~__('index')}}</h3>
+			<ul>
+				<li>{{~__('about deraemon cms')}}</li>
+				<li>{{~__('tutorial')}}</li>
+			</ul>
+		</section>
+
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}

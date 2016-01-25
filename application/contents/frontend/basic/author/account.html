@@ -1,0 +1,66 @@
+<!--ログインしてないときはリダイレクト-->
+{{^logged_in_user}}
+{{~redirect()}}
+{{/^}}
+
+
+<!--ログインしてるとき-->
+{{#logged_in_user}}
+
+{{#account_result.post}}
+{{~user_account = set(account_result.post)}}
+{{/#}}
+{{^account_result.post}}
+{{~user_account = set(logged_in_user)}}
+{{/^}}
+
+<section>
+
+	{{#account_result.success}}
+	<div id="notice" class="success">
+		<p>保存しました</p>
+	</div>
+	{{/#}}
+
+	{{#account_result.invalid}}
+	<div id="notice" class="invalid">
+		<p>入力を確認してください</p>
+		<ul>
+			{{*account_result.errors : error}}
+			<li>{{error.message}} (field: {{error.field}})</li>
+			{{/*}}
+		</ul>
+	</div>
+	{{/#}}
+
+	{{#account_result.exception}}
+	<div id="notice" class="exception">
+		<p>システムエラー</p>
+		<p>もう一度送やり直してください。</p>
+	</div>
+	{{/#}}
+
+	<form action="" method="POST" enctype="multipart/form-data">
+
+		<dl>
+
+			<dt>ユーザーID</dt>
+			<dd>
+				<input type="text" name="username" value="{{user_account.username}}" placeholder="user ID...">
+			</dd>
+
+			<dt>メールアドレス</dt>
+			<dd>
+				<input type="text" name="email" value="{{user_account.email}}" placeholder="email...">
+			</dd>
+		</dl>
+
+		{{&ticket}}
+		<div>
+			<button type="submit" name="account" value="1">保存する</button>
+		</div>
+
+	</form>
+
+</section>
+{{/#}}

@@ -1,0 +1,60 @@
+<!--ログインしてるときはリダイレクト-->
+{{#logged_in_user}}
+{{~redirect()}}
+{{/#}}
+
+{{^logged_in_user}}
+<section>
+
+	{{#password_result.success}}
+	<div id="notice" class="success">
+		<p>パスワードを変更しました</p>
+		<ul>
+			<li>もう一度ログインしてください。</li>
+		</ul>
+	</div>
+	{{/#}}
+
+	{{#account_result.success}}
+	<div id="notice" class="success">
+		<p>アカウントを変更しました</p>
+		<ul>
+			<li>もう一度ログインしてください。</li>
+		</ul>
+	</div>
+	{{/#}}
+
+	{{#login_result.failed}}
+	<div id="notice" class="invalid">
+		<p>ログインに失敗しました</p>
+		<ul>
+			<li>ID、パスワードを確認して下さい。</li>
+		</ul>
+	</div>
+	{{/#}}
+
+	<form action="" method="POST">
+
+		<dl>
+			<dt>ユーザーID</dt>
+			<dd><input type="text" name="username" value="{{login_result.post.username}}" placeholder="user ID..."></dd>
+			<dt>パスワード</dt>
+			<dd><input type="password" name="password" value="" placeholder="password..."></dd>
+		</dl>
+
+		<div>
+			<div>
+				<label><input type="checkbox" name="remember" value="1" {{~form_value(login_result.post.remember)}}> ログイン状態を保持する</label>
+			</div>
+			<div>
+				<label><a href="{{host}}author/forgot" title="forgot">パスワードを忘れた場合</a></label>
+			</div>
+		</div>
+
+		<div>
+			<button type="submit" name="login" value="1">ログイン</button>
+		</div>
+
+	</form>
+</section>
+{{/^}}

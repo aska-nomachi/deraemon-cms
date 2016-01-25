@@ -1,0 +1,143 @@
+<form class="mon8 cnt" action="http://localhost/mono/search" method="GET">
+	<dl>
+		<dt>search</dt><dd><input type="text" name="string" value="{{search_result.get.string}}" placeholder="string"></dd>
+	</dl>
+	<p class="pb1"><button type="submit" name="search" value="search">search</button></p>
+</form>
+
+<ul>
+	{{*search_result.items : item}}
+	<li>
+		{{item.title}}
+		<img src="{{item.main_image.path}}w100-h100-s{{item.main_image.file}}" alt="{{item.title}}">
+	</li>
+	{{/*}}
+</ul>
+
+{{? $amimal = array('kind' => 'kohei', 'name' => 'tama'); }}
+
+{{~ set_lang('ja')}}
+{{~ translate(amimal.kind)}}
+{{~ translate('kohei')}}
+
+{{? $date = '2013-7-28';}}
+{{~ date_format(date, 'Y年n月j日')}}
+
+{{% links = get_items(segment = [home])}}
+{{!~ debug(links.items.home)}}
+
+{{% archive = get_items(division = [page, new], order_column = id, order_direction = ASC, pagenate=true, items_per_page = 2, follow = 1)}}
+
+<p>{{#archive.pagenate1}}page1{{/#}}</p>
+<p>{{#archive.pagenate2}}page2{{/#}}</p>
+<p>{{#archive.pagenate3}}page3{{/#}}</p>
+<p>{{archive.total}}</p>
+<ul>
+	{{*archive.items : result}}
+	<li>
+		{{items.title}}
+		<img src="{{result.main_image.path}}w100-h100-s{{result.main_image.file}}" alt="{{result.title}}">
+	</li>
+	{{/*}}
+</ul>
+
+{{#archive.pagenate : pagenate}}
+{{#pagenate.exist}}
+<p>
+	{{#pagenate.first_page : first_page}}
+	{{#first_page.current}}<span>&Lt;</span>{{/#}}
+	{{^first_page.current}}<a href="{{first_page.url}}" title="{{first_page.index}}">&Lt;</a>{{/^}}
+	{{/#}}
+
+	{{#pagenate.prev_page : prev_page}}
+	{{#prev_page.current}}<span>&lt;</span>{{/#}}
+	{{^prev_page.current}}<a href="{{prev_page.url}}" title="{{prev_page.index}}">&lt;</a>{{/^}}
+	{{/#}}
+
+	{{*pagenate.pages : page}}
+	{{#page.current}}<span>{{page.index}}</span>{{/#}}
+	{{^page.current}}<a href="{{page.url}}" title="{{page.index}}">{{page.index}}</a>{{/^}}
+	{{/*}}
+
+	{{#pagenate.next_page : next_page}}
+	{{#next_page.current}}<span>&gt;</span>{{/#}}
+	{{^next_page.current}}<a href="{{next_page.url}}" title="{{next_page.index}}">&gt;</a>{{/^}}
+	{{/#}}
+
+	{{#pagenate.last_page : last_page}}
+	{{#last_page.current}}<span>&Gt;</span>{{/#}}
+	{{^last_page.current}}<a href="{{last_page.url}}" title="{{last_page.index}}">&Gt;</a>{{/^}}
+	{{/#}}
+</p>
+{{/#}}
+{{/#}}
+
+{{#archive.pagenate : pagenate}}
+<p>
+	{{#pagenate.follow_pre}}...{{/#}}
+	{{*pagenate.follow_pages : page}}
+	{{#page.current}}<span>{{page.index}}</span>{{/#}}
+	{{^page.current}}<a href="{{page.url}}" title="{{page.index}}">{{page.index}}</a>{{/^}}
+	{{/*}}
+	{{#pagenate.follow_suf}}...{{/#}}
+</p>
+{{/#}}
+
+<hr>
+
+{{#archive.prev : prev}}
+{{prev.title}}
+<img src="{{prev.main_image.path}}w100-h100-s{{prev.main_image.file}}" alt="{{prev.title}}">
+{{/#}}
+
+{{#archive.next : next}}
+{{next.title}}
+<img src="{{next.main_image.path}}w100-h100-s{{next.main_image.file}}" alt="{{next.title}}">
+{{/#}}
+
+<hr>
+
+<p>id: {{ item.id }}</p>
+<p>title: {{item.title}}</p>
+<p>segment: {{item.segment}}</p>
+<p>description: {{item.description}}</p>
+<p>summary: {{item.summary}}</p>
+<p>item content: {{item.content}}</p>
+<p>item content: {{&item.content}}</p>
+<p>issued: {{#item.issued:issued}}{{~ date_format  (issued, 'Y年 n月 j日')}}{{/#}}</p>
+
+<img src="{{item.main_image.path}}w-h-o{{item.main_image.file}}" alt="{{item.title}}">
+<img src="{{item.main_image.path}}w100-h100-p{{item.main_image.file}}" alt="{{item.title}}">
+<img src="{{item.main_image.path}}w100-h100-l{{item.main_image.file}}" alt="{{item.title}}">
+<img src="{{item.main_image.path}}w100-h100-s{{item.main_image.file}}" alt="{{item.title}}">
+<img src="{{item.main_image.path}}w100-h-s{{item.main_image.file}}" alt="{{item.title}}">
+<img src="{{item.main_image.path}}w-h100-s{{item.main_image.file}}" alt="{{item.title}}">
+
+{{#item.images}}
+<ul>
+	{{*item.images:image}}
+	<li>
+		<img src="{{image.path}}w100-h100-l{{image.file}}" alt="{{image.name}}">
+		<p>{{image.name}}</p>
+	</li>
+	{{/*}}
+</ul>
+{{/#}}
+
+<img src="{{item.images.photo1.path}}w100-h100-l{{item.images.photo1.file}}" alt="{{item.images.phito1.name}}">
+
+{{!? echo Debug::vars($item['fields']); }}
+
+{{#item}}
+<div>
+	{{*item.fields:field}}
+	<p>{{field.name}}</p>
+	<ul>
+		{{*field.values:value}}
+		<li>{{&value.value}}</li>
+		{{/*}}
+	</ul>
+	{{/*}}
+</div>
+{{/#}}
+</div>

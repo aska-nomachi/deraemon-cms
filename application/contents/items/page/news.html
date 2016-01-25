@@ -1,0 +1,96 @@
+<<<<<<< HEAD
+<!-- for present -->
+<div style="border: 3px solid aqua;">
+	<div style="background-color: aqua; float: right; padding: 10px;">news content</div>
+	<!-- /for present -->
+
+	<!--.news_ss1-->
+	<section class="news_ss1 pad2 box">
+
+		<div class="txc mar3-b">
+			<h1 class="news-title title1-1 mar3-b gri8-6 pre8-1 suf8-1">{{item.title}}</h1>
+			<div class="news-catch catch">
+				{{~auto_p(item.catch)}}
+			</div>
+		</div>
+
+		<!--.news_ss2-->
+		<sectoin class="news_ss2">
+
+			<h2 class="title1-1">news list</h2>
+
+			<!--.news-list--> 
+			{{%newses = get_items(division = ['news'], order_column = 'issued', order_direction = 'desc', paginate = 'true', items_per_page = 6, follow = 2)}}
+			<ul class="newses-list box">
+				{{*newses.items: news}}
+				<li class="newses-list-item gri3-1 pad2">
+					<a class="mar1-b" href="{{host}}{{news.segment}}">
+						<img class="imw" src="{{~image_url(news.main_image, '400', '400', 'v')}}" alt="{{news.main_image.name}}" />
+					</a>
+					<h3 class="newses-list-item-title title2">{{news.title}}</h3>
+					<div class="mar1-b">
+						<p>{{~limit_chars(news.summary, 80)}}</p>
+					</div>
+					<div class="newses-list-item-more txr"><a class="more" href="{{host}}{{news.segment}}">more</a></div>
+				</li>
+				{{/*}}
+			</ul>
+			<!--/.news-list--> 
+
+			<!--.paginate-->
+			{{~paginate = set(products.paginate)}}
+			{{>paginate}}
+			<!--/.paginate-->
+
+		</sectoin>
+		<!--/.news_ss2-->
+
+	</section>
+	<!--/.news_ss1-->
+
+	<!-- for present -->
+</div>
+<!-- /for present -->
+=======
+<!--.news_ss1-->
+<section class="news_ss1 pad2 box">
+
+	<div class="txc mar3-b">
+		<h1 class="news-title title1-1 mar3-b gri8-6 pre8-1 suf8-1">{{item.title}}</h1>
+		<div class="news-catch catch">
+			{{~auto_p(item.catch)}}
+		</div>
+	</div>
+
+	<!--.news_ss2-->
+	<sectoin class="news_ss2">
+
+		<h2 class="title1-1">news list</h2>
+		
+		<!--.news-list--> 
+		{{%newses = get_items(division = ['news'], order_column = 'issued', order_direction = 'desc', paginate = 'true', items_per_page = 6, follow = 2)}}
+		<ul class="newses-list box">
+			{{*newses.items: news}}
+			<li class="newses-list-item gri3-1 pad2">
+				<a class="mar1-b" href="{{host}}{{news.segment}}"><img class="imw" src="{{~image_url(news.main_image, '400', '400', 'v')}}" alt="{{news.main_image.name}}" /></a>
+				<h3 class="newses-list-item-title title2">{{news.title}}</h3>
+				<div class="mar1-b">
+					<p>{{~limit_chars(news.summary, 80)}}</p>
+				</div>
+				<div class="newses-list-item-more txr"><a class="more" href="{{host}}{{news.segment}}">more</a></div>
+			</li>
+			{{/*}}
+		</ul>
+		<!--/.news-list--> 
+
+		<!--.paginate-->
+		{{~paginate = set(newses.paginate)}}
+		{{>paginate}}
+		<!--/.paginate-->
+
+	</sectoin>
+	<!--/.news_ss2-->
+
+</section>
+<!--/.news_ss1-->
+>>>>>>> origin/master

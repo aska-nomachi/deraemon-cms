@@ -1,0 +1,101 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">{{~__('divisions')}} - {{~__('index')}}</h1>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<!--Create-->
+		<form action="" method="POST">
+
+			<dl class="hor">
+
+				<dt class="mb1">{{~__('wrapper')}}</dt>
+				<dd class="mb1">
+					<select class="frm" name="wrapper_id"  data-value="{{post.wrapper_id}}">
+						<option value="">---</option>
+						{{*wrappers : wrapper}}
+						<option value="{{wrapper.id}}">{{wrapper.name}} [ id:{{wrapper.id}} ] [content type: {{wrapper.content_type}} ]</option>
+						{{/*}}
+					</select>
+					<p class="note pt1">このdivisionのwrapperを選択します。</p>
+				</dd>
+
+				<dt class="mb1">{{~__('segment')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="segment" value="{{post.segment}}" placeholder="segment...">
+					<p class="note pt1">segmentは半角英数とアンダースコアのみ使用できます。 [a-z]、[1-9]、[_]</p>
+				</dd>
+
+				<dt class="mb1">{{~__('name')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="name" value="{{post.name}}" placeholder="name...">
+					<p class="note pt1">任意の名前をつけます。</p>
+				</dd>
+
+			</dl>
+
+			<p class="txr mb1"><button class="btn blue" type="submit" name="create" value="1"><i class="fa fa-plus-square"></i> {{~__('create')}}</button></p>
+
+		</form>
+		<!--/Create-->
+
+		<!--List-->
+		{{#divisions}}
+		<div>
+
+			<table class="tbl">
+				<tr>
+					<th>{{~__('id')}}</th>
+					<th>{{~__('wrapper')}}</th>
+					<th>{{~__('segment')}}</th>
+					<th>{{~__('name')}}</th>
+					<th>&nbsp;</th>
+				</tr>
+				{{*divisions : division}}
+				<tr>
+					<td>{{division.id}}</td>
+					<td>{{division.wrapper_id}}, {{division.wrapper_name}}, {{division.wrapper_segment}}, {{division.wrapper_content_type}}</td>
+					<td>{{division.segment}}</td>
+					<td>{{division.name}}</td>
+					<td class="txr"><a class="btn" href="{{division.edit_url}}" title=""><i class="fa fa-edit"></i> {{~__('edit')}}</a></td>
+				</tr>
+				{{/*}}
+			</table>
+
+		</div>
+		{{/#}}
+
+		{{^divisions}}
+		<p>no divisions...</p>
+		{{/^}}
+		<!--/List-->
+
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}

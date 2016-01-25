@@ -1,0 +1,108 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">{{item.division_name}} - {{item.segment}} - {{~__('received comments')}}</h1>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<!--Update-->
+		{{#received_comments}}
+		<form class="grd" action="" method="POST">
+
+			<!--Sort-->
+			<nav class="sort">
+				<ul class="inl grd txr">
+					<li class="p1">sort</li>
+					{{*columns : column}}
+					<li class="p1">
+						{{#column.current}}
+						{{#column.current_asc}}<i class="fa fa-sort-asc"></i>{{/#}}
+						{{#column.current_desc}}<i class="fa fa-sort-desc"></i>{{/#}}
+						{{/#}}
+						<a href="{{column.url}}" title="{{column.name}}">
+							{{column.name}}
+						</a>
+					</li>
+					{{/*}}
+				</ul>
+			</nav>
+			<!--/Sort-->
+
+			<!--lists-->
+			<div class="lists grd mb1">
+				{{*received_comments : received_comment}}
+				<article class="list ptb2 grd">
+					<div class="gla8 pr1">
+						<h2 class="ttl2 mb1">{{received_comment.subject}}</h2>
+						<ul class="grd inl mb1">
+							<li class="mr1"><span class="name">{{~__('id')}}</span>{{received_comment.id}}</li>
+							<li class="mr1"><span class="name">{{~__('user id')}}</span>{{received_comment.user_id}}</li>
+							<li class="mr1"><span class="name">{{~__('replay id')}}</span>{{received_comment.replay_id}}</li>
+							<li class="mr1"><span class="name">{{~__('display name')}}</span>{{received_comment.display_name}}</li>
+							<li class="mr1"><span class="name">{{~__('created')}}</span>{{received_comment.created}}</li>
+							<li class="mr1"><span class="name"></span></li>
+						</ul>
+						<div>{{received_comment.content}}</div>
+					</div>
+
+					<div class="gla2 pr1">
+						<ul class="uns">
+							<li class="mr1"><label><span class="name">{{~__('is accept')}}</span><input type="checkbox" name="is_active{{received_comment.id}}" value="1" data-value="{{received_comment.is_accept}}"></li>
+						</ul>
+					</div>
+
+					<div class="gla2 txr">
+						<input type="checkbox" name="delete_received_comment_id[{{received_comment.id}}]" value="{{received_comment.id}}" {{~form_value(post.delete_received_comment_id)}}>
+						<a class="delete btn red" href="{{received_comment.delete_url}}" title="delete"><i class="fa fa-minus-square"></i> {{~__('delete')}}</a>
+					</div>
+				</article>
+				{{/*}}
+			</div>
+			<!--/lists-->
+
+			<div class="txr">
+				<button class="delete btn red" type="submit" name="delete" value="1"><i class="fa fa-minus-square"></i> {{~__('select delete')}}</button>
+				<button class="btn blue" type="submit" name="update" value="1"><i class="fa fa-refresh"></i> {{~__('update')}}</button>
+			</div>
+
+		</form>
+		{{/#}}
+
+		{{^received_comments}}
+		<p>{{~__('no received comments')}}...</p>
+		{{/^}}
+		<!--/Update-->
+
+		<!--Pagenate-->
+		<div class="txc">{{>pagenate}}</div>
+		<!--/Pagenate-->
+
+
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}

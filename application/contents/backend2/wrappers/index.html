@@ -1,0 +1,99 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">{{~__('wrappers')}} - {{~__('index')}}</h1>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<!--Create-->
+		<form class="mb1" action="" method="POST">
+
+			<dl class="hor">
+
+				<dt class="mb1">{{~__('segment')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="segment" value="{{post.segment}}" placeholder="segment...">
+					<p class="note pt1">segmentは半角英数とアンダースコアのみ使用できます。 [a-z]、[1-9]、[_]</p>
+				</dd>
+
+				<dt class="mb1">{{~__('name')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="name" value="{{post.name}}" placeholder="name...">
+					<p class="note pt1">任意の名前をつけます。</p>
+				</dd>
+
+				<dt class="mb1">{{~__('content type')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="content_type" value="{{post.content_type}}" placeholder="content type...">
+					<p class="note pt1">
+						ファイルのコンテントタイプを指定します。<br />
+						text/html、application/json、text/xml; charset=UTF-8、text/plain、text/css、text/javascript、etc<br />
+					</p>
+				</dd>
+
+			</dl>
+
+			<div class="txr"><button class="btn blue" type="submit" name="create" value="1"><i class="fa fa-plus-square"></i> {{~__('create')}}</button></div>
+
+		</form>
+		<!--/Create-->
+
+		<!--List-->
+		{{#wrappers}}
+		<div>
+
+			<table class="tbl">
+				<tr>
+					<th>id</th>
+					<th>{{~__('segment')}}</th>
+					<th>{{~__('name')}}</th>
+					<th>{{~__('content type')}}</th>
+					<th>&nbsp;</th>
+				</tr>
+				{{*wrappers : wrapper}}
+				<tr>
+					<td>{{wrapper.id}}</td>
+					<td>{{wrapper.segment}}</td>
+					<td>{{wrapper.name}}</td>
+					<td>{{wrapper.content_type}}</td>
+					<td class="txr"><a class="btn" href="{{wrapper.edit_url}}" title="edit"><i class="fa fa-edit"></i> {{~__('edit')}}</a></td>
+				</tr>
+				{{/*}}
+			</table>
+
+		</div>
+		{{/#}}
+
+		{{^wrappers}}
+		<p>no wrappers...</p>
+		{{/^}}
+		<!--/List-->
+
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}

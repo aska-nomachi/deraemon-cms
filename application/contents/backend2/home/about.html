@@ -1,0 +1,230 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h2 class="ttl1 prl2 ptb1 mb3 nlr3 txr">about</h2>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<section class="fix mb3">
+			<h3 class="ttl2 mb1">kohx cms とは？</h3>
+
+			<p>コーダー、デザイナーがサーバサイドや、プログラミングの知識なしでも作れるCMSだよ！</p>
+			<p>コンテンツマネージができて、メールフォーム、コメント、ログイン機能が最初っからついてるよ！</p>
+			<p>htmlで編集できるよ！</p>
+			<p>余計な機能がついてないからすっきりするよ！</p>
+			<p>html、css、javascriptは何も干渉受けないから自由に使えるよ！</p>
+			<p>anglerjsはむりかな。。。</p>
+		</section>
+
+		<hr class="mb3">
+
+		<section class="fix mb3">
+			<h3 class="ttl2 mb1">インストール</h3>
+
+			<dl>
+				<dt>.htaccessの変更</dt>
+				<dd class="mb1">
+					<p>ディレクトリの名前を変更</p>
+					<pre>
+# Installation directory
+RewriteBase /prototype2/  ->ここを/newname/に変える</pre>
+				</dd>
+
+				<dt>application->config->database.phpの変更</dt>
+				<dd class="mb1">
+
+					<pre>
+'hostname'   => 'localhost',  ->ホスト名
+'database'   => 'prototype2', ->データベース名
+'username'   => 'root',       ->ユーザーネーム
+'password'   => '',           ->パスワード</pre>
+				</dd>
+
+				<dt>bootstrapの変更</dt>
+				<dd class="mb1">
+					<pre>$public_host = 'prototype2.com';  ->公開するサーバのホスト名</pre>
+					<pre>$local_host = '/prototype2/';     ->ローカルサーバのホスト名</pre>
+				</dd>
+
+				<dt>ダイレクトユーザを作成</dt>
+				<dd class="mb1">
+					<p>[host]/admin/directuser?direct_key=[database->direct_key]に接続</p>
+					<p>フォームに入力して最高権限のdirectを作成</p>
+				</dd>
+
+				<dt>settingsの変更</dt>
+				<dd class="mb1">
+					<ul>
+						<li>direct_key</li>
+						<li>backend_name</li>
+						<li>lang</li>
+						<li>backend_lang</li>
+						<li>encrypt_key</li>
+						<li>cooki_salt</li>
+						<li>session_name</li>
+						<li>auth_hash_key</li>
+						<li>bauth_session_key</li>
+					</ul>
+				</dd>
+			</dl>
+		</section>
+
+		<hr class="mb3">
+
+		<section class="fix mb3">
+			<h3 class="ttl2 mb1">デフォルトのテーマ</h3>
+			<p>basic</p>
+			<p>入っているファイル</p>
+			<ul>
+				<li>basic->email->reset.html</li>
+				<li>basic->email->activate.html</li>
+				<li>basic->error->404.html</li>
+				<li>basic->error->500.html</li>
+				<li>basic->error->default.html</li>
+			</ul>
+		</section>
+
+		<hr class="mb3">
+
+		<section class="fix mb3">
+			<h3 class="ttl2 mb3">タブの説明</h3>
+
+			<p class="mb1">タブは4つあります。簡単に説明。</p>
+			<ul>
+				<li>
+					<p>dashboard -> home、settings、users、received emails、received commentsがあります。</p>
+					<p>設定関係と受け取ったメール、コメントの一覧があります。</p>
+				</li>
+				<li>
+					<p>template -> wrappers、divisions、shapes、parts、emails、errorsがあります。</p>
+					<p>各種テンプレートがあります。</p>
+				</li>
+				<li>
+					<p>attachment -> fields、categories、tagsがあります。</p>
+					<p>フィールドとカテゴリーとタグを作るところです。</p>
+				</li>
+				<li>
+					<p>items -> divisionを作ったら増えていきます。</p>
+					<p>ページのタイトル、キーワードなどの設定、画像の登録、中身のhtmlなんかを編集します。</p>
+				</li>
+			</ul>
+		</section>
+
+		<hr class="mb3">
+
+		<section class="fix mb3">
+			<div class="gla6 p1">
+				<h3 class="ttl2 mb2">templateの説明</h3>
+
+				<p>wrapperはhtmlなどの一番外のテンプレートです。</p>
+				<p><code>&lbrace;&lbrace;>division_content&rbrace;&rbrace;</code> の中に次のテンプレートdivisionsがはいってきます。</p>
+				<p>divisionsは、大きく違う内容のページとにわけます。</p>
+				<p>例えばhtmlだけど、普通のページ（home、about as、contactなんか）とブログ的なもの（管理者の報告ブログ、スタッフブログなんか）</p>
+				<p>この2つはdivisionのpageとdivisionのblogとかにわけます。</p>
+				<p>divisionの <code>&lbrace;&lbrace;>shape_content&rbrace;&rbrace;</code> のなかに次のテンプレートshapesが入ってきます。</p>
+				<p>
+					shapeは使っても使わなくてもOKです。これはひな形を作ります。例えば、newsというdivisionを作った時にタイトルと中身がほとんど一緒の時に
+					これをつかってデザインなんかを揃えます。
+				</p>
+				<p>shapeを使う時は、item（新しいページを作るとき編集するもの）の編集のなかのcontentの画面で選択するとOKです。</p>
+				<p>使わない時はここにitemのcontent （<code>&lbrace;&lbrace;&item.content&rbrace;&rbrace;</code>） の部分がはいります。 </p>
+				<p>
+					itemの項目はどこでも使えます。たとえば、headのtitleには <code>&lbrace;&lbrace;item.title&rbrace;&rbrace;</code>を
+					使います。内容は<code>&lbrace;&lbrace;item.content&rbrace;&rbrace;</code>で使えます。
+				</p>
+				<p>itemの項目は他にもたくさんありますが、後で説明します。</p>
+				<p>他にemailsとerrorsのテンプレートがあります。</p>
+				<p>emailsはContact usとかに使うユーザーが送信するメールフォームのテンプレートに使います。</p>
+				<p>errorsは404 not faundなどのエラーページのテンプレートです。</p>
+				<p>この2つはもあとで詳しく説明していきます。</p>
+			</div>
+
+			<div class="gla6 p1">
+				<style>
+					.img_el { border: 1px solid rosybrown; position: relative; padding: 8px; }
+					.img_el:after { position: absolute; font-weight: bold; display: block; background-color: rosybrown; top: 0; right: 0; padding: 2px 4px; }
+					.img_wrapper:after { content: 'wrapper template'; }
+					.img_division:after { content: 'division template'; }
+					.img_shape:after { content: 'shape template'; }
+					.img_item:after { content: 'item content'; }
+					.img_part:after { content: 'part template'; }
+				</style>
+				<figure>
+					<figcaption class="txc mb1">図で説明するとこんなかんじになってます。</figcaption>
+					<div class="img_wrapper img_el">
+						&lt;!DOCTYPE html&gt;<br>
+						&lt;html lang="ja"&gt;<br>
+						&lt;head&gt;<br>
+						&lt;meta charset="utf-8"&gt;<br>
+						&lt;title&gt;<br>
+						.....<br>
+						&lt;/head&gt;<br>
+						&lt;body&gt;<br>
+						&lt;h1&gt;title&lt;/h1&gt;<br>
+						&lt;section&gt;<br>
+						<div class="img_division img_el">
+							&lt;section&gt;<br>
+							.....<br>
+							<div class="img_shape img_el">
+								&lt;section&gt;<br>
+								.....<br>
+								<div class="img_item img_el">
+									ここに内容が入ります。<br>
+									&lt;section&gt;<br>
+									.....<br>
+									.....<br>
+									.....<br>
+									&lt;/section&gt;
+									<div class="img_part img_el">
+										partはどこにでも入れれます。<br>
+										&lt;div&gt;.....&lt;/div&gt;
+									</div>
+								</div>
+								.....<br>
+								&lt;/section&gt;
+							</div>
+							.....<br>
+							&lt;/section&gt;
+						</div>
+						&lt;/section&gt;<br>
+						&lt;/body&gt;<br>
+						&lt;/html&gt;
+					</div>
+				</figure>
+			</div>
+		</section>
+
+		<hr class="mb3">
+
+		<section class="fix mb3">
+			<h3 class="ttl2 mb2">その他の項目</h3>
+			<p>その他の事項はチュートリアルにそって説明していきます。</p>
+			<a href="{{host}}admin/home/tutorial" title="tutorial">チュートリアルへ</a>
+		</section>
+		<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}

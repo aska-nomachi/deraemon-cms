@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <title>{{title}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<meta name="keywords" content="{{keywords}}">
+		<meta name="description" content="{{description}}">
+		<meta name="author" content="Kohei Okuda">
+		<meta name="generator" content="Kohana 3.3">
+		<meta name="copyright" content="Copyright nolgraphic">
+
+		<!-- styles -->
+		<!--<link href='http://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>-->
+    <link href="{{backend_host}}media/css/normalize.css" rel="stylesheet">
+    <link href="{{backend_host}}media/css/grid.css" rel="stylesheet">
+    <link href="{{backend_host}}media/css/base.css" rel="stylesheet">
+    <link href="{{backend_host}}media/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{backend_host}}media/icon/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{backend_host}}media/icon/apple-touch-icon-114-precomposed.png">
+		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{backend_host}}media/icon/apple-touch-icon-72-precomposed.png">
+		<link rel="apple-touch-icon-precomposed" href="{{backend_host}}media/icon/apple-touch-icon-57-precomposed.png">
+		<link rel="shortcut icon" href="{{backend_host}}media/icon/favicon.png">
+
+		<!-- javascript -->
+    <script src="{{backend_host}}media/js/jquery-1.10.1.min.js"></script>
+    <script src="{{backend_host}}media/js/form.js"></script>
+    <script src="{{backend_host}}media/js/inputfile.js"></script>
+    <script src="{{backend_host}}media/js/base.js"></script>
+
+		<!-- codemirror -->
+		<script src="{{backend_host}}media/codemirror/lib/codemirror.js"></script>
+		<link href= "{{backend_host}}media/codemirror/lib/codemirror.css" rel="stylesheet">
+		<script src="{{backend_host}}media/codemirror/addon/edit/matchbrackets.js"></script>
+    <script src="{{backend_host}}media/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+    <script src="{{backend_host}}media/codemirror/mode/xml/xml.js"></script>
+    <script src="{{backend_host}}media/codemirror/mode/javascript/javascript.js"></script>
+    <script src="{{backend_host}}media/codemirror/mode/css/css.js"></script>
+    <script src="{{backend_host}}media/codemirror/mode/clike/clike.js"></script>
+    <script src="{{backend_host}}media/codemirror/mode/php/php.js"></script>
+		<link href= "{{backend_host}}media/codemirror/theme/ambiance.css" rel="stylesheet">
+	</head>
+
+	<body>
+		<div id="wrapper" class="fix">
+			{{&content}}
+		</div>
+		{{!? if(Kohana::$environment === Kohana::DEVELOPMENT) echo View::factory('profiler/stats'); }}
+	</body>
+</html>

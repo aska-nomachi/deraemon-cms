@@ -1,0 +1,132 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h1 class="ttl1 prl2 ptb1 mb1 nlr3 txr">{{~__('users')}} - {{~__('index')}}</h1>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<!--Create-->
+		<form class="mb1" action="" method="POST" enctype="multipart/form-data">
+
+			<dl class="hor">
+
+				<dt class="mb1">{{~__('username')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="create_username" value="{{create.username}}" placeholder="{{~__('username')}}...">
+				</dd>
+
+				<dt class="mb1">{{~__('email')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="create_email" value="{{create.email}}" placeholder="{{~__('email')}}...">
+				</dd>
+
+				<dt class="mb1">{{~__('password')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="password" name="create_password" value="{{create.password}}" placeholder="{{~__('password')}}...">
+				</dd>
+
+				<dt class="mb1">{{~__('avatar')}}</dt>
+				<dd class="mb1">
+					<label class="btn">{{~__('select')}}<input type="file" name="create_avatar"></label>
+				</dd>
+
+				<dt class="mb1">{{~__('is block')}}</dt>
+				<dd class="mb1">
+					<input type="checkbox" name="create_is_block" value="1" data-value="{{create.is_block}}">
+				</dd>
+
+			</dl>
+
+			<div class="txr"><button class="btn blue" type="submit" name="create" value="1"><i class="fa fa-plus-square"></i> {{~__('create')}}</button></div>
+
+		</form>
+		<!--/Create-->
+
+		<!--Update-->
+		{{#users}}
+		<form action="" method="POST">
+
+			<table class="tbl mb1">
+				<tr class="sort">
+					{{*columns : column}}
+					{{#column.url}}
+					<th>
+						{{#column.current}}
+						{{#column.current_asc}}<i class="fa fa-sort-asc"></i>{{/#}}
+						{{#column.current_desc}}<i class="fa fa-sort-desc"></i>{{/#}}
+						{{/#}}
+						<a href="{{column.url}}" title="{{~__(column.name)}}">
+							{{~__(column.name)}}
+						</a>
+					</th>
+					{{/#}}
+					{{^column.url}}
+					<th><span >{{~__(column.name)}}</span></th>
+					{{/^}}
+					{{/*}}
+				</tr>
+
+				{{*users : user}}
+				<tr>
+					<td>
+						<div>{{user.id}}</div>
+						{{#user.avatar}}
+						<div><img class="blc" src="{{~image_url(user.avatar, 50, 50, 's')}}" alt="{{user.username}}" /></div>
+						{{/#}}
+						{{^user.avatar}}
+						<div style="background: #ccc; color: #fff; line-height: 50px; width: 50px; text-align: center; font-weight: bold;">noimg</div>
+						{{/^}}
+					</td>
+					<td>{{user.role}}</td>
+					<td>{{user.username}}</td>
+					<td>{{user.email}}</td>
+					<td>
+						<input type="checkbox" name="is_block[{{user.id}}]" value="1" data-value="{{user.is_block}}">
+					</td>
+					<td class="txr"><a class="btn" href="{{user.edit_url}}" title="edit"><i class="fa fa-edit"></i> {{~__('edit')}}</a></td>
+				</tr>
+				{{/*}}
+			</table>
+
+			<div class="txr"><button class="btn blue" type="submit" name="update" value="1"><i class="fa fa-refresh"></i> {{~__('update')}}</button></div>
+
+		</form>
+		{{/#}}
+
+		{{^users}}
+		<p>{{~__('no user')}}...</p>
+		{{/^}}
+		<!--/Update-->
+
+		<!--Pagenate-->
+		<div class="txc">{{>pagenate}}</div>
+		<!--/Pagenate-->
+
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}

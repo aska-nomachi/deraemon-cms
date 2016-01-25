@@ -1,0 +1,81 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">{{~__('divisions')}} - {{division.name}} - {{~__('edit')}}</h1>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<!--Update-->
+		<form action="" method="POST">
+
+			<dl class="hor">
+
+				<dt class="mb1">{{~__('wrapper')}}</dt>
+				<dd class="mb1">
+					<select class="frm" name="wrapper_id"  data-value="{{division.wrapper_id}}">
+						<option value="">---</option>
+						{{*wrappers : wrapper}}
+						<option value="{{wrapper.id}}">{{wrapper.name}} [ id: {{division.wrapper_id}} ] [ content type: {{division.wrapper_content_type}} ]</option>
+						{{/*}}
+					</select>
+				</dd>
+
+				<dt class="mb1">{{~__('segment')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="segment" value="{{division.segment}}" placeholder="segment...">
+				</dd>
+
+				<dt class="mb1">{{~__('name')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="name" value="{{division.name}}" placeholder="name...">
+				</dd>
+			</dl>
+
+			<dl class="mb1">
+				<dt class="mb1">{{~__('content')}}</dt>
+				<dd>
+					<p class="note">必ず&lbrace;&lbrace;&gt;shape_content&rbrace;&rbrace;を記述して下さい。<span style="color: red;">validationに含める！</span></p>
+					<textarea id="content_textarea1" name="content">{{division.content}}</textarea>
+				</dd>
+			</dl>
+
+			<div class="txr">
+				<a class="delete btn red" href="{{division.delete_url}}" title="delete"><i class="fa fa-minus-square"></i> {{~__('delete')}}</a>
+				<button class="btn blue" type="submit" name="update" value="1"><i class="fa fa-refresh"></i> {{~__('update')}}</button>
+			</div>
+
+		</form>
+		<!--/Update-->
+
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+<!--snippets-->
+{{>snippets}}
+<!--/snippets-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}

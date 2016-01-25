@@ -1,0 +1,81 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">{{item.division_name}} - {{item.segment}} - {{~__('fields')}}</h1>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<!--Update-->
+		{{#fields}}
+		<form action="" method="POST">
+
+			<table class="tbl mb1">
+
+				<tr class="sort">
+					{{*columns : column}}
+					{{#column.url}}
+					<th>
+						{{#column.current}}
+						{{#column.current_asc}}<i class="fa fa-sort-asc"></i>{{/#}}
+						{{#column.current_desc}}<i class="fa fa-sort-desc"></i>{{/#}}
+						{{/#}}
+						<a href="{{column.url}}" title="{{column.name}}">{{column.name}}</a></th>
+					{{/#}}
+					{{^column.url}}
+					<th><span >{{column.name}}</span></th>
+					{{/^}}
+					{{/*}}
+				</tr>
+
+				{{*fields : field}}
+				<tr>
+					<td>{{field.id}}</td>
+					<td>{{field.segment}}</td>
+					<td>{{field.name}}</td>
+					<td>{{field.order}}</td>
+					<td><textarea class="frm" name="value[{{field.id}}]" value="{{field.value}}" placeholder="{{~__('value')}}...">{{field.value}}</textarea></td>
+				</tr>
+				{{/*}}
+
+			</table>
+
+			<div class="txr">
+				<button class="btn blue" type="submit" name="update" value="1"><i class="fa fa-refresh"></i> {{~__('update')}}</button>
+			</div>
+
+		</form>
+		{{/#}}
+
+		{{^fields}}
+		<p>{{~__('no fields')}}...</p>
+		{{/^}}
+		<!--/Update-->
+
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}

@@ -1,0 +1,90 @@
+<<<<<<< HEAD
+<!-- for present -->
+<div style="border: 3px solid cornflowerblue;">
+	<div style="background-color: cornflowerblue; float: right; padding: 10px;">part header</div>
+	<!-- /for present -->
+
+	<header id="header" class="header mar3-b box">
+
+		<div class="header_top box">
+			<a class="header_top-logo gri6-1" href="{{host}}">{{site_title}}</a>
+			<h1 class="header_top-catch gri6-3">{{item.catch}}</h1>
+			<div class="header_contact gri6-2 pad2-rt">
+				<a href="{{host}}contact">contact</a>
+			</div>
+		</div>
+
+		<nav class="gnav">
+			{{%pages = get_items(division = ['page'], order_column = 'order')}}
+			<ul class="gnav-list">
+				{{*pages.items: page}}
+				<li class="gnav-list-item">
+					<div>
+						{{#page.current}}
+						<span>{{page.title}}</span>
+						{{/#}}
+						{{^page.current}}
+						<a href="{{host}}{{page.segment}}" title="{{page.title}}">{{page.title}}</a>
+						{{/^}}
+					</div>
+				</li>
+				{{/*}}
+			</ul>
+		</nav>
+
+		<!--	<div class="">
+				<form action="{{host}}login" method="POST">
+					<input type="text" name="username" value="{{login_result.post.username}}" placeholder="user ID...">&nbsp;
+					<input type="password" name="password" value="" placeholder="password...">
+					<label><input type="checkbox" name="remember" value="1" {{~form_value(login_result.post.remember)}}> keep login</label>
+					<label><a href="{{host}}author/forgot" title="forgot">If you forgot password.</a></label>
+					<button type="submit" name="login" value="1">login</button>
+				</form>
+			</div>-->
+
+	</header>
+
+	<!-- for present -->
+</div>
+<!-- /for present -->
+=======
+<header id="header" class="header mar3-b box">
+
+	<div class="header_top box">
+		<a class="header_top-logo gri6-1" href="{{host}}">{{site_title}}</a>
+		<h1 class="header_top-catch gri6-3">{{item.catch}}</h1>
+		<div class="header_contact gri6-2 pad2-rt">
+			<a href="{{host}}contact">contact</a>
+		</div>
+	</div>
+
+	<nav class="gnav">
+		{{%pages = get_items(division = ['page'], order_column = 'order')}}
+		<ul class="gnav-list">
+			{{*pages.items: page}}
+			<li class="gnav-list-item">
+				<div>
+					{{#page.current}}
+					<span>{{page.title}}</span>
+					{{/#}}
+					{{^page.current}}
+					<a href="{{host}}{{page.segment}}" title="{{page.title}}">{{page.title}}</a>
+					{{/^}}
+				</div>
+			</li>
+			{{/*}}
+		</ul>
+	</nav>
+
+<!--	<div class="">
+		<form action="{{host}}login" method="POST">
+			<input type="text" name="username" value="{{login_result.post.username}}" placeholder="user ID...">&nbsp;
+			<input type="password" name="password" value="" placeholder="password...">
+			<label><input type="checkbox" name="remember" value="1" {{~form_value(login_result.post.remember)}}> keep login</label>
+			<label><a href="{{host}}author/forgot" title="forgot">If you forgot password.</a></label>
+			<button type="submit" name="login" value="1">login</button>
+		</form>
+	</div>-->
+
+</header>
+>>>>>>> origin/master

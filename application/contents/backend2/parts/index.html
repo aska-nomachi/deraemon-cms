@@ -1,0 +1,80 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">{{~__('parts')}} - {{~__('index')}}</h1>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<!--Create-->
+		<form class="mb1" action="" method="POST">
+
+			<dl class="hor">
+
+				<dt class="mb1">{{~__('segment')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="segment" value="{{post.segment}}" placeholder="segment...">
+					<p class="note pt1">segmentは半角英数とアンダースコアのみ使用できます。 [a-z]、[1-9]、[_]</p>
+				</dd>
+
+			</dl>
+
+			<div class="txr"><button class="btn blue" type="submit" name="create" value="1"><i class="fa fa-plus-square"></i> {{~__('create')}}</button></div>
+
+		</form>
+		<!--/Create-->
+
+		<!--List-->
+		{{#parts}}
+		<div>
+
+			<table class="tbl">
+				<tr>
+					<th>{{~__('id')}}</th>
+					<th>{{~__('segment')}}</th>
+					<th>&nbsp;</th>
+				</tr>
+				{{*parts : part}}
+				<tr>
+					<td>{{part.id}}</td>
+					<td>{{part.segment}}</td>
+					<td class="txr"><a class="btn" href="{{part.edit_url}}" title="edit"><i class="fa fa-edit"></i> {{~__('edit')}}</a></td>
+				</tr>
+				{{/*}}
+			</table>
+
+		</div>
+		{{/#}}
+
+		{{^parts}}
+		<p>no parts...</p>
+		{{/^}}
+		<!--/List-->
+
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}

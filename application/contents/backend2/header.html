@@ -1,0 +1,55 @@
+<header id="header" class="grd">
+
+	<div class="mb1 fix">
+		<h1 class="gla4 ptrl3 pb2">
+			<a class="logo" href="{{host}}" target="_blank">
+				{{#site_title}}{{site_title}}{{/#}}
+				{{^site_title}}No title{{/^}}
+			</a>
+			<div><small>by deraemon cms version 0.8.4</small></div>
+		</h1>
+
+		<div class="gla8 ptr3 txr">
+			<ul class="user_info inl">
+				<li class="mr1"><i class="fa fa-user"></i> {{logged_in_user.username}}</li>
+				<li class="mr1"><i class="fa fa-key"></i> {{logged_in_user.role}}</li>
+				<li class="mr1"><i class="fa fa-clock-o"></i> {{#logged_in_user.last_login:lastlogin}}{{? echo date('Y-m-d H:i:s', $lastlogin); }}{{/#}}</li>
+				<li><a href="{{logout_url}}" title=""><i class="fa fa-sign-out"></i> {{~__('logout')}}</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="tabs clr plr1 fix">
+		<nav class="fix">
+			<ul class="tab_names inl grd">
+				{{*menus:menu}}
+				<li class="tab_name gla2 txc{{#menu.current}} current active{{/#}}">
+					<span class="m1 p1"><i class="{{menu.icon}}"></i> {{~__(menu.name)}}</span>
+				</li>
+				{{/*}}
+			</ul>
+		</nav>
+
+		<nav class="fix mb2">
+			<ul class="tab_boxes inl gla12">
+				{{*menus:menu}}
+				<li class="tab_box gla12{{^menu.current}} hid{{/^}}">
+					<ul class="inl gla12 mb1">
+						{{*menu.children:child}}
+						<li class="gla1 ptrl1">
+							{{#child.allow}}
+							<a class="blc{{#child.current}} current{{/#}}" href="{{child.url}}" title="{{~__(child.name)}}">{{~__(child.name)}}</a>
+							{{/#}}
+							{{^child.allow}}
+							<span class="prl1 blc">{{~__(child.name)}}</span>
+							{{/^}}
+						</li>
+						{{/*}}
+					</ul>
+				</li>
+				{{/*}}
+			</ul>
+		</nav>
+	</div>
+
+</header>

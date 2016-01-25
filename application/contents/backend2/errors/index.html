@@ -1,0 +1,61 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">errors - {{~__('index')}}</h1>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<!--List-->
+		{{#errors}}
+		<div>
+
+			<table class="tbl">
+				<tr>
+					<th>{{~__('name')}}</th>
+					<th>{{~__('segment')}}</th>
+					<th>&nbsp;</th>
+				</tr>
+				{{*errors : error}}
+				<tr>
+					<td>{{error.name}}</td>
+					<td>{{error.segment}}</td>
+					<td class="txr"><a class="btn" href="{{error.edit_url}}" title=""><i class="fa fa-edit"></i> edit</a></td>
+				</tr>
+				{{/*}}
+			</table>
+
+		</div>
+		{{/#}}
+
+		{{^errors}}
+		<p>no errors...</p>
+		{{/^}}
+		<!--/List-->
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}

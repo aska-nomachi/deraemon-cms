@@ -1,0 +1,65 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">{{~__('settings')}} - send comment</h1>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<!--Update-->
+		<form action="" method="POST">
+
+			<dl class="hor">
+				<dt class="mb1">send comment</dt>
+				<dd class="mb1"><label>on <input type="checkbox" name="send_comment_is_on" value="1" data-value="{{settings.send_comment_is_on}}"></label></dd>
+
+				<dt class="mb1">send comment is user only</dt>
+				<dd class="mb1"><label>on <input type="checkbox" name="send_comment_is_user_only" value="1" data-value="{{settings.send_comment_is_user_only}}"></label></dd>
+
+				<dt class="mb1">item send comment is on default</dt>
+				<dd class="mb1">
+					<label>on <input type="checkbox" name="item_send_comment_is_on_default" value="1" data-value="{{settings.item_send_comment_is_on_default}}"></label>
+					<small>各アイテムごとに設定するコメントの設定のデフォルト値</small>
+				</dd>
+
+				<dt class="mb1">send comment is accept default</dt>
+				<dd class="mb1">
+					<label>on <input type="checkbox" name="send_comment_is_accept_default" value="1" data-value="{{settings.send_comment_is_accept_default}}"></label>
+				</dd>
+
+				<dt class="mb1">send comment allowable tags</dt>
+				<dd class="mb1"><input class="frm" type="text" name="send_comment_allowable_tags" value="{{settings.send_comment_allowable_tags}}" data-value="{{settings.send_comment_allowable_tags}}"></dd>
+			</dl>
+
+			<div class="txr"><button class="btn blue" type="submit" name="update" value="1"><i class="fa fa-refresh"></i> {{~__('update')}}</button></div>
+
+		</form>
+		<!--/Update-->
+
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}

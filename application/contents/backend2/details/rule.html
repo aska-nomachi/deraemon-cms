@@ -1,0 +1,94 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">{{~__('details')}} - {{detail.name}} - {{~__('rule')}}</h1>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<!--Create-->
+		<form class="mb1" action="" method="POST">
+
+			<dl class="hor">
+
+				<dt class="mb1">{{~__('callback')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="create_callback" value="{{create.callback}}" placeholder="{{~__('callback')}}...">
+				</dd>
+
+				<dt class="mb1">{{~__('param')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="create_param" value="{{create.param}}" placeholder="{{~__('param')}}...">
+				</dd>
+
+			</dl>
+
+			<div class="txr">
+				<button class="btn blue" type="submit" name="create" value="1"><i class="fa fa-plus-square"></i> {{~__('create')}}</button>
+			</div>
+
+		</form>
+		<!--/Create-->
+
+		<!--list-->
+		{{#rules}}
+		<div>
+			<form action="" method="POST">
+				<div class="mb1">{{detail.name}} [ {{detail.segment}} ]</div>
+				<table class="tbl mb1">
+					<tr>
+						<th>{{~__('id')}}</th>
+						<th>{{~__('callback')}}</th>
+						<th>{{~__('param')}}</th>
+						<th>&nbsp;</th>
+						<th>&nbsp;</th>
+					</tr>
+					{{*rules : rule}}
+					<tr>
+						<td>{{rule.id}}</td>
+						<td><input class="frm" type="text" name="callback[{{rule.id}}]" value="{{rule.callback}}" placeholder="{{~__('callback')}}..."></td>
+						<td><input class="frm" type="text" name="param[{{rule.id}}]" value="{{rule.param}}" placeholder="{{~__('param')}}..."></td>
+						<td class="txr"><a class="delete btn red" href="{{rule.delete_url}}" title="delete"><i class="fa fa-minus-square"></i> {{~__('delete')}}</a></td>
+					</tr>
+					{{/*}}
+				</table>
+
+				<div class="txr">
+					<button class="btn blue" type="submit" name="update" value="1"><i class="fa fa-refresh"></i> {{~__('update')}}</button>
+				</div>
+			</form>
+		</div>
+		{{/#}}
+
+		{{^rules : rule}}
+		<p>{{~__('no rules')}}...</p>
+		{{/^}}
+		<!--/Update-->
+
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}

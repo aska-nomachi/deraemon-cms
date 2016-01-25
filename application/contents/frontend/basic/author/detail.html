@@ -1,0 +1,57 @@
+<!--ログインしてないときはリダイレクト-->
+{{^logged_in_user}}
+{{~redirect()}}
+{{/^}}
+
+{{#detail_result.post}}
+{{~user_detail = set(detail_result.post)}}
+{{/#}}
+
+{{^detail_result.post}}
+{{~user_detail = set(logged_in_user.detail)}}
+{{/^}}
+
+<!--ログインしてるとき-->
+{{#logged_in_user}}
+<section>
+
+	{{#detail_result.success}}
+	<div id="notice" class="success">
+		<h2>保存しました</h2>
+	</div>
+	{{/#}}
+
+	{{#detail_result.invalid}}
+	<div id="notice" class="invalid">
+		<h2>入力を確認してください</h2>
+		<ul>
+			{{*detail_result.errors : error}}
+			<li>{{error.message}} (field: {{error.field}})</li>
+			{{/*}}
+		</ul>
+	</div>
+	{{/#}}
+
+	{{#detail_result.exception}}
+	<div id="notice" class="exception">
+		<h2>システムエラー</h2>
+		<p>もう一度送やり直してください。</p>
+	</div>
+	{{/#}}
+
+	<form action="" method="POST" enctype="multipart/form-data">
+
+		<dl>
+			{{*user_detail: detail}}
+			<dt>{{detail.name}}</dt>
+			<dd><input class="lpad1" type="text" name="{{detail.segment}}" value="{{detail.value}}" placeholder="{{detail.segment}}..."></dd>
+			{{/*}}
+		</dl>
+
+		{{&ticket}}
+		<div>
+			<button type="submit" name="detail" value="1">保存する</button>
+		</div>
+	</form>
+</section>
+{{/#}}

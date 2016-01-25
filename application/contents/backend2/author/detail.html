@@ -1,0 +1,60 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">{{~__('author')}} - {{~__('detail')}}</h1>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<!--Update-->
+		<form action="" method="POST">
+			<dl class="mb1">
+				<dt class="mb1">{{~__('content')}}</dt>
+				<dd>
+					<p class="note">表示したいitemに <code>&lbrace;&lbrace;&gt;author_detail&rbrace;&rbrace;</code> を入れてください。</p>
+					<p class="note">contentのformのなかにonetime ticketのタグ<code>&lbrace;&lbrace;&gt;&amp;ticket&rbrace;&rbrace;</code> を入れてください。</p>
+					<p class="note">userbul details</p>
+					<p class="mb1"><code>&lbrace;&lbrace;*usable_details&rbrace;&rbrace;</code></p>
+					<ul class="uns">
+						{{*usable_details:usable_detail}}
+						<li class="mb1"><code>&lbrace;&lbrace;{{usable_detail.segment}}.segment&rbrace;&rbrace;</code> <code>&lbrace;&lbrace;{{usable_detail.segment}}.name&rbrace;&rbrace;</code></li>
+						{{/*}}
+					</ul>
+					<p class="uns"><code>&lbrace;&lbrace;/*&rbrace;&rbrace;</code></p>
+					<textarea id="content_textarea1" name="content">{{detail.content}}</textarea>
+				</dd>
+			</dl>
+
+			<div class="txr">
+				<button class="btn blue" type="submit" name="update" value="1"><i class="fa fa-refresh"></i> {{~__('update')}}</button>
+			</div>
+
+		</form>
+		<!--/Update-->
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}

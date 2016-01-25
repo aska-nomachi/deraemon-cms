@@ -1,0 +1,75 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">{{~__('emails')}} - {{~__('setting')}}</h1>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<!--Update-->
+		<form action="" method="POST">
+
+			<dl class="hor">
+				<dt class="mb1">{{~__('send email')}}</dt>
+				<dd class="mb1"><label>{{~__('on')}} <input type="checkbox" name="send_email_is_on" value="1" data-value="{{settings.send_email_is_on}}"></label></dd>
+
+				<dt class="mb1">{{~__('send email save')}}</dt>
+				<dd class="mb1"><label>{{~__('on')}} <input type="checkbox" name="send_email_save_is_on" value="1" data-value="{{settings.send_email_save_is_on}}"></label></dd>
+
+				<dt class="mb1">{{~__('send email confirm is on')}}</dt>
+				<dd class="mb1"><label>{{~__('on')}} <input type="checkbox" name="send_email_confirm_is_on" value="1" data-value="{{settings.send_email_confirm_is_on}}"></label></dd>
+
+				<dt class="mb1">{{~__('send email allowable tags')}}</dt>
+				<dd class="mb1"><input class="frm" type="text" name="send_email_allowable_tags" value="{{settings.send_email_allowable_tags}}" data-value="{{settings.send_email_allowable_tags}}"></dd>
+
+				<dt class="mb1">{{~__('send email defult receive subject')}}</dt>
+				<dd class="mb1"><input class="frm" type="text" name="send_email_defult_receive_subject" value="{{settings.send_email_defult_receive_subject}}" data-value="{{settings.send_email_defult_receive_subject}}"></dd>
+
+				<dt class="mb1">{{~__('send email defult user name')}}</dt>
+				<dd class="mb1"><input class="frm" type="text" name="send_email_defult_user_name" value="{{settings.send_email_defult_user_name}}" data-value="{{settings.send_email_defult_user_name}}"></dd>
+
+				<dt class="mb1">{{~__('send email defult user address')}}</dt>
+				<dd class="mb1"><input class="frm" type="text" name="send_email_defult_user_address" value="{{settings.send_email_defult_user_address}}" data-value="{{settings.send_email_defult_user_address}}"></dd>
+
+				<dt class="mb1">{{~__('send email defult confirm subject')}}</dt>
+				<dd class="mb1"><input class="frm" type="text" name="send_email_defult_confirm_subject" value="{{settings.send_email_defult_confirm_subject}}" data-value="{{settings.send_email_defult_confirm_subject}}"></dd>
+
+				<dt class="mb1">{{~__('send email defult admin name')}}</dt>
+				<dd class="mb1"><input class="frm" type="text" name="send_email_defult_admin_name" value="{{settings.send_email_defult_admin_name}}" data-value="{{settings.send_email_defult_admin_name}}"></dd>
+
+				<dt class="mb1">{{~__('send email defult admin address')}}</dt>
+				<dd class="mb1"><input class="frm" type="text" name="send_email_defult_admin_address" value="{{settings.send_email_defult_admin_address}}" data-value="{{settings.send_email_defult_admin_address}}"></dd>
+			</dl>
+
+			<div class="txr"><button class="btn blue" type="submit" name="update" value="1"><i class="fa fa-refresh"></i> {{~__('update')}}</button></div>
+
+		</form>
+		<!--/Update-->
+
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}

@@ -1,0 +1,154 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">{{item.division_name}} - {{item.segment}} - {{~__('edit')}}</h1>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<!--Update-->
+		<form action="" method="POST">
+
+			<dl class="hor">
+
+				<dt class="mb1">{{~__('division')}}</dt>
+				<dd class="mb1">{{item.division_name}} [ {{~__('id:')}} {{item.division_id}} ] [ {{~__('content type')}}: {{item.division_segment}} ]</dd>
+
+				<dt class="mb1">{{~__('id')}}</dt>
+				<dd class="mb1">{{item.id}}</dd>
+
+				<dt class="mb1">{{~__('segment')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="segment" value="{{item.segment}}" placeholder="{{~__('segment')}}...">
+					<p class="note pt1">
+						segmentは半角英数とアンダースコアのみ使用できます。 [a-z]、[1-9]、[_]<br />
+						segmentはurlに使われます、この時urlの「-」は「_」に変換されます。
+					</p>
+				</dd>
+
+				<dt class="mb1">{{~__('title')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="title" value="{{item.title}}" placeholder="{{~__('title')}}...">
+					<p class="note pt1">このitemのタイトルを入力します。</p>
+				</dd>
+
+				<dt class="mb1">{{~__('catch')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="catch" value="{{item.catch}}" placeholder="{{~__('catch')}}...">
+					<p class="note pt1">このitemのキャッチコピーを入力します。</p>
+				</dd>
+
+				<dt class="mb1">{{~__('keywords')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="keywords" value="{{item.keywords}}" placeholder="{{~__('keywords')}}...">
+					<p class="note pt1">このitemのヘッダ内のキーワードをカンマ区切りで入力します。 ex) カンマは半角の「,」です。 アクセサリー, キラキラ, かわいい</p>
+				</dd>
+
+				<dt class="mb1">{{~__('description')}}</dt>
+				<dd class="mb1">
+					<textarea class="frm" rows="6" name="description" placeholder="{{~__('description')}}...">{{item.description}}</textarea>
+					<p class="note pt1">このitemのヘッダ内のディスクリプションを入力します。 ex) ウサギさんのアクセサリー屋さんです。</p>
+				</dd>
+
+				<dt class="mb1">{{~__('summary')}}</dt>
+				<dd class="mb1">
+					<textarea class="frm" rows="6" name="summary" placeholder="{{~__('summary')}}...">{{item.summary}}</textarea>
+					<p class="note pt1">
+						このitemの要約を入力します。<br />
+						htmlタグが使えます。
+						ex) ようこそうさぎのアクセサリー屋さんへ...<p>
+				</dd>
+
+				<dt class="mb1">{{~__('order')}}</dt>
+				<dd class="mb1">
+					<input class="frm srt" type="text" name="order" value="{{item.order}}" placeholder="{{~__('order')}}...">
+					&nbsp;<span class="note">並び順を指定します。</span>
+				</dd>
+
+				<dt class="mb1">{{~__('activate')}}</dt>
+				<dd class="mb1">
+					<input type="checkbox" name="is_active" value="1" data-value="{{item.is_active}}">
+					&nbsp;<span class="note">公開するときはチェックします。</span>
+				</dd>
+
+				<dt class="mb1">{{~__('issued')}}</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="issued" value="{{item.issued}}" placeholder="{{~__('issued')}}...">
+					<p class="note pt1">このitemが公開される日付をタイムストリングで記入します。 2014-05-31、2014/5/31 0:00</p>
+				</dd>
+
+				<dt class="mb1">{{~__('created')}}</dt>
+				<dd class="mb1">{{item.created}}</dd>
+
+				<dt class="mb1">{{~__('categories')}}</dt>
+				<dd class="mb1">
+					{{*categories : category}}
+					<label><input type="checkbox" name="category_id[]" value="{{category.id}}" data-value="{{item.category_ids}}"> {{category.name}}</label>
+					{{/*}}
+					<p class="note pt1">このitemのカテゴリーにチェックします。</p>
+				</dd>
+
+				<dt class="mb1">{{~__('tags')}}</dt>
+				<dd class="mb1">
+					{{*tags : tag}}
+					<label><input type="checkbox" name="tag_id[]" value="{{tag.id}}" data-value="{{item.tag_ids}}"> {{tag.name}}</label>
+					{{/*}}
+					<p class="note pt1">このitemのタグにチェックします。</p>
+				</dd>
+
+				<dt class="mb1">{{~__('parents')}}</dt>
+				<dd class="mb1">
+					<select class="frm" name="parent_id"  data-value="{{item.parent_id}}">
+						<option value="">---</option>
+						{{*parents : parent}}
+						<option value="{{parent.id}}">{{parent.segment}}</option>
+						{{/*}}
+					</select>
+					<p class="note pt1">このitemの属するitemを指定します。</p>
+				</dd>
+
+				<dt class="mb1">{{~__('send comment is on')}}</dt>
+				<dd class="mb1">
+					<label><input type="checkbox" name="send_comment_is_on" value="1" data-value="{{item.send_comment_is_on}}"></label>
+					<p class="note pt1">
+						このitemにコメント機能をつけるときにチェックします。<br />
+						dashboarタブ -> dsettingsタブメニュー -> send commentの設定が影響します。
+					</p>
+				</dd>
+			</dl>
+
+			<div class="txr">
+				<a class="delete btn red" href="{{item.delete_url}}" title="delete"><i class="fa fa-minus-square"></i> {{~__('delete')}}</a>
+				<button class="btn blue" type="submit" name="update" value="1"><i class="fa fa-refresh"></i> {{~__('update')}}</button>
+			</div>
+
+		</form>
+		<!--/Update-->
+
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}

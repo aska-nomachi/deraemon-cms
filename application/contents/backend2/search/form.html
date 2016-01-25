@@ -1,0 +1,83 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">{{~__('search')}} - {{~__('form')}}</h1>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<!--Update-->
+		<form action="" method="POST">
+
+			<dl class="mb1">
+				<dt class="mb1">{{~__('content')}}</dt>
+				<dd>
+					<pre class="mb1"><code>&lt;form action="{{host}}test_search" method="GET"&gt;</code></pre>
+					<pre class="mb1">&lt;input type="text" name="string" value="{{search_result.get.string}}" placeholder="string"&gt;
+&lt;input type="hidden" name="and_or" value="and"&gt;デフォルトはand</code></pre>
+
+					<pre class="mb1"><code>&lt;input type="hidden" name="divisions" value="page, article"&gt;
+又は
+&lt;input type="hidden" name="divisions[]" value="page"&gt;
+&lt;input type="hidden" name="divisions[]" value="shop"&gt;</code></pre>
+
+					<pre class="mb1"><code>&lt;input type="hidden" name="categories" value="aaa, bbb"&gt;
+又は
+&lt;input type="hidden" name="categories[]" value="aaa"&gt;
+&lt;input type="hidden" name="categories[]" value="bbb"&gt;</code></pre>
+
+					<pre class="mb1"><code>&lt;input type="hidden" name="tag" value="aaa, bbb"&gt;
+又は
+&lt;input type="hidden" name="tag[]" value="aaa"&gt;
+&lt;input type="hidden" name="tag[]" value="bbb"&gt;</code></pre>
+
+					<pre class="mb1"><code>&lt;input type="hidden" name="xn" value="3"&gt;</code></pre>
+
+					<pre class="mb1"><code>&lt;input type="hidden" name="paginate" value="4, 2"&gt; [items_per_page, follow]</code></pre>
+					<pre class="mb1"><code>&lt;input type="hidden" name="order" value="name, DESC"&gt; [order_column, order_direction]</code></pre>
+
+					<pre class="mb1"><code>&lt;input type="hidden" name="flags" value="images, fields, comments, children"&gt;
+itemの何をとるか、デフォルトはfalse</code></pre>
+
+					<pre class="mb1"><code>&lt;button type="submit" name="search" value="search"&gt;search&lt;/button&gt; nameはsearchで固定</code></pre>
+					<pre class="mb1"><code>&lt;/form&gt;</code></pre>
+
+					<p class="note">表示したいitemに <code>&lbrace;&lbrace;&gt;search_form&rbrace;&rbrace;</code> を入れてください。</p>
+					<p class="note">contentのformタグのなかにonetime ticketのタグ<code>&lbrace;&lbrace;&gt;&amp;ticket&rbrace;&rbrace;</code> を入れてください。</p>
+					<textarea id="content_textarea1" name="content">{{form.content}}</textarea>
+				</dd>
+			</dl>
+
+			<div class="txr">
+				<button class="btn blue" type="submit" name="update" value="1"><i class="fa fa-refresh"></i> {{~__('update')}}</button>
+			</div>
+
+		</form>
+		<!--/Update-->
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}
