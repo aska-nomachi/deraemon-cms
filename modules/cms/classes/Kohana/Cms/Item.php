@@ -12,6 +12,12 @@ class Kohana_Cms_Item {
 	 */
 	public static function build_html($item)
 	{
+		echo Debug::vars($item);
+		
+		$wrapper_content = Kohana::find_file($settings->front_tpl_dir . '/wrapper', $file, $ext);
+		$wrapper_content = Tpl::get_file($item->wrapper->segment, $settings->front_tpl_dir . '/wrapper', array('division_content' => $division_content));
+
+
 		// Get settings
 		$settings = Cms_Helper::settings();
 
@@ -19,18 +25,18 @@ class Kohana_Cms_Item {
 		if ($item->shape_segment)
 		{
 			// Todo::-1 content考える！ パーシャルは先に変更しておく！？
-			$shape_content = Tpl::get_file($item->shape_segment, $settings->front_tpl_dir.'/shape');
-			$item->content = Tpl::get_file($item->segment, $settings->item_dir.'/'.$item->division->segment);
+			$shape_content = Tpl::get_file($item->shape_segment, $settings->front_tpl_dir . '/shape');
+			$item->content = Tpl::get_file($item->segment, $settings->item_dir . '/' . $item->division->segment);
 		}
 		else
 		{
-			$shape_content = Tpl::get_file($item->segment, $settings->item_dir.'/'.$item->division->segment);
+			$shape_content = Tpl::get_file($item->segment, $settings->item_dir . '/' . $item->division->segment);
 			$item->content = '';
 		}
 
-		$division_content = Tpl::get_file($item->division->segment, $settings->front_tpl_dir.'/division', array('shape_content' => $shape_content));
+		$division_content = Tpl::get_file($item->division->segment, $settings->front_tpl_dir . '/division', array('shape_content' => $shape_content));
 
-		$wrapper_content = Tpl::get_file($item->wrapper->segment, $settings->front_tpl_dir.'/wrapper', array('division_content' => $division_content));
+		$wrapper_content = Tpl::get_file($item->wrapper->segment, $settings->front_tpl_dir . '/wrapper', array('division_content' => $division_content));
 
 		// Search parts
 		preg_match_all("/{{>(.[^{}]*)}}/", $wrapper_content, $matches, PREG_SET_ORDER);
@@ -45,8 +51,8 @@ class Kohana_Cms_Item {
 
 		// Get email segments
 		$emails = Tbl::factory('emails')
-			->read()
-			->as_array(NULL, 'segment');
+				->read()
+				->as_array(NULL, 'segment');
 
 		$parts = array();
 		foreach ($matches as $matche)
@@ -58,25 +64,25 @@ class Kohana_Cms_Item {
 			if (in_array($segment_string, $others))
 			{
 				list($dir, $file) = explode('_', $segment_string);
-				$parts[$key] = Tpl::get_file($file, $settings->front_tpl_dir.'/'.$dir);
+				$parts[$key] = Tpl::get_file($file, $settings->front_tpl_dir . '/' . $dir);
 			}
 			// If parts tag in emails array
 			elseif (in_array(str_replace('email_', '', $segment_string), $emails))
 			{
 				$segment = str_replace('email_', '', $segment_string);
 				// {{@segment}}をsegmentに変更
-				$email_content = Tpl::get_file($segment, $settings->front_tpl_dir.'/email');
+				$email_content = Tpl::get_file($segment, $settings->front_tpl_dir . '/email');
 				$parts[$key] = str_replace('{{@segment}}', $segment, $email_content);
 			}
 			else
 			{
-				$parts[$key] = Tpl::get_file($matche[1], $settings->front_tpl_dir.'/part');
+				$parts[$key] = Tpl::get_file($matche[1], $settings->front_tpl_dir . '/part');
 			}
 		}
 
 		// Replace parts
 		$html = str_replace(array_keys($parts), array_values($parts), $wrapper_content);
-		
+
 		return $html;
 	}
 
@@ -129,8 +135,8 @@ class Kohana_Cms_Item {
 		if (Valid::email(Arr::get($post, 'username')))
 		{
 			$user = Tbl::factory('users')
-				->where('email', '=', Arr::get($post, 'username'))
-				->read(1);
+					->where('email', '=', Arr::get($post, 'username'))
+					->read(1);
 
 			//If usernameとemailが同じでないとき
 			if (($user->username) !== $user->email)
@@ -244,13 +250,13 @@ class Kohana_Cms_Item {
 			// Todo:: IDが飛ぶから修正
 			// Create
 			Tbl::factory('users')
-				->create(array(
-					'username' => $username,
-					'email' => $email,
-					'password' => $password,
-					'is_block' => $settings->author_register_default_is_block,
-				))
-				->add_roles('login');
+					->create(array(
+						'username' => $username,
+						'email' => $email,
+						'password' => $password,
+						'is_block' => $settings->author_register_default_is_block,
+					))
+					->add_roles('login');
 
 			/**
 			 * Set result
@@ -308,20 +314,20 @@ class Kohana_Cms_Item {
 				// -> 暗号化
 				// -> URLエンコード
 				// -> クエリストリングにする
-				$activate_key = '?activate_key='.urlencode(
-						Encrypt::instance()
-							->encode($settings->author_register_activate_access_key.$delimiter.$username.$delimiter.$email.$delimiter.$password)
+				$activate_key = '?activate_key=' . urlencode(
+								Encrypt::instance()
+										->encode($settings->author_register_activate_access_key . $delimiter . $username . $delimiter . $email . $delimiter . $password)
 				);
 
 				// Get message and clean return
-				$activate_content = preg_replace('/(\r\n|\n|\r)/', '', Tpl::get_file('activate_mail', $settings->front_tpl_dir.'/author'));
+				$activate_content = preg_replace('/(\r\n|\n|\r)/', '', Tpl::get_file('activate_mail', $settings->front_tpl_dir . '/author'));
 
 				$activate_message = Tpl::factory($activate_content)
-					->set('username', $username)
-					->set('email', $email)
-					->set('password', $password)
-					->set('activate_key', $activate_key)
-					->render();
+						->set('username', $username)
+						->set('email', $email)
+						->set('password', $password)
+						->set('activate_key', $activate_key)
+						->render();
 
 				// メールを送る
 				// Set time limit to 5 minutes
@@ -331,20 +337,20 @@ class Kohana_Cms_Item {
 				//echo '<meta charset="utf-8"><pre>'.$activate_message.'</pre>';
 				// Todo:: 送信チェック！
 				Email::factory($settings->author_register_activate_subject, $activate_message, $settings->author_register_activate_email_type)
-					->set_config(array(
-						'driver' => 'smtp',
-						'options' => array(
-							'hostname' => $settings->smtp_hostname,
-							'username' => $settings->smtp_username,
-							'password' => $settings->smtp_password,
-							'port' => $settings->smtp_port,
-						)
-					))
-					->to($email)
-					// Todo:: 追加
-					->cc($settings->author_register_activate_from_address, $settings->author_register_activate_from_name ? : NULL)
-					->from($settings->author_register_activate_from_address, $settings->author_register_activate_from_name ? : NULL)
-					->send();
+						->set_config(array(
+							'driver' => 'smtp',
+							'options' => array(
+								'hostname' => $settings->smtp_hostname,
+								'username' => $settings->smtp_username,
+								'password' => $settings->smtp_password,
+								'port' => $settings->smtp_port,
+							)
+						))
+						->to($email)
+						// Todo:: 追加
+						->cc($settings->author_register_activate_from_address, $settings->author_register_activate_from_name ? : NULL)
+						->from($settings->author_register_activate_from_address, $settings->author_register_activate_from_name ? : NULL)
+						->send();
 			}
 			// Else メールチェックないとき
 			else
@@ -421,31 +427,31 @@ class Kohana_Cms_Item {
 
 			// Create
 			$user = Tbl::factory('users')
-				->create(array(
-					'username' => $username,
-					'email' => $email,
-					'password' => $password,
-					'is_block' => $settings->author_register_default_is_block,
-				))
-				->add_roles('login');
+					->create(array(
+						'username' => $username,
+						'email' => $email,
+						'password' => $password,
+						'is_block' => $settings->author_register_default_is_block,
+					))
+					->add_roles('login');
 
 			// Create users_details
 			$detail_ids = Tbl::factory('details')
-				->read()
-				->as_array(NULL, 'id');
+					->read()
+					->as_array(NULL, 'id');
 
 			foreach ($detail_ids as $detail_id)
 			{
 				Tbl::factory('users_details')
-					->create(array(
-						'user_id' => $user->id,
-						'detail_id' => $detail_id,
-						'value' => NULL,
+						->create(array(
+							'user_id' => $user->id,
+							'detail_id' => $detail_id,
+							'value' => NULL,
 				));
 			}
 
 			// Make user dir
-			Cms_Helper::make_dir($user->username, $settings->image_dir.'/user');
+			Cms_Helper::make_dir($user->username, $settings->image_dir . '/user');
 			//Cms_Helper::rename_dir($user->username, 'new', $settings->image_dir.'/user');
 			//Cms_Helper::delete_dir($user->username, $settings->image_dir.'/user', TRUE);
 			// make dir はbackendも！
@@ -537,10 +543,10 @@ class Kohana_Cms_Item {
 		{
 			// Validation email
 			$validation = Validation::factory($post)
-				->rule('email', 'not_empty')
-				->rule('email', 'email')
-				->rule('email', 'Tbl_Users::has_email')
-				->label('email', __('Email'));
+					->rule('email', 'not_empty')
+					->rule('email', 'email')
+					->rule('email', 'Tbl_Users::has_email')
+					->label('email', __('Email'));
 
 			// If Validation
 			if (!$validation->check())
@@ -550,8 +556,8 @@ class Kohana_Cms_Item {
 
 			// Get user あとでupdeteするからget()で取得
 			$user = Tbl::factory('users')
-				->where('email', '=', Arr::get($post, 'email'))
-				->get();
+					->where('email', '=', Arr::get($post, 'email'))
+					->get();
 
 			// If there is not user to exception ユーザーが登録されてないときは例外へ
 			if (!$user)
@@ -573,15 +579,15 @@ class Kohana_Cms_Item {
 			// -> 暗号化
 			// -> URLエンコード
 			// -> クエリストリングにする
-			$reset_key = '?reset_key='.urlencode(Encrypt::instance()->encode($reset_key.$delimiter.$user->email));
+			$reset_key = '?reset_key=' . urlencode(Encrypt::instance()->encode($reset_key . $delimiter . $user->email));
 
 			// Get message and clean return
-			$reset_content = preg_replace('/(\r\n|\n|\r)/', '', Tpl::get_file('reset_mail', $settings->front_tpl_dir.'/author'));
+			$reset_content = preg_replace('/(\r\n|\n|\r)/', '', Tpl::get_file('reset_mail', $settings->front_tpl_dir . '/author'));
 
 			$reset_message = Tpl::factory($reset_content)
-				->set('user', $user)
-				->set('reset_key', $reset_key)
-				->render();
+					->set('user', $user)
+					->set('reset_key', $reset_key)
+					->render();
 
 			// メールを送る
 			// Set time limit to 5 minutes
@@ -591,18 +597,18 @@ class Kohana_Cms_Item {
 			//echo '<meta charset="utf-8"><pre>'.$reset_message.'</pre>';
 			// Todo:: 送信チェック！
 			Email::factory($settings->author_password_reset_subject, $reset_message, $settings->author_password_reset_email_type)
-				->set_config(array(
-					'driver' => 'smtp',
-					'options' => array(
-						'hostname' => $settings->smtp_hostname,
-						'username' => $settings->smtp_username,
-						'password' => $settings->smtp_password,
-						'port' => $settings->smtp_port,
-					)
-				))
-				->to($user->email)
-				->from($settings->author_password_reset_from_address, $settings->author_password_reset_from_name ? : NULL)
-				->send();
+					->set_config(array(
+						'driver' => 'smtp',
+						'options' => array(
+							'hostname' => $settings->smtp_hostname,
+							'username' => $settings->smtp_username,
+							'password' => $settings->smtp_password,
+							'port' => $settings->smtp_port,
+						)
+					))
+					->to($user->email)
+					->from($settings->author_password_reset_from_address, $settings->author_password_reset_from_name ? : NULL)
+					->send();
 
 			// Database commit
 			Database::instance()->commit();
@@ -698,8 +704,8 @@ class Kohana_Cms_Item {
 
 			// userをemailから取得
 			$user = Tbl::factory('users')
-				->where('email', '=', $email)
-				->get();
+					->where('email', '=', $email)
+					->get();
 
 			// userが取得できないとき
 			if (!$user)
@@ -760,14 +766,15 @@ class Kohana_Cms_Item {
 				 * password setting
 				 */
 				$validation = Validation::factory($post)
-					->rule('password', 'not_empty')
-					->rule('password', 'min_length', array(':value', 8))
-					->rule('confirm', 'matches', array(':validation', 'confirm', 'password'))
-					->label('password', __('Password'))
-					->label('confirm', __('Confirm'));
+						->rule('password', 'not_empty')
+						->rule('password', 'min_length', array(':value', 8))
+						->rule('confirm', 'matches', array(':validation', 'confirm', 'password'))
+						->label('password', __('Password'))
+						->label('confirm', __('Confirm'));
 
 				// If validation check is false
-				if (!$validation->check()) throw new Validation_Exception($validation);
+				if (!$validation->check())
+					throw new Validation_Exception($validation);
 
 				$user->update(array(
 					'password' => Arr::get($post, 'password'),
@@ -874,18 +881,19 @@ class Kohana_Cms_Item {
 
 			// validation
 			$validation = Validation::factory($post)
-				->rule('username', 'not_empty')
-				->rule('password', 'not_empty')
-				->label('username', __('Username'))
-				->label('password', __('Password'));
+					->rule('username', 'not_empty')
+					->rule('password', 'not_empty')
+					->label('username', __('Username'))
+					->label('password', __('Password'));
 
 			// If validation check is false
-			if (!$validation->check()) throw new Validation_Exception($validation);
+			if (!$validation->check())
+				throw new Validation_Exception($validation);
 
 			// Get user
 			$user = Tbl::factory('users')
-				->where('id', '=', Auth::instance()->get_user()->id)
-				->get();
+					->where('id', '=', Auth::instance()->get_user()->id)
+					->get();
 
 			// password hash
 			$resign_password = Auth::instance()->hash_password(Arr::get($post, 'password'));
@@ -993,14 +1001,14 @@ class Kohana_Cms_Item {
 			{
 				// Update
 				$user = Tbl::factory('users')
-					->get(Auth::instance()->get_user()->id)
-					->update($post);
+						->get(Auth::instance()->get_user()->id)
+						->update($post);
 
 				// New name
 				$newname = $user->username;
 
 				// Rename image user dir
-				Cms_Helper::rename_dir($oldname, $newname, $settings->image_dir.'/user');
+				Cms_Helper::rename_dir($oldname, $newname, $settings->image_dir . '/user');
 			}
 			// $_FILESがあって$postがabatar_deleteを持ってない時
 			elseif (Upload::not_empty($_FILES['avatar']) AND ! Arr::get($post, 'avatar_delete'))
@@ -1031,19 +1039,19 @@ class Kohana_Cms_Item {
 
 				// Update
 				$user = Tbl::factory('users')
-					->get(Auth::instance()->get_user()->id)
-					->update($post, 'validate_with_avatar');
+						->get(Auth::instance()->get_user()->id)
+						->update($post, 'validate_with_avatar');
 
 				// New name
 				$newname = $user->username;
 
 				// Rename image user dir
-				Cms_Helper::rename_dir($oldname, $newname, $settings->image_dir.'/user');
+				Cms_Helper::rename_dir($oldname, $newname, $settings->image_dir . '/user');
 
 				// Image division directory // イメージを入れるディレクトリ
-				$dir_path = 'application/'.$settings->image_dir.'/user/'.$user->username.'/';
+				$dir_path = 'application/' . $settings->image_dir . '/user/' . $user->username . '/';
 				// Upload image イメージをアップロード
-				$filename = Upload::save($post['avatar'], 'avatar'.$user->ext, $dir_path);
+				$filename = Upload::save($post['avatar'], 'avatar' . $user->ext, $dir_path);
 
 				// Build sizes
 				$sizes = array(
@@ -1056,9 +1064,9 @@ class Kohana_Cms_Item {
 				foreach ($sizes as $key => $value)
 				{
 					Image::factory($filename)
-						->resize($value[0], $value[1], Image::INVERSE)
-						->crop($value[0], $value[1])
-						->save($dir_path.'avatar'.$key.$user->ext);
+							->resize($value[0], $value[1], Image::INVERSE)
+							->crop($value[0], $value[1])
+							->save($dir_path . 'avatar' . $key . $user->ext);
 				}
 			}
 			else
@@ -1067,15 +1075,15 @@ class Kohana_Cms_Item {
 				$user = Auth::instance()->get_user();
 
 				// Get directory
-				$dir_path = 'application/'.$settings->image_dir.'/user/'.$user->username.'/';
+				$dir_path = 'application/' . $settings->image_dir . '/user/' . $user->username . '/';
 
 				// Delete image files
-				if (is_file($dir_path.'avatar'.$user->ext))
+				if (is_file($dir_path . 'avatar' . $user->ext))
 				{
-					unlink($dir_path.'avatar'.$user->ext);
-					unlink($dir_path.'avatar'.'_v'.$user->ext);
-					unlink($dir_path.'avatar'.'_h'.$user->ext);
-					unlink($dir_path.'avatar'.'_s'.$user->ext);
+					unlink($dir_path . 'avatar' . $user->ext);
+					unlink($dir_path . 'avatar' . '_v' . $user->ext);
+					unlink($dir_path . 'avatar' . '_h' . $user->ext);
+					unlink($dir_path . 'avatar' . '_s' . $user->ext);
 				}
 
 				// Set NULL to post ext
@@ -1083,8 +1091,8 @@ class Kohana_Cms_Item {
 
 				// Update
 				Tbl::factory('users')
-					->get(Auth::instance()->get_user()->id)
-					->update($post);
+						->get(Auth::instance()->get_user()->id)
+						->update($post);
 			}
 
 			// Database commit
@@ -1184,14 +1192,14 @@ class Kohana_Cms_Item {
 		try
 		{
 			$validation = Validation::factory($post)
-				->rule('newer', 'not_empty')
-				->rule('newer', 'min_length', array(':value', 8))
-				->rule('confirm', 'matches', array(':validation', ':field', 'newer'))
-				->rule('present', 'not_empty')
-				->rule('present', 'Tbl_Users::check_pass')
-				->label('present', __('Present Password'))
-				->label('newer', __('Newer Password'))
-				->label('confirm', __('Confirm Password'))
+					->rule('newer', 'not_empty')
+					->rule('newer', 'min_length', array(':value', 8))
+					->rule('confirm', 'matches', array(':validation', ':field', 'newer'))
+					->rule('present', 'not_empty')
+					->rule('present', 'Tbl_Users::check_pass')
+					->label('present', __('Present Password'))
+					->label('newer', __('Newer Password'))
+					->label('confirm', __('Confirm Password'))
 			;
 
 			if (!$validation->check())
@@ -1206,8 +1214,8 @@ class Kohana_Cms_Item {
 				'password' => $post['newer'],
 			);
 			Tbl::factory('users')
-				->get(Auth::instance()->get_user()->id)
-				->update($data);
+					->get(Auth::instance()->get_user()->id)
+					->update($data);
 
 			// Database commit
 			Database::instance()->commit();
@@ -1299,13 +1307,13 @@ class Kohana_Cms_Item {
 
 		// Get user detail
 		$detail_items = Tbl::factory('users_details')
-			->join('details')->on('users_details.detail_id', '=', 'details.id')
-			->select('users_details.*')
-			->select('details.segment')
-			->select('details.name')
-			->where('user_id', '=', $user->id)
-			->read()
-			->as_array('segment');
+				->join('details')->on('users_details.detail_id', '=', 'details.id')
+				->select('users_details.*')
+				->select('details.segment')
+				->select('details.name')
+				->where('user_id', '=', $user->id)
+				->read()
+				->as_array('segment');
 
 		// Set post to detail_items
 		$post_for_validation = array();
@@ -1348,14 +1356,14 @@ class Kohana_Cms_Item {
 			// Get rules ここで使うルール以外は取得しない！
 			$detail_segments = $post_for_validation ? array_keys($post_for_validation) : NULL;
 			$rules = Tbl::factory('detail_rules')
-				->join('details')->on('detail_rules.detail_id', '=', 'details.id')
-				->select('detail_rules.*')
-				->select('details.segment')
-				->select('details.name')
-				->select('details.order')
-				->where('details.segment', 'IN', $detail_segments)
-				->read()
-				->as_array();
+					->join('details')->on('detail_rules.detail_id', '=', 'details.id')
+					->select('detail_rules.*')
+					->select('details.segment')
+					->select('details.name')
+					->select('details.order')
+					->where('details.segment', 'IN', $detail_segments)
+					->read()
+					->as_array();
 
 			// Iterate post set rule and label
 			foreach ($rules as $rule)
@@ -1374,8 +1382,8 @@ class Kohana_Cms_Item {
 					}
 				}
 				$validation
-					->rule($rule->segment, $rule->callback, $rule->param)
-					->label($rule->segment, __($rule->name));
+						->rule($rule->segment, $rule->callback, $rule->param)
+						->label($rule->segment, __($rule->name));
 			}
 
 			// Check validation
@@ -1391,12 +1399,12 @@ class Kohana_Cms_Item {
 			foreach ($detail_items as $detail_item)
 			{
 				Tbl::factory('users_details')
-					->select('users_details.*')
-					->join('details')->on('users_details.detail_id', '=', 'details.id')
-					->where('users_details.user_id', '=', $user->id)
-					->where('details.segment', '=', $detail_item->segment)
-					->get()
-					->update(array('value' => $detail_item->value));
+						->select('users_details.*')
+						->join('details')->on('users_details.detail_id', '=', 'details.id')
+						->where('users_details.user_id', '=', $user->id)
+						->where('details.segment', '=', $detail_item->segment)
+						->get()
+						->update(array('value' => $detail_item->value));
 			}
 
 			// Database commit
@@ -1488,8 +1496,8 @@ class Kohana_Cms_Item {
 		$segment = Arr::get($post, 'send_email_segment', Arr::get($post, 'send_email'));
 
 		$email = Tbl::factory('emails')
-			->where('segment', '=', $segment)
-			->read(1);
+				->where('segment', '=', $segment)
+				->read(1);
 
 		// Try
 		try
@@ -1502,9 +1510,9 @@ class Kohana_Cms_Item {
 
 			// Get rules
 			$rules = Tbl::factory('email_rules')
-				->where('email_id', '=', $email->id)
-				->read()
-				->as_array();
+					->where('email_id', '=', $email->id)
+					->read()
+					->as_array();
 
 			/*
 			 * validation
@@ -1530,12 +1538,13 @@ class Kohana_Cms_Item {
 					}
 				}
 				$validation
-					->rule($rule->field, $rule->callback, $rule->param)
-					->label($rule->field, __($rule->label));
+						->rule($rule->field, $rule->callback, $rule->param)
+						->label($rule->field, __($rule->label));
 			}
 
 			// If validation check is false
-			if (!$validation->check()) throw new Validation_Exception($validation);
+			if (!$validation->check())
+				throw new Validation_Exception($validation);
 
 			// </editor-fold>
 
@@ -1552,7 +1561,7 @@ class Kohana_Cms_Item {
 			$receive_subject = $receive_subject_factory->render();
 
 			// Get confirm message and clean return 改行は{{return}}でコントロールするためリターンを削除
-			$receive_message_string = preg_replace('/(\r\n|\n|\r)/', '', Tpl::get_file($email->segment, $settings->front_tpl_dir.'/email/receive'));
+			$receive_message_string = preg_replace('/(\r\n|\n|\r)/', '', Tpl::get_file($email->segment, $settings->front_tpl_dir . '/email/receive'));
 
 			// Get receive content ここでpostの値をpost名で使えるようにする。
 			$receive_content_factory = Tpl::factory($receive_message_string);
@@ -1572,17 +1581,17 @@ class Kohana_Cms_Item {
 			//echo '<meta charset="utf-8">'."<pre>from: [$user_name] $user_address<br />subject: $receive_subject<br />$receive_message</pre>";
 			// Todo:: 送信チェック！
 			$receive_email = Email::factory($receive_subject, $receive_message, $email->receive_email_type)
-				->set_config(array(
-					'driver' => 'smtp',
-					'options' => array(
-						'hostname' => $settings->smtp_hostname,
-						'username' => $settings->smtp_username,
-						'password' => $settings->smtp_password,
-						'port' => $settings->smtp_port,
-					)
-				))
-				->to($email->admin_address, $email->admin_name)
-				->from($user_address, $user_name);
+					->set_config(array(
+						'driver' => 'smtp',
+						'options' => array(
+							'hostname' => $settings->smtp_hostname,
+							'username' => $settings->smtp_username,
+							'password' => $settings->smtp_password,
+							'port' => $settings->smtp_port,
+						)
+					))
+					->to($email->admin_address, $email->admin_name)
+					->from($user_address, $user_name);
 
 			$receive_email->send();
 			// </editor-fold>
@@ -1602,7 +1611,7 @@ class Kohana_Cms_Item {
 				$confirm_subject = $confirm_subject_factory->render();
 
 				// Get confirm message and clean return
-				$confirm_message_string = preg_replace('/(\r\n|\n|\r)/', '', Tpl::get_file($email->segment, $settings->front_tpl_dir.'/email/confirm'));
+				$confirm_message_string = preg_replace('/(\r\n|\n|\r)/', '', Tpl::get_file($email->segment, $settings->front_tpl_dir . '/email/confirm'));
 
 				// Get confirm content ここでpostの値をpost名で使えるようにする。
 				$confirm_content_factory = Tpl::factory($confirm_message_string);
@@ -1619,18 +1628,18 @@ class Kohana_Cms_Item {
 				//echo '<meta charset="utf-8">'."<pre>from: [$email->admin_name] $email->admin_address<br />subject: $confirm_subject<br />$confirm_message</pre>";
 				// Todo:: 送信チェック！
 				Email::factory($confirm_subject, $confirm_message, $email->confirm_email_type)
-					->set_config(array(
-						'driver' => 'smtp',
-						'options' => array(
-							'hostname' => $settings->smtp_hostname,
-							'username' => $settings->smtp_username,
-							'password' => $settings->smtp_password,
-							'port' => $settings->smtp_port,
-						)
-					))
-					->to($user_address, $user_name)
-					->from($email->admin_address, $email->admin_name)
-					->send();
+						->set_config(array(
+							'driver' => 'smtp',
+							'options' => array(
+								'hostname' => $settings->smtp_hostname,
+								'username' => $settings->smtp_username,
+								'password' => $settings->smtp_password,
+								'port' => $settings->smtp_port,
+							)
+						))
+						->to($user_address, $user_name)
+						->from($email->admin_address, $email->admin_name)
+						->send();
 			}
 			// </editor-fold>
 
@@ -1642,10 +1651,10 @@ class Kohana_Cms_Item {
 			if ($settings->send_email_save_is_on)
 			{
 				Tbl::factory('received_emails')
-					->create(array(
-						'email_segment' => $email->name,
-						'json' => json_encode($post),
-						'created' => Date::formatted_time(),
+						->create(array(
+							'email_segment' => $email->name,
+							'json' => json_encode($post),
+							'created' => Date::formatted_time(),
 				));
 			}
 			// </editor-fold>
@@ -1715,8 +1724,8 @@ class Kohana_Cms_Item {
 		$settings = Cms_Helper::settings();
 
 		$logged_in_user = Tbl::factory('users')
-			->where('id', '=', Auth::instance()->get_user()->id)
-			->read(1);
+				->where('id', '=', Auth::instance()->get_user()->id)
+				->read(1);
 
 		// post filter
 		$post = self::post_filter($post, $settings->send_comment_allowable_tags);
@@ -1737,15 +1746,15 @@ class Kohana_Cms_Item {
 		{
 			// Create
 			Tbl::factory('received_comments')
-				->create(array(
-					'item_id' => $item_id,
-					'user_id' => isset($logged_in_user->id) ? $logged_in_user->id : NULL,
-					'replay_id' => Arr::get($post, 'replay_id'),
-					'display_name' => Arr::get($post, 'display_name'),
-					'subject' => Arr::get($post, 'subject'),
-					'content' => Arr::get($post, 'content'),
-					'created' => Date::formatted_time(),
-					'is_accept' => $settings->send_comment_is_accept_default,
+					->create(array(
+						'item_id' => $item_id,
+						'user_id' => isset($logged_in_user->id) ? $logged_in_user->id : NULL,
+						'replay_id' => Arr::get($post, 'replay_id'),
+						'display_name' => Arr::get($post, 'display_name'),
+						'subject' => Arr::get($post, 'subject'),
+						'content' => Arr::get($post, 'content'),
+						'created' => Date::formatted_time(),
+						'is_accept' => $settings->send_comment_is_accept_default,
 			));
 
 			// Database commit
@@ -1784,9 +1793,9 @@ class Kohana_Cms_Item {
 			// errors
 			$result->errors[] = array(
 				'field' => 'system error',
-				//'message' => $e->getMessage(),
-				//'file' => $e->getFile(),
-				//'line' => $e->getLine(),
+					//'message' => $e->getMessage(),
+					//'file' => $e->getFile(),
+					//'line' => $e->getLine(),
 			);
 		}
 
@@ -1897,12 +1906,12 @@ class Kohana_Cms_Item {
 		{
 			// selectはitems.id, items.segmentのみ
 			$sql = DB::select('items.id', 'items.segment')
-					->from('items')
-					->join('divisions')->on('items.division_id', '=', 'divisions.id')
-					->join('items_categories', 'LEFT')->on('items.id', '=', 'items_categories.item_id')
-					->join('categories', 'LEFT')->on('items_categories.category_id', '=', 'categories.id')
-					->join('items_tags', 'LEFT')->on('items.id', '=', 'items_tags.item_id')
-					->join('tags', 'LEFT')->on('items_tags.tag_id', '=', 'tags.id');
+							->from('items')
+							->join('divisions')->on('items.division_id', '=', 'divisions.id')
+							->join('items_categories', 'LEFT')->on('items.id', '=', 'items_categories.item_id')
+							->join('categories', 'LEFT')->on('items_categories.category_id', '=', 'categories.id')
+							->join('items_tags', 'LEFT')->on('items.id', '=', 'items_tags.item_id')
+							->join('tags', 'LEFT')->on('items_tags.tag_id', '=', 'tags.id');
 
 			// エディターから上位の時はすべて表示
 			if (!(Auth::instance()->logged_in('direct') OR Auth::instance()->logged_in('admin') OR Auth::instance()->logged_in('edit')))
@@ -1974,8 +1983,8 @@ class Kohana_Cms_Item {
 			}
 
 			$items = $sql->as_object()
-				->execute()
-				->as_array('segment');
+					->execute()
+					->as_array('segment');
 		}
 		else
 		{
@@ -2014,9 +2023,9 @@ class Kohana_Cms_Item {
 			// Paginate resultに入れる
 			//items_per_pageとfollow(前後のリンクの数)もgetでおくる
 			$result->pagenate = Pgn::factory(array(
-					'total_items' => $result->total,
-					'items_per_page' => $items_per_page,
-					'follow' => $follow,
+						'total_items' => $result->total,
+						'items_per_page' => $items_per_page,
+						'follow' => $follow,
 			));
 
 			// Paginated items resultに入れる

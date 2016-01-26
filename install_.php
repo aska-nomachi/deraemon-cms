@@ -1,3 +1,154 @@
+<?php
+//error_reporting(0);
+
+$ticket = post('ticket', '');
+$hostname = post('hostname', FALSE);
+$database = post('database', FALSE);
+$username = post('username', FALSE);
+$password = post('password', FALSE);
+
+$errors = array();
+
+if (session('deraemon_step', 1) == 1)
+{
+	if ($ticket == 'stap1')
+	{
+		$errors = array();
+		try
+		{
+			if (!($hostname AND $database AND $username))
+			{
+				$errors[] = 'すべて記入してください。';
+				throw new Exception();
+			}
+
+			$dsn = 'mysql:host=' . $hostname . ';dbname=' . $database . ';charset=utf8';
+
+			$db = new PDO($dsn, $username, $password);
+			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+			$file = './application/config/database.php';
+			$database_config = file_get_contents($file);
+
+			$patterns = array(
+				"/'hostname' => '.*?',/",
+				"/'database' => '.*?',/",
+				"/'username' => '.*?',/",
+				"/'password' => '.*?',/",
+			);
+			$replacements = array(
+				"'hostname' => '" . $hostname . "',",
+				"'database' => '" . $database . "',",
+				"'username' => '" . $username . "',",
+				"'password' => '" . $password . "',",
+			);
+			$database_config_fixed = preg_replace($patterns, $replacements, $database_config);
+			file_put_contents($file, $database_config_fixed, LOCK_EX);
+
+			$query = file_get_contents("deraemon_cms.sql");
+			$db->exec($query);
+
+			$_SESSION['deraemon_dsn'] = $dsn;
+			$_SESSION['deraemon_username'] = $username;
+			$_SESSION['deraemon_password'] = $password;
+			$_SESSION['deraemon_step'] = 2;
+		}
+		catch (PDOException $e)
+		{
+			$errors[] = '接続できません。';
+		}
+		catch (Exception $e)
+		{
+			$errors[] = '接続できません。';
+		}
+	}
+}
+
+$rootdirectory = post('rootdirectory', FALSE);
+$backend_name = post('backend_name', FALSE);
+$site_title = post('site_title', FALSE);
+$site_email_address = post('site_email_address', FALSE);
+
+if (session('deraemon_step') == 2)
+{
+	if ($ticket == 'stap2')
+	{
+		try
+		{
+			$settings = array(
+				'direct_key' => hash('sha256', rand(10000, 99999)),
+				'backend_name' => $backend_name,
+				'site_title' => $site_title,
+				'site_email_address' => $site_email_address,
+				'send_email_defult_admin_address' => $site_email_address,
+				'author_register_activate_from_address' => $site_email_address,
+				'author_register_activate_from_name' => $site_title,
+				'author_register_activate_access_key' => hash('sha256', rand(10000, 99999)),
+				'author_password_reset_from_address' => $site_email_address,
+				'author_password_reset_from_name' => $site_title,
+				'direct_key' => hash('sha256', rand(10000, 99999)),
+				'encrypt_key' => hash('sha256', rand(10000, 99999)),
+				'cooki_salt' => hash('sha256', rand(10000, 99999)),
+				'auth_hash_key' => hash('sha256', rand(10000, 99999)),
+				'auth_session_key' => hash('sha256', rand(10000, 99999)),
+			);
+
+
+			$dsn = session('deraemon_dsn');
+			$username = session('deraemon_username');
+			$password = session('deraemon_password');
+
+			$db = new PDO($dsn, $username, $password);
+			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+			foreach ($settings as $key => $value)
+			{
+				$sql = "update settings set value = :value where `key` = '{$key}'";
+				$stmt = $db->prepare($sql);
+				$stmt->bindValue(':value', $value);
+				$stmt->execute();
+			}
+
+			ini_set('xdebug.var_display_max_children', -1);
+			ini_set('xdebug.var_display_max_data', -1);
+			ini_set('xdebug.var_display_max_depth', -1);
+
+			$file = './application/bootstrap.php';
+			$bootstrap = file_get_contents($file);
+			$pattern = "/'base_url' => '.*?,/";
+			$replacement = "'base_url' => '/" . trim($rootdirectory, '/') . "/',";
+			$bootstrap_fixed = preg_replace($pattern, $replacement, $bootstrap);
+			file_put_contents($file, $bootstrap_fixed, LOCK_EX);
+
+			$file = './.htaccess';
+			$htaccess = file_get_contents($file);
+			$pattern = "/RewriteBase .*?\n/";
+			$replacement = "RewriteBase /" . trim($rootdirectory, '/') . "/\n";
+			$replacement = ($replacement == 'RewriteBase //\n') ? 'RewriteBase /\n' : $replacement;
+			$htaccess_fixed = preg_replace($pattern, $replacement, $htaccess);
+			file_put_contents($file, $htaccess_fixed, LOCK_EX);
+
+			$_SESSION['deraemon_step'] = 'fin';
+			$direct_key = $settings['direct_key'];
+
+			$host = empty($_SERVER["HTTPS"]) ? "http://" : "https://";
+			$url = $host . $_SERVER["HTTP_HOST"] . '/' . trim($rootdirectory, '/') . '/' . $backend_name . '/directuser?direct_key=' . $direct_key;
+			header("Location: {$url}");
+		}
+		catch (PDOException $e)
+		{
+			echo $e->getMessage();
+
+			$errors = '設定できません。';
+		}
+		catch (Exception $e)
+		{
+			echo $e->getMessage();
+		}
+	}
+}
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
     <head>
@@ -9,7 +160,7 @@
 		<style>
 			body
 			{
-				/*font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;*/
+				font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
 			}
 			* {
 				-webkit-box-sizing: border-box;
@@ -116,165 +267,6 @@
 
     <body>
 		<?php
-//error_reporting(0);
-		setlocale(LC_ALL, 'ja_JP.utf-8');
-		setlocale(LC_ALL, 'en_US.utf-8');
-
-		$ticket = post('ticket', '');
-		$hostname = post('hostname', FALSE);
-		$database = post('database', FALSE);
-		$username = post('username', FALSE);
-		$password = post('password', FALSE);
-
-
-		$errors = array();
-
-		if (session('deraemon_step', 1) == 1)
-		{
-			if ($ticket == 'stap1')
-			{
-				$errors = array();
-				try
-				{
-					if (!($hostname AND $database AND $username))
-					{
-						$errors[] = 'すべて記入してください。';
-						throw new Exception();
-					}
-
-					$dsn = 'mysql:host=' . $hostname . ';dbname=' . $database;
-
-					$db = new PDO($dsn, $username, $password);
-					$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-					$file = './application/config/database.php';
-					$database_config = file_get_contents($file);
-
-					$patterns = array(
-						"/'hostname' => '.*?',/",
-						"/'database' => '.*?',/",
-						"/'username' => '.*?',/",
-						"/'password' => '.*?',/",
-					);
-					$replacements = array(
-						"'hostname' => '" . $hostname . "',",
-						"'database' => '" . $database . "',",
-						"'username' => '" . $username . "',",
-						"'password' => '" . $password . "',",
-					);
-					$database_config_fixed = preg_replace($patterns, $replacements, $database_config);
-					file_put_contents($file, $database_config_fixed, LOCK_EX);
-
-					$query = file_get_contents("deraemon_cms.sql");
-					$db->exec($query);
-
-					$_SESSION['deraemon_dsn'] = $dsn;
-					$_SESSION['deraemon_username'] = $username;
-					$_SESSION['deraemon_password'] = $password;
-					$_SESSION['deraemon_step'] = 2;
-				}
-				catch (PDOException $e)
-				{
-					$errors[] = '接続できません。';
-				}
-				catch (Exception $e)
-				{
-					$errors[] = '接続できません。';
-				}
-			}
-		}
-
-		$rootdirectory = post('rootdirectory', FALSE);
-		$backend_name = post('backend_name', FALSE);
-		$site_title = post('site_title', FALSE);
-		$site_email_address = post('site_email_address', FALSE);
-
-		if (session('deraemon_step') == 2)
-		{
-			if ($ticket == 'stap2')
-			{
-				try
-				{
-					var_dump(post('site_title', ''));
-					var_dump($site_title);
-					die;
-
-
-					$settings = array(
-						'direct_key' => hash('sha256', rand(10000, 99999)),
-						'backend_name' => $backend_name,
-						'site_title' => $site_title,
-						'site_email_address' => $site_email_address,
-						'send_email_defult_admin_address' => $site_email_address,
-						'author_register_activate_from_address' => $site_email_address,
-						'author_register_activate_from_name' => $site_title,
-						'author_register_activate_access_key' => hash('sha256', rand(10000, 99999)),
-						'author_password_reset_from_address' => $site_email_address,
-						'author_password_reset_from_name' => $site_title,
-						'direct_key' => hash('sha256', rand(10000, 99999)),
-						'encrypt_key' => hash('sha256', rand(10000, 99999)),
-						'cooki_salt' => hash('sha256', rand(10000, 99999)),
-						'auth_hash_key' => hash('sha256', rand(10000, 99999)),
-						'auth_session_key' => hash('sha256', rand(10000, 99999)),
-					);
-
-
-					$dsn = session('deraemon_dsn');
-					$username = session('deraemon_username');
-					$password = session('deraemon_password');
-
-					$db = new PDO($dsn, $username, $password);
-					$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-					foreach ($settings as $key => $value)
-					{
-						$sql = "update settings set value = :value where `key` = '{$key}'";
-						$stmt = $db->prepare($sql);
-						$stmt->bindValue(':value', $value);
-						$stmt->execute();
-					}
-
-					ini_set('xdebug.var_display_max_children', -1);
-					ini_set('xdebug.var_display_max_data', -1);
-					ini_set('xdebug.var_display_max_depth', -1);
-
-					$file = './application/bootstrap.php';
-					$bootstrap = file_get_contents($file);
-					$pattern = "/'base_url' => '.*?,/";
-					$replacement = "'base_url' => '/" . trim($rootdirectory, '/') . "/',";
-					$bootstrap_fixed = preg_replace($pattern, $replacement, $bootstrap);
-					file_put_contents($file, $bootstrap_fixed, LOCK_EX);
-
-					$file = './.htaccess';
-					$htaccess = file_get_contents($file);
-					$pattern = "/RewriteBase .*?\n/";
-					$replacement = "RewriteBase /" . trim($rootdirectory, '/') . "/\n";
-					$replacement = ($replacement == 'RewriteBase //\n') ? 'RewriteBase /\n' : $replacement;
-					$htaccess_fixed = preg_replace($pattern, $replacement, $htaccess);
-					file_put_contents($file, $htaccess_fixed, LOCK_EX);
-
-					$_SESSION['deraemon_step'] = 'fin';
-					$direct_key = $settings['direct_key'];
-
-					$host = empty($_SERVER["HTTPS"]) ? "http://" : "https://";
-					$url = $host . $_SERVER["HTTP_HOST"] . '/' . trim($rootdirectory, '/') . '/' . $backend_name . '/directuser?direct_key=' . $direct_key;
-					header("Location: {$url}");
-				}
-				catch (PDOException $e)
-				{
-					echo $e->getMessage();
-
-					$errors = '設定できません。';
-				}
-				catch (Exception $e)
-				{
-					echo $e->getMessage();
-				}
-			}
-		}
-		?>
-
-		<?php
 		if (session('deraemon_step', 1) == 1)
 		{
 			?>
@@ -351,6 +343,10 @@
 		}
 		?>
 
+
+	</body>
+</html>
+
 		<?php
 
 		function post($key, $default = NULL)
@@ -363,6 +359,3 @@
 			return isset($_SESSION[$key]) ? $_SESSION[$key] : $default;
 		}
 		?>
-
-	</body>
-</html>
