@@ -91,3 +91,8 @@ items -> divisionを作ったら増えていきます。
 
 # TEMPLATEの説明
 
+
+
+## License
+MIT
+
