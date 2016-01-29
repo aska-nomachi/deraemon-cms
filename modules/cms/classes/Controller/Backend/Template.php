@@ -138,7 +138,7 @@ class Controller_Backend_Template extends Controller {
 					'home' => array(
 						'name' => 'home',
 						'controller' => 'home',
-						'actions' => array('index', 'about', 'syntax', 'tutorial'),
+						'actions' => array('index', 'about', 'syntax'),//, 'function', 'tutorial'
 						'url' => URL::site("{$this->settings->backend_name}/home/index", 'http'),
 						'allow' => FALSE,
 						'roles' => array('direct', 'admin', 'edit'),
@@ -377,7 +377,7 @@ class Controller_Backend_Template extends Controller {
 		 */
 		// <editor-fold defaultstate="collapsed" desc="Allow page controll">
 		if ($this->logged_in_user AND $current_child)
-		{;
+		{
 			// ロールに含まれない場合
 			if (!in_array($this->logged_in_user->role, $current_child->roles))
 			{

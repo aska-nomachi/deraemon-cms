@@ -12,10 +12,68 @@ class Kohana_Cms_Item {
 	 */
 	public static function build_html($item)
 	{
-		echo Debug::vars($item);
-		
-		$wrapper_content = Kohana::find_file($settings->front_tpl_dir . '/wrapper', $file, $ext);
-		$wrapper_content = Tpl::get_file($item->wrapper->segment, $settings->front_tpl_dir . '/wrapper', array('division_content' => $division_content));
+		/*
+		 *  :TODO aaaaaaaaaaaaaaaaaaaaaaa
+		 */
+
+		// Get settings
+//		$settings = Cms_Helper::settings();
+//
+//		$wrapper_file_path = Kohana::find_file($settings->front_tpl_dir . '/wrapper', $item->wrapper->segment, 'html');
+//		$wrapper_content = file_get_contents($wrapper_file_path);
+//
+//		$division_file_path = Kohana::find_file($settings->front_tpl_dir . '/division', $item->division->segment, 'html');
+//		$division_content = file_get_contents($division_file_path);
+//
+//		$wd = str_replace('{{>division_content}}', $division_content, $wrapper_content);
+//
+//		$shape_file_path = Kohana::find_file($settings->front_tpl_dir . '/shape', $item->shape_segment, 'html');
+//		$shape_content = $shape_file_path ? file_get_contents($shape_file_path) : '{{>item_content}}';
+//
+//		$wds = str_replace('{{>shape_content}}', $shape_content, $wd);
+//
+//		$item_file_path = Kohana::find_file($settings->item_dir . '/' . $item->division->segment, $item->segment, 'html');
+//		$item_content = file_get_contents($item_file_path);
+//
+//		$wdsi = str_replace('{{>item_content}}', $item_content, $wds);
+//		
+//		$replacements = array();
+//		preg_match_all("/{{>(.[^{}]*)}}/", $wdsi, $replacements, PREG_SET_ORDER);
+//
+//		// dirからpart名を取得
+//		
+//		
+//		// $replacementsにpartがあれば置換え
+//		
+//		
+//		// Get others $replacementsにあれば置換え
+//		$others = array(
+//			'search_form', 'search_result',
+//			'comment_form', 'comment_result',
+//			'comment_form', 'comment_result',
+//			'author_login', 'author_register', 'author_activate', 'author_forgot', 'author_reset', 'author_resign', 'author_account', 'author_password', 'author_detail'
+//		);
+//		
+//		// mailも
+//		
+//
+//		$wdsip = $wdsi;
+//		foreach ($parts as $part)
+//		{
+//			list($search, $replace_segment) = $part;
+//			$part_file_path = Kohana::find_file($settings->front_tpl_dir . '/part', $replace_segment, 'html');
+//			$part_content = file_get_contents($part_file_path);
+//			$wdsip = str_replace($search, $part_content, $wdsip);
+//		}
+//		
+//					echo Debug::vars($wdsip);
+//
+//		
+//		die;
+
+		/*
+		 *  :TODO aaaaaaaaaaaaaaaaaaaaaaa
+		 */
 
 
 		// Get settings
@@ -90,7 +148,7 @@ class Kohana_Cms_Item {
 	 * text filter
 	 *
 	 * @param  string  $values
-	 * @param  array		 $filters
+	 * @param  array	$allowable_tags
 	 * @return string
 	 */
 	public static function post_filter($values, $allowable_tags = NULL)

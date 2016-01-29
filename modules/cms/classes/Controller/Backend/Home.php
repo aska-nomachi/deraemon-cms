@@ -15,8 +15,9 @@ class Controller_Backend_Home extends Controller_Backend_Template {
 		$this->local_menus = array(
 			'index' => array('name' => 'index', 'url' => URL::site("{$this->settings->backend_name}/home", 'http')),
 			'syntax' => array('name' => 'syntax', 'url' => URL::site("{$this->settings->backend_name}/home/syntax", 'http')),
+//			'function' => array('name' => 'function', 'url' => URL::site("{$this->settings->backend_name}/home/function", 'http')),
 			'about' => array('name' => 'about', 'url' => URL::site("{$this->settings->backend_name}/home/about", 'http')),
-			'tutorial' => array('name' => 'tutorial', 'url' => URL::site("{$this->settings->backend_name}/home/tutorial", 'http')),
+//			'tutorial' => array('name' => 'tutorial', 'url' => URL::site("{$this->settings->backend_name}/home/tutorial", 'http')),
 		);
 
 		// local menus set current
@@ -68,6 +69,19 @@ class Controller_Backend_Home extends Controller_Backend_Template {
 		 */
 		// Get content file and Factory
 		$content_file = Tpl::get_file('syntax', $this->settings->back_tpl_dir.'/home', $this->partials);
+		$this->content = Tpl::factory($content_file);
+	}
+	
+	/**
+	 * Action function
+	 */
+	public function action_function()
+	{
+		/**
+		 * View
+		 */
+		// Get content file and Factory
+		$content_file = Tpl::get_file('function', $this->settings->back_tpl_dir.'/home', $this->partials);
 		$this->content = Tpl::factory($content_file);
 	}
 

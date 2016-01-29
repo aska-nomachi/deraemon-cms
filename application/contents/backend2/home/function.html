@@ -1,0 +1,492 @@
+{{#logged_in_user}}
+<!--#header-->
+{{>header}}
+<!--/#header-->
+{{/#}}
+
+<!--#main-->
+<div id="main" class="grd">
+
+	<!--Local menu-->
+	{{>local_menu}}
+	<!--/Local menu-->
+
+	<!--.main_cont-->
+	<section class="main_cont gla10 prlb3">
+
+		<!--Title-->
+		<h2 class="ttl1 prl2 ptb1 mb3 nlr3 txr">function</h2>
+		<!--/Title-->
+
+		<!--Notice-->
+		{{&notice}}
+		<!--/Notice-->
+
+		<section class="fix mb3">
+			<h3 class="ttl2 mb2">関数について</h3>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;~ &rbrace;&rbrace;</code></h4>
+			<p>			
+				関数は <code>&lbrace;&lbrace;~ &rbrace;&rbrace;</code> のように「~」チルダで始まります。<br />
+				variableが、stringのとき値を出します。 ない場合はなにも出しません。<br />
+				variableがstringじゃない時は「array!」と表示します。<br />
+				例えば、variableが <code>$variable = 'hello!';</code> の時、<code>&lbrace;&lbrace;variable&rbrace;&rbrace;</code> は 「hello!」 と表示します。
+			</p>
+
+			<h4 class="top_bar"><code>&lbrace;&lbrace;variable.name&rbrace;&rbrace;</code></h4>
+			<p>
+				variableがnameを持っいる場合「.」でつないで表します。<br />
+				例えばvariableが、以下のような時</p>
+			<pre><code>$variable = array(
+  'name' => 'taro',
+  'age' => '12',
+  'images' => array(
+    'main'=> 'photo1.jpg',
+    'sub'=> 'photo2.jpg',
+   ),
+ );</code></pre>
+			<p>
+				のとき <code>&lbrace;&lbrace;variable.name&rbrace;&rbrace;</code> は「taro」と表示します。<br />
+				のとき <code>&lbrace;&lbrace;variable.images.main&rbrace;&rbrace;</code> は「photo1.jpg」と表示します。
+			</p>
+
+			<h4 class="top_bar"><code>&lbrace;&lbrace;&variable&rbrace;&rbrace;</code></h4>
+			<p>
+				variableをエスケープなしに表示します。<br />
+				例えば、variableの値が <code>$variable = '&lt;b&gt;hello!&lt;/b&gt;';</code> のとき、<code>&lbrace;&lbrace;variable&rbrace;&rbrace;</code> だと
+				「&lt;b&gt;hello!&lt;/b&gt;」ですが、<code>&lbrace;&lbrace;&variable&rbrace;&rbrace;</code> だと 「<b>hello!</b>」になります。
+			</p>
+
+			<h4 class="top_bar">
+				<code>&lbrace;&lbrace;#variable&rbrace;&rbrace;...&lbrace;&lbrace;/#&rbrace;&rbrace;</code>&nbsp;と&nbsp;
+				<code>&lbrace;&lbrace;^variable&rbrace;&rbrace;...&lbrace;&lbrace;/^&rbrace;&rbrace;</code>
+			</h4>
+			<p>
+				「#」で囲むとif文、「^」で囲むとnotif文になります。<br />
+				例えば
+			</p>
+			<pre><code>&lbrace;&lbrace;#variable&rbrace;&rbrace;
+&lt;p&gt;&lbrace;&lbrace;variable&rbrace;&rbrace;&lt;/p&gt;
+&lbrace;&lbrace;/#&rbrace;&rbrace;
+&lbrace;&lbrace;^variable&rbrace;&rbrace;
+&lt;p&gt;It is not found.&lt;/p&gt;
+&lbrace;&lbrace;/^&rbrace;&rbrace;</code></pre>
+			<p>
+				のときvariableが存在する場合は <code>&lbrace;&lbrace;#variable&rbrace;&rbrace;...&lbrace;&lbrace;/#&rbrace;&rbrace;</code>
+				で囲まれた部分を実行します。<br />
+				「''」「NULL」「0」のときは <code>&lbrace;&lbrace;^variable&rbrace;&rbrace;...&lbrace;&lbrace;/^&rbrace;&rbrace;</code>
+				で囲まれた部分を実行します。<br />
+				上記の場合、variableが <code>$variable = 'hello!';</code> の時「hello!」が表示され「It is not found.」は表示されません、<br />
+				<code>$text = '';</code> の時「It is not found.」が表示され「hello!」は表示されません。
+			</p>
+			<p>
+				「#」の場合、次のように「:」のあとに値を入れる変数を指定できます。
+			</p>
+			<pre><code>&lbrace;&lbrace;#text:value&rbrace;&rbrace;
+&lt;p&gt;&lbrace;&lbrace;value&rbrace;&rbrace;&lt;/p&gt;
+&lbrace;&lbrace;/#&rbrace;&rbrace;</code></pre>
+
+			<h4 class="top_bar">
+				<code>&lbrace;&lbrace;*users:user&rbrace;&rbrace;...&lbrace;&lbrace;/*&rbrace;&rbrace;</code>
+			</h4>
+			<p>
+				値をループします。「:」のあとに値を入れる変数を指定します。<br />
+				例えばusersが、以下のような時
+			</p>
+			<pre><code>$users = array(
+  'user1' => array('id' => '1', 'username' => 'aaaaa', 'email' => 'aaaaa@gmail.com'),
+  'user2' => array('id' => '2', 'username' => 'bbbbb', 'email' => 'bbbbb@gmail.com'),
+  'user3' => array('id' => '3', 'username' => 'ccccc', 'email' => 'ccccc@gmail.com'),
+ );</code></pre>
+			<p>
+				usersのデータをループで表示するには次のようにします。
+			</p>
+			<pre><code>&lt;ul&gt;
+&lbrace;&lbrace;*users:user&rbrace;&rbrace;
+&lt;li&gt;[&lbrace;&lbrace;user.id&rbrace;&rbrace;] &lbrace;&lbrace;user.username&rbrace;&rbrace; (&lbrace;&lbrace;user.email&rbrace;&rbrace;)&lt;/li&gt;
+&lbrace;&lbrace;/*&rbrace;&rbrace;
+&lt;/ul&gt;</code></pre>
+			<p>
+				表示は次のようになります。
+			</p>
+			<ul>
+				<li>[1] aaaaa (aaaaa@gmail.com)</li>
+				<li>[2] bbbbb (bbbbb@gmail.com)</li>
+				<li>[3] ccccc (ccccc@gmail.com)</li>
+			</ul>
+
+			<h4 class="top_bar">
+				<code>&lbrace;&lbrace;#text&rbrace;&rbrace;...&lbrace;&lbrace;/#&rbrace;&rbrace;</code>&nbsp;と&nbsp;
+				<code>&lbrace;&lbrace;^text&rbrace;&rbrace;...&lbrace;&lbrace;/^&rbrace;&rbrace;</code>&nbsp;と&nbsp;
+				<code>&lbrace;&lbrace;*users:user&rbrace;&rbrace;...&lbrace;&lbrace;/*&rbrace;&rbrace;</code> の組み合わせ
+			</h4>
+			<p>
+				組み合わせてuserがあるときは <code>&lt;ul&gt;</code> <code>&lt;li&gt;</code> で表示、ないときは <code>&lt;p&gt;</code> で「It is not found.」を表示します。
+			</p>
+			<pre><code>&lbrace;&lbrace;#users&rbrace;&rbrace;
+&lt;ul&gt;
+ &lbrace;&lbrace;*users:user&rbrace;&rbrace;
+ &lt;li&gt;[&lbrace;&lbrace;user.id&rbrace;&rbrace;] &lbrace;&lbrace;user.username&rbrace;&rbrace; (&lbrace;&lbrace;user.email&rbrace;&rbrace;)&lt;/li&gt;
+ &lbrace;&lbrace;/*&rbrace;&rbrace;
+&lt;/ul&gt;
+&lbrace;&lbrace;/#&rbrace;&rbrace;
+&lbrace;&lbrace;^users&rbrace;&rbrace;
+&lt;p&gt;It is not found.&lt;p&gt;
+&lbrace;&lbrace;/^&rbrace;&rbrace;
+</code></pre>
+			<p>
+				このように書くと、usersがない場合に <code>&lt;ul&gt;</code> <code>&lt;/ul&gt;</code> も表示されません。
+			</p>
+
+			<h4 class="top_bar">
+				<code>&lbrace;&lbrace;!text&rbrace;&rbrace;</code>
+			</h4>
+			<p>
+				<code>&lbrace;&lbrace;</code> の後に「!」をつけると無効化されます。
+			</p>
+			<pre><code>&lbrace;&lbrace;#text&rbrace;&rbrace;
+ &lbrace;&lbrace;text&rbrace;&rbrace;
+&lbrace;&lbrace;/#&rbrace;&rbrace;
+</code></pre>
+			<p>の場合、次のようになります。</p>
+			<pre><code>&lbrace;&lbrace;!#text&rbrace;&rbrace;
+ &lbrace;&lbrace;!text&rbrace;&rbrace;
+&lbrace;&lbrace;!/#&rbrace;&rbrace;
+</code></pre>
+
+			<h4 class="top_bar">
+				<code>&lbrace;&lbrace;~debug(item)&rbrace;&rbrace;</code>
+			</h4>
+			<p>
+				「~」で始まる場合は関数を呼び出します。 <br />
+				ここでは「dubug」関数を例にあげて説明します。<br />
+				<code>&lbrace;&lbrace;~debug(item)&rbrace;&rbrace;</code> の場合、「debug」関数を呼び出して「item」の値を関数に渡しています。
+			</p>
+			<p>debug関数は渡した値の情報を表示すので次の様な結果を返します。</p>
+			<pre><code>array(
+ "id" => string(1) "1"
+ "division_id" => string(1) "1"
+ "shape_segment" => NULL
+ "image_id" => string(1) "1"
+ "user_id" => string(1) "2"
+ "parent_id" => string(1) "0"
+ "segment" => string(4) "home"
+ "title" => string(9) "ホーム"
+ "catch" => string(30) "キャッチコピーが入っています。"
+ "keywords" => string(36) "キーワード１,キーワード２,キーワード３"
+ "description" => string(34) "ディスクリプションが入っています。"
+ "summary" => string(24) "サマリーが入っています。"
+ "order" => string(1) "1"
+ "is_active" => string(1) "1"
+ .........
+ .........
+ .........
+ "content" => string(0) ""
+);
+</code></pre>
+			<p>
+				また、変数への代入もできます。<br />
+				「dete」関数を例にあげて説明します。
+			</p>
+			<p>
+				<code>&lbrace;&lbrace;~date('y年m月d日')&rbrace;&rbrace;</code> の場合、現在の時刻を「2014年6月4日」と表示します。<br />
+				この値を任意の変数「today」に代入するには次のように書きます。<br />
+				<code>&lbrace;&lbrace;~today = date('y年m月d日')&rbrace;&rbrace;</code><br />
+				この変数を表示する場合は次のようにします。
+			</p>
+			<pre><code>&lbrace;&lbrace;~today = date('y年m月d日')&rbrace;&rbrace;
+&lt;p&gt;今日の日付は &lbrace;&lbrace;today&rbrace;&rbrace; です。&lt;/p&gt;
+</code></pre>
+			<p>関数は他にもありますが後で説明します。</p>
+
+			<h4 class="top_bar">
+				<code>&lbrace;&lbrace;%(item)&rbrace;&rbrace;</code>
+			</h4>
+			<p>
+				「%」は今のところget_items関数で使用できます。パラメータを次のような文字列で指定できます。<br />
+				<code>&lbrace;&lbrace;~items = get_items(division = ['page'], category = ['cat', 'dog'])&rbrace;&rbrace;</code>
+			</p>
+			<p>get_items関数の詳しい説明はあとで行います。</p>
+		</section>
+
+		<section class="fix mb3">
+			<h3 class="ttl2 mb2">globalの定数について</h3>
+
+			<h4 class="top_bar"><code>&lbrace;&lbrace;host&rbrace;&rbrace;</code></h4>
+			<p>http://kohx-cms.com/</p>
+			<p>ホスト名が表示されます。</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;media_dir&rbrace;&rbrace;</code></h4>
+			<p>http://kohx-cms.com/media/</p>
+			<p>メディアディレクトリのパスが表示されます。</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;images_dir&rbrace;&rbrace;</code></h4>
+			<p>http://kohx-cms.com/images_dir/</p>
+			<p>イメージディレクトリのパスが表示されます。</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;css_dir&rbrace;&rbrace;</code></h4>
+			<p>http://kohx-cms.com/css_dir/</p>
+			<p>スタイルシートのディレクトリのパスが表示されます。</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;js_dir&rbrace;&rbrace;</code></h4>
+			<p>http://kohx-cms.com/js_dir/</p>
+			<p>ジャバスクリプトディレクトリのパスが表示されます。</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;icon_dir&rbrace;&rbrace;</code></h4>
+			<p>http://kohx-cms.com/icon_dir/</p>
+			<p>アイコンディレクトリのパスが表示されます。</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;lang&rbrace;&rbrace;</code></h4>
+			<p>ja</p>
+			<p>設定した言語が表示されます。</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;timestamp&rbrace;&rbrace;</code></h4>
+			<p>タイムスタンプを表示します。</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;return&rbrace;&rbrace;</code></h4>
+			<p>PHP_EOL (\n)の改行を表示します。</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;logged_in_user.id&rbrace;&rbrace;</code></h4>
+			<p>2</p>
+			<p>ユーザーのIDを表示します。</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;logged_in_user.email&rbrace;&rbrace;</code></h4>
+			<p>kohei.0728@gmail.com</p>
+			<p>ユーザーのEMAILを表示します。</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;logged_in_user.username&rbrace;&rbrace;</code></h4>
+			<p>kohei</p>
+			<p>ユーザーのusernameを表示します。</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;logged_in_user.logins&rbrace;&rbrace;</code></h4>
+			<p>10</p>
+			<p>ユーザーのログインした回数を表示します。</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;logged_in_user.details&rbrace;&rbrace;</code></h4>
+			<p>まだ実装してない！</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;site.[key]&rbrace;&rbrace;</code></h4>
+			<p>siteに設定した値を表示します。</p>
+		</section>
+
+		<section class="fix mb3">
+			<h3 class="ttl2 mb2">item定数lについて</h3>
+			<p>各ページの情報を得るにはitem定数を使います。</p>
+			<p>
+				itemはurlの最後の文字列で決まります。<br />
+				例えば、urlが「http://kohx-cms.com/xxx/yyy/zzz/home」場合<br />
+				「/xxx/yyy/zzz/」は無視してこのページのitemは「home」からページの情報を取得します。
+			</p>
+			<p>
+				itemの情報を表示する場合は <code>&lbrace;&lbrace;item.[key]&rbrace;&rbrace;</code> の形で表示されます。<br />
+				例えば「id」を表示したい時は <code>&lbrace;&lbrace;item.id&rbrace;&rbrace;</code> で表示されます。<br />
+				「summary」を表示したい時は <code>&lbrace;&lbrace;item.summary&rbrace;&rbrace;</code> で表示されます。
+			</p>
+			<p>
+				itemの情報をチェックしたいときはdegub関数を使って確認できます。<br />
+				<code>&lbrace;&lbrace;~debug(item)&rbrace;&rbrace;</code><br />
+				現在のページの情報がオブジェクトで表示されます。
+				{{~example = get_item('product1', true, true, true)}}
+				{{~debug(example)}}		
+			</p>
+			<p>内容を一つづつ見ていきます。</p>
+
+
+
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.id&rbrace;&rbrace;</code></h4>
+			<p>itemのIDです。</p>
+			<p>{{example.id}}</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.division_id&rbrace;&rbrace;</code></h4>
+			<p>itemのdivisionのIDです。</p>
+			<p>{{example.division_id}}</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.shape_segment&rbrace;&rbrace;</code></h4>
+			<p>itemのshapeが設定してある場合のshape_segmentです。</p>
+			<p>{{example.shape_segment}}</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.image_id&rbrace;&rbrace;</code></h4>
+			<p>itemのメインとなるイメージのIDです。</p>
+			<p>{{example.image_id}}</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.parent_id&rbrace;&rbrace;</code></h4>
+			<p>itemの属する親itemのIDです。</p>
+			<p>{{example.parent_id}}</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.segment&rbrace;&rbrace;</code></h4>
+			<p>itemのsegmentでこのページを取得する場合に使います。IDと同じくユニークで英数半角とアンダースコアの組み合わせです。</p>
+			<p>{{example.segment}}</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.title&rbrace;&rbrace;</code></h4>
+			<p>itemのタイトルです。主に <code>&lt;head&gt;</code> 内の <code>&lt;item&gt;</code> で使用します。</p>
+			<p>{{example.title}}</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.catch&rbrace;&rbrace;</code></h4>
+			<p>itemのキャッチフレーズです。サブタイトルなどに使用します。</p>
+			<p>{{example.catch}}</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.keywords&rbrace;&rbrace;</code></h4>
+			<p>itemのキーワードです。<code>&lt;head&gt;</code> 内の <code>&lt;meta name="keywords"  content="" /&gt;</code>で使用します。</p></p>
+			<p>{{example.keywords}}</p>
+			<p><code>&lt;meta name="keywords"  content="&lbrace;&lbrace;item.keywords&rbrace;&rbrace;" /&gt;</code>このようにして使います。</p>
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.description&rbrace;&rbrace;</code></h4>
+			<p>itemのディスクリプションです。<code>&lt;head&gt;</code> 内の <code>&lt;meta name="description"  content="" /&gt;</code>で使用します。</p></p>
+			<p>{{example.description}}</p>
+			<p><code>&lt;meta name="description"  content="&lbrace;&lbrace;item.description&rbrace;&rbrace;" /&gt;</code>このようにして使います。</p>
+
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.summary&rbrace;&rbrace;</code></h4>
+			<p>itemの要約です。itemをリスト表示にしたりするときの要約です。<br />
+				タグを使ている場合は「&amp;」を使って <code>&lbrace;&lbrace;&item.summary&rbrace;&rbrace;</code> とします。<br />
+				タグを取り除きたい場合は「strip_tags関数」を使い次のように書きます。<br />
+				<code>&lbrace;&lbrace;~strip_tags(item.summary)&rbrace;&rbrace;</code> これでタグの取り除かれた要約が表示されます。
+				もし数を制限したい場合は「limit_chars関数」を使い次のように書きます。<br />
+				<code>&lbrace;&lbrace;~limit_chars(item.summary)&rbrace;&rbrace;</code> これでタグの取り除かれた要約が表示されます。<br />
+				その他関数の詳しい説明、関数の組み合わせの説明は後で説明します。
+			<p>{{example.summary}}</p>
+			</p>
+
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.order&rbrace;&rbrace;</code></h4>
+			<p>itemの順番です。リスト表示するときの既定の順番です。</p>
+			<p>{{example.order}}</p>
+
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.is_active&rbrace;&rbrace;</code></h4>
+			<p>itemのアクティブフラッグです。これが「TRUE」の場合は公開されています。</p>
+			<p>{{example.is_active}}</p>
+
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.issued&rbrace;&rbrace;</code></h4>
+			<p>
+				itemの発行日時です。「2014-05-07 12:00:00」の形で表示されます。<br />
+				表示フォーマットを変えたいときは「dae_format関数」を使い次のように書きます。<br />
+				<code>&lbrace;&lbrace;~date_format(item.issued, 'Y年n月j日 h時i分')&rbrace;&rbrace;</code> これで「2014年6月10日 10時35分」と表示されます。
+			</p>
+			<p>{{example.issued}}</p>
+
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.created&rbrace;&rbrace;</code></h4>
+			<p>
+				itemの作成日です。「2014-05-07 12:00:00」の形で表示されます。<br />
+				表示フォーマットを変えたいときは「dae_format関数」を使い次のように書きます。<br />
+				<code>&lbrace;&lbrace;~date_format(item.issued, 'Y年n月j日 h時i分')&rbrace;&rbrace;</code> これで「2014年6月10日 10時35分」と表示されます。
+			</p>
+			<p>{{example.created}}</p>
+
+
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.send_comment_is_on&rbrace;&rbrace;</code></h4>
+			<p>itemのコメントを許可するかしないかのフラッグです。</p>
+			<p>{{example.send_comment_is_on}}</p>
+
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.division&rbrace;&rbrace;</code></h4>
+			<p>itemのdivisionの情報が配列で入っています。</p>
+			<p>{{~debug(example.division)}}		</p>
+			<p>それぞれを表示するときは以下のように書きます。</p>
+			<code>&lbrace;&lbrace;item.division.id&rbrace;&rbrace;</code>
+			<code>&lbrace;&lbrace;item.division.wrapper_id&rbrace;&rbrace;</code>
+			<code>&lbrace;&lbrace;item.division.segment&rbrace;&rbrace;</code>
+			<code>&lbrace;&lbrace;item.division.name&rbrace;&rbrace;</code>
+			<p>{{example.division.id}} {{example.division.wrapper_id}} {{example.division.segment}} {{example.division.name}}</p>
+
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.wrapper&rbrace;&rbrace;</code></h4>
+			<p>itemのwrapperの情報が配列で入っています。</p>
+			<p>{{~debug(example.wrapper)}}</p>
+
+			<p>それぞれを表示するときは以下のように書きます。</p>
+			<code>&lbrace;&lbrace;item.wrapper.id&rbrace;&rbrace;</code>
+			<code>&lbrace;&lbrace;item.wrapper.segment&rbrace;&rbrace;</code>
+			<code>&lbrace;&lbrace;item.wrapper.name&rbrace;&rbrace;</code>
+			<code>&lbrace;&lbrace;item.wrapper.content_type&rbrace;&rbrace;</code>
+			<p>{{example.wrapper.id}} {{example.wrapper.segment}} {{example.wrapper.name}} {{example.wrapper.content_type}}</p>
+
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.main_image&rbrace;&rbrace;</code></h4>
+			<p>itemのmain_imageの情報が配列で入っています。</p>
+			<p>{{~debug(example.main_image)}}</p>
+			<p>それぞれを表示するときは以下のように書きます。</p>
+			<code>&lbrace;&lbrace;item.main_image.id&rbrace;&rbrace;</code>
+			<code>&lbrace;&lbrace;item.main_image.item_id&rbrace;&rbrace;</code>
+			<code>&lbrace;&lbrace;item.main_image.segment&rbrace;&rbrace;</code>
+			<code>&lbrace;&lbrace;item.main_image.ext&rbrace;&rbrace;</code>
+			<code>&lbrace;&lbrace;item.main_image.name&rbrace;&rbrace;</code>
+			<code>&lbrace;&lbrace;item.main_image.description&rbrace;&rbrace;</code>
+			<code>&lbrace;&lbrace;item.main_image.order&rbrace;&rbrace;</code>
+			<code>&lbrace;&lbrace;item.main_image.path&rbrace;&rbrace;</code>
+			<code>&lbrace;&lbrace;item.main_image.file&rbrace;&rbrace;</code>
+			<p>
+				{{example.main_image.id}}
+				{{example.main_image.item_id}}
+				{{example.main_image.segment}}
+				{{example.main_image.ext}}
+				{{example.main_image.name}}
+				{{example.main_image.description}}
+				{{example.main_image.order}}
+				{{example.main_image.path}}
+				{{example.main_image.file}}
+			</p>
+			<p>
+				imageタグを表示する場合はこのように書きます。pathとfileの間は<br />
+				高さ、幅、画像のタイプを指定します。<br />
+				オリジナルの画層をそのまま出すときw-h-o<br />
+				高さ400以下、幅400以下で横長の画像を出すときw400-h400-h<br />
+				高さ400以下、幅400以下で縦長の画像を出すときw400-h400-v<br />
+				高さ400以下、幅400以下で正方形の画像を出すときw400-h400-s<br />
+				<code>&gl;img src="&lbrace;&lbrace;item.main_image.path&rbrace;&rbrace;w400-h400-h&lbrace;&lbrace;item.main_image.file&rbrace;&rbrace;" /&gt;</code>
+				もしくはimage_urlカンスを使います。<br />
+				<code>&gl;img src="&lbrace;&lbrace;~image_url(item.mainimage, 400, 400, 'h')&rbrace;&rbrace;" /&gt;</code>
+			<p>{{~image_url(example.main_image, 400, 400, 'h')}}</p>
+
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.categories&rbrace;&rbrace;</code></h4>
+			<p>itemのカテゴリーを配列で返します。<br />
+				カテゴリーdivisionで指定し、そのdivisionに属するitemで使えます。</p>
+			{{~debug(example.categories)}}
+			<p>全部を表示するにはループを使います。</p>
+			<pre><code>&lbrace;&lbrace;*item.categories: category&rbrace;&rbrace;
+&lt;div&gt;&lbrace;&lbrace;category.id&rbrace;&rbrace; - &lbrace;&lbrace;category.division_id&rbrace;&rbrace; - &lbrace;&lbrace;category.segment&rbrace;&rbrace; - &lbrace;&lbrace;category.name&rbrace;&rbrace; - &lbrace;&lbrace;category.description&rbrace;&rbrace; - &lbrace;&lbrace;category.order&rbrace;&rbrace;&lt;/div&gt;
+&lbrace;&lbrace;/*&rbrace;&rbrace;</code></pre>
+			{{*example.categories: category}}
+			<div>{{category.id}} - {{category.division_id}} - {{category.segment}} - {{category.name}} - {{category.description}} - {{category.order}}</div>
+			{{/*}}
+
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.tags&rbrace;&rbrace;</code></h4>
+			<p>itemのタグを配列で返します。<br />
+				タグはすべてのitemで共通で使えます。</p>
+
+			{{~debug(example.categories)}}
+			<p>全部を表示するにはループを使います。</p>
+			<pre><code>&lbrace;&lbrace;*item.tags: tag&rbrace;&rbrace;
+&lt;div&gt;&lbrace;&lbrace;tag.id&rbrace;&rbrace; - &rbrace;&rbrace; - &lbrace;&lbrace;tag.segment&rbrace;&rbrace; - &lbrace;&lbrace;tag.name&rbrace;&rbrace; - &lbrace;&lbrace;tag.description&rbrace;&rbrace; - &lbrace;&lbrace;tag.order&rbrace;&rbrace;&lt;/div&gt;
+&lbrace;&lbrace;/*&rbrace;&rbrace;</code></pre>
+			{{*example.tags: tag}}
+			<div>{{tag.id}} - {{tag.segment}} - {{tag.name}} - {{tag.description}} - {{tag.order}}</div>
+			{{/*}}
+
+
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.user&rbrace;&rbrace;</code></h4>
+			<p>userのitemを作成したユーザの情報を配列で返します。</p>
+			{{~debug(example.user)}}
+			<p>それぞれを表示するときは以下のように書きます。</p>
+			<code>&lbrace;&lbrace;item.user.email&rbrace;&rbrace;</code>
+			<code>&lbrace;&lbrace;item.user.username&rbrace;&rbrace;</code>
+
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.is_***&rbrace;&rbrace;</code></h4>
+			<p>is_***は後で説明するget_items関数でitemを取得したときにitemのsegmentと組み合わせて使います。<br />
+				表示されているのページのセグメントが***と同じのときtureを返します。</p>
+			<p><code>&lbrace;&lbrace;item.user.is_product1&rbrace;&rbrace;</code></p>
+			{{~debug(example.is_product1)}}
+
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.images&rbrace;&rbrace;</code></h4>
+			<p>imagesはitemに登録した画像を配列で返します。</p>
+			{{~debug(example.images)}}
+			<p>全部を表示するにはループを使います。</p>
+			<p>imgタグの表示方法はmain_imageと同じです。</p>
+			<pre><code>&lbrace;&lbrace;*item.images: image&rbrace;&rbrace;
+&gl;img src="&lbrace;&lbrace;~image_url(image, 400, 400, 'h')&rbrace;&rbrace;" /&gt;
+&lbrace;&lbrace;/*&rbrace;&rbrace;</code></pre>
+			<br />
+			{{*example.images: images}}
+			<p><img src="{{~image_url(images, 200, 400, 'h')}}" /></p>
+			{{/*}}
+
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.fields&rbrace;&rbrace;</code></h4>
+			<p>fieldsはitemに登録した画像を配列で返します。</p>
+			{{~debug(example.fields)}}
+			<p>全部を表示するにはループを使います。</p>
+			<pre><code>&lbrace;&lbrace;*item.fields: fields&rbrace;&rbrace;
+&lt;div&gt;&lbrace;&lbrace;field.id&rbrace;&rbrace; - &lbrace;&lbrace;field.division_id&rbrace;&rbrace; - &lbrace;&lbrace;field.segment&rbrace;&rbrace; - &lbrace;&lbrace;field.name&rbrace;&rbrace; - &lbrace;&lbrace;field.description&rbrace;&rbrace; - &lbrace;&lbrace;field.order&rbrace;&rbrace;&lt;/div&gt;
+&lbrace;&lbrace;/*&rbrace;&rbrace;</code></pre>
+			{{*example.fields: field}}
+			<div>{{field.id}} - {{field.division_id}} - {{field.segment}} - {{field.name}} - {{field.description}} - {{field.order}}</div>
+			{{/*}}
+
+			<h4 class="top_bar"><code>&lbrace;&lbrace;item.content&rbrace;&rbrace;</code></h4>
+			<p>contentはitemのコンテントを表示します。</p>
+			<p><code>&lbrace;&lbrace;item.content&rbrace;&rbrace;</code></p>
+			<p>タグを使う場合は＆を使います。</p>
+			<p><code>&lbrace;&lbrace;&amp;item.content&rbrace;&rbrace;</code></p>
+			<p>関数と組み合わせることもできます。</p>
+			<p><code>&lbrace;&lbrace;&amp;~limit_chars(item.content)&rbrace;&rbrace;</code></p>
+		</section>
+	</section>
+	<!--/.main_cont-->
+
+</div>
+<!--/#main-->
+
+{{#logged_in_user}}
+<!--#footer-->
+{{>footer}}
+<!--/#footer-->
+{{/#}}
