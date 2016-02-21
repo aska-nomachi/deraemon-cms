@@ -1,0 +1,40 @@
+<section>
+	<h1>お問合せ</h1>
+
+	{{#send_email_result.success}}
+	<div>
+		<p>送信完了</p>
+	</div>
+	{{/#}}
+
+	{{#send_email_result.invalid}}
+	<div>
+		<p>送信失敗</p>
+		<ul>
+			{{*send_email_result.errors : error}}
+			<li>{{error.message}} (field: {{error.field}})</li>
+			{{/*}}
+		</ul>
+	</div>
+	{{/#}}
+
+	{{#send_email_result.exception}}
+	<div>
+		<p>システムエラー</p>
+		<p>もう一度送やり直してください。</p>
+	</div>
+	{{/#}}
+
+	<form action="" method="POST">
+		<p>タイトル: <input type="text" name="title" value="{{send_email_result.post.title}}" placeholder="title"></p>
+		<p>お名前: <input type="text" name="name" value="{{send_email_result.post.name}}" placeholder="name"></p>
+		<p>メールアドレス: <input type="text" name="email" value="{{send_email_result.post.email}}" placeholder="email"></p>
+		<p>お問い合わせ内容: <textarea name="content" rows="10" cols="20" placeholder="content">{{send_email_result.post.content}}</textarea></p>
+
+		{{&ticket}}
+		<!--<input type="hidden" name="send_email_segment" value="[emailのセグメント名] or {{@segment}}">-->
+		<!--<button type="submit" name="send_email" value="[emailのセグメント名] or {{@segment}}">send</button>-->
+		<button type="submit" name="send_email" value="{{@segment}}">送信する</button>
+	</form>
+
+</section>

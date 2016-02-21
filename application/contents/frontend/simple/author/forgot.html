@@ -1,0 +1,61 @@
+<!--ログインしてるときはリダイレクト-->
+{{#logged_in_user}}
+{{~redirect()}}
+{{/#}}
+
+{{^logged_in_user}}
+<section>
+
+	{{^forgot_result}}
+	<p>パスワードを忘れた場合、登録したメールアドレスにリセットリンクを送るので下のフォームから送信してください。</p>
+	{{/^}}
+
+	{{#forgot_result.success}}
+	<div id="notice" class="success">
+		<p>送信完了</p>
+		<ul>
+			<li>メールのリンクをクリックしてください。</li>
+		</ul>
+	</div>
+	{{/#}}
+
+	{{#forgot_result.invalid}}
+	<div id="notice" class="invalid">
+		<p>送信失敗</p>
+		<ul>
+			{{*forgot_result.errors : error}}
+			<li>{{error.message}} (field: {{error.field}})</li>
+			{{/*}}
+		</ul>
+	</div>
+	{{/#}}
+
+	{{#forgot_result.exception}}
+	<div id="notice" class="exception">
+		<p>システムエラー</p>
+		<ul>
+			<li>もう一度送やり直してください。</li>
+		</ul>
+	</div>
+	{{/#}}
+
+	{{^forgot_result.success}}
+	<form action="" method="POST">
+
+		<dl>
+			<dt>登録済みのメールアドレス</dt>
+			<dd>
+				<input type="text" name="email" value="{{forgot_result.post.email}}" placeholder="email...">
+			</dd>
+
+		</dl>
+
+		{{&ticket}}
+		<div>
+			<button type="submit" name="forgot" value="1">送信する</button>
+		</div>
+
+	</form>
+	{{/^}}
+</section>
+{{/^}}

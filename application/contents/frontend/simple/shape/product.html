@@ -1,0 +1,31 @@
+<section class="products pad2 box">
+
+	<div class="txc mar3-b">
+		<h1 class="products-title title1-1 mar3-b gri8-6 pre8-1 suf8-1">{{item.title}}</h1>
+		<div class="products-catch catch">
+			{{~auto_p(item.catch)}}
+		</div>
+	</div>
+
+	<figure class="products-image gri6-4 pre6-1 suf6-1 mar3-b">
+		<img class="imw" src="{{~image_url(item.main_image, '', '', 'o')}}" alt="second" />
+	</figure>
+
+	<div class="gri6-4 pre6-1 suf6-1 mar3-b">
+		<div class="products-category mar1-b">
+			カテゴリー: 
+			{{*item.categories: category}}
+			<span>{{category.name}}</span>
+			{{/*}}
+		</div>
+
+		<div class="products-content mar1-b">
+			{{>item_content}}
+		</div>
+
+			<p class="products-type">{{item.fields.type.name}}: {{item.fields.type.value}}</p>
+			<p class="products-price">{{item.fields.price.name}}: {{~number_format(item.fields.price.value)}}</p>
+
+	</div>
+
+</section>

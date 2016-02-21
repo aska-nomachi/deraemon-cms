@@ -1,0 +1,30 @@
+<!--#search_result-->
+{{#search_result.total: total}}
+<p>{{total}}件見つかりました。</p>
+{{/#}}
+{{^search_result.total}}
+<p>見つかりませんでした。</p>
+{{/^}}
+
+<ul>
+	{{*search_result.items : item}}
+	<li>
+		<a class="blc" href="{{host}}{{item.segment}}" title="{{item.title}}">
+			{{#item.main_image}}
+			<img src="{{~ image_url(item.main_image, '', '80', 'h')}}" alt="{{item.main_image.name}}">
+			{{/#}}
+			<p>{{item.count}}. {{item.title}}</p>
+			<p>{{item.catch}}</p>
+		</a>
+	</li>
+	{{/*}}
+	{{^search_result.items}}
+	<li>
+		<span>
+			<p>Not found.</p>
+			<p>Please search once again. </p>
+		</span>
+	</li>
+	{{/^}}
+</ul>
+<!--/#search_result-->

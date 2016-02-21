@@ -1,0 +1,87 @@
+<!--getないときはリダイレクト-->
+{{^reset_result.get}}
+{{~redirect()}}
+{{/^}}
+
+<!--ログインしてるときはリダイレクト-->
+{{#logged_in_user}}
+{{~redirect()}}
+{{/#}}
+
+{{^logged_in_user}}
+<section>
+	{{#reset_result.success}}
+	<div id="notice" class="success">
+		<p>設定完了</p>
+		<p>ログインしてください。</p>
+	</div>
+
+	{{%login = get_items(segment = ['login'])}}
+	<form action="{{host}}{{*login.items : login_item}}{{login_item.segment}}{{/*}}" method="POST">
+
+		<dl>
+			<dt>ユーザーID</dt>
+			<dd>
+				<input type="text" name="username" value="" placeholder="user ID...">
+			</dd>
+			<dt>パスワード</dt>
+			<dd>
+				<input type="password" name="password" value="" placeholder="password...">
+			</dd>
+		</dl>
+
+		<div>
+			<label>ログイン状態を保持する<input type="checkbox" name="remember" value="1" {{~form_value(login_result.post.remember)}}></label>
+		</div>
+
+		{{&ticket}}
+		<div>
+			<button type="submit" name="login" value="1">login</button>
+		</div>
+
+	</form>
+	{{/#}}
+
+	{{#reset_result.invalid}}
+	<div id="notice"  class="invalid">
+		<p>以下の内容を確認して下さい</p>
+		<ul>
+			{{*reset_result.errors : error}}
+			<li>{{error.message}} (field: {{error.field}})</li>
+			{{/*}}
+		</ul>
+	</div>
+	{{/#}}
+
+	{{#reset_result.exception}}
+	<div id="notice" class="exception">
+		<p>システムエラー</p>
+		<p>もう一度送やり直してください。</p>
+	</div>
+	{{/#}}
+
+	{{^reset_result.success}}
+	{{^reset_result.exception}}
+	<p>新しいパスワードを設定してください。</p>
+	<form action="" method="POST">
+		<dl>
+			<dt>新しいパスワード<br>New pasword</dt>
+			<dd>
+				<input type="text" name="password" value="{{reset_result.post.password}}" placeholder="password...">
+			</dd>
+			<dt>新しいパスワード 再入力<br>New pasword Confirm</dt>
+			<dd>
+				<input type="text" name="confirm" value="{{reset_result.post.confirm}}" placeholder="confirm...">
+			</dd>
+		</dl>
+
+		{{&ticket}}
+		<div>
+			<button type="submit" name="reset" value="1">reset</button>
+		</div>
+
+	</form>
+	{{/^}}
+	{{/^}}
+</section>
+{{/^}}

@@ -12,33 +12,33 @@
 	</div>
 </section>
 
-<section class="news gri2-1 mar3-b">
+<section class="topics gri2-1 mar3-b">
 
-	<h2 class="title1 mar2-b">news</h2>
+	<h2 class="title1 mar2-b">topics</h2>
 
-	{{%newses = get_items(division = ['news'], order_column = 'issued', order_direction = 'desc', limit = '3')}}
-	<ul class="news-list pad2-rlt">
-		{{*newses.items: news}}
-		<li class="news-list-item box mar3-b">
-			<a class="news-list-item-image gri5-1 pad1-r" href="{{host}}{{news.segment}}">
-				<img class="imw" src="{{~image_url(news.main_image)}}" alt="{{news.main_image.name}}" />
+	{{%topics = get_items(division = ['topics'], order_column = 'issued', order_direction = 'desc', limit = '3')}}
+	<ul class="topic-list pad2-rlt">
+		{{*topics.items: topic}}
+		<li class="topic-list-item box mar3-b">
+			<a class="topic-list-item-image gri5-1 pad1-r" href="{{host}}{{topic.segment}}">
+				<img class="imw" src="{{~image_url(topic.main_image)}}" alt="{{topic.main_image.name}}" />
 			</a>
-			<div class="news-list-item-text gri5-4">
-				<h3 class="news-list-item-title title2">{{news.title}}</h3>
-				<div>{{~date_format(news.issued)}}</div>
-				{{~summary = auto_p(news.summary)}}
+			<div class="topic-list-item-text gri5-4">
+				<h3 class="topic-list-item-title title2">{{topic.title}}</h3>
+				<div>{{~date_format(topic.issued)}}</div>
+				{{~summary = auto_p(topic.summary)}}
 				<p>{{~limit_chars(summary, 60)}}</p>
 			</div>
-			<div class="news-list-item-more txr"><a class="more" href="{{host}}{{news.segment}}">more</a></div>
+			<div class="topic-list-item-more txr"><a class="more" href="{{host}}{{topic.segment}}">more</a></div>
 		</li>
 		{{/*}}
-		{{^newses.items}}
+		{{^topics.items}}
 		<li>not found...</li>
 		{{/^}}
 	</ul>
 
 	<div class="news-list-more pad2-rl txr">
-		<a class="more" href="{{host}}{{item.segment}}">to news list</a>
+		<a class="more" href="{{host}}{{item.segment}}">to topic list</a>
 	</div>
 
 </section>
@@ -76,7 +76,7 @@
 			<div class="products-list-item-more txr"><a class="more" href="{{host}}{{product.segment}}">more</a></div>
 		</li>
 		{{/*}}
-		{{^newses.items}}
+		{{^topics.items}}
 		<li>not found...</li>
 		{{/^}}
 	</ul>

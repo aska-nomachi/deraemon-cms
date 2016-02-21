@@ -64,8 +64,11 @@ class Kohana_Cms_Item {
 		}
 
 		// replace others
+		$wdsip_replacements = array();
+		preg_match_all("/{{>(.[^{}]*)}}/", $wdsip, $wdsip_replacements, PREG_SET_ORDER);
+
 		$wdsipo = $wdsip;
-		foreach ($replacements as $replacement)
+		foreach ($wdsip_replacements as $replacement)
 		{
 			$replacement_segment = explode('_', end($replacement));
 
@@ -77,7 +80,7 @@ class Kohana_Cms_Item {
 				{
 					$other_content = file_get_contents($other_file_path);
 					$other_content = str_replace('{{@segment}}', end($replacement_segment), $other_content);
-					$wdsipo = str_replace(reset($replacement), $other_content, $wdsip);
+					$wdsipo = str_replace(reset($replacement), $other_content, $wdsipo);
 				}
 			}
 		}

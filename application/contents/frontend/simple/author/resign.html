@@ -1,0 +1,62 @@
+{{#logged_in_user}}
+<section>
+
+	{{#resign_result.invalid}}
+	<div id="notice" class="invalid mb1">
+		<h2>以下の内容を確認して下さい</h2>
+		<ul>
+			{{*resign_result.errors : error}}
+			<li>{{error.message}} (field: {{error.field}})</li>
+			{{/*}}
+		</ul>
+	</div>
+	{{/#}}
+
+	{{#resign_result.exception}}
+	<div id="notice" class="exception mb1">
+		<h2>退会失敗</h2>
+		<ul>
+			<li>ユーザーID 又は パスワード が間違っています。Gagal</li>
+		</ul>
+	</div>
+	{{/#}}
+
+	{{^resign_result.success}}
+	<p>ユーザーID と パスワード を入れて送信してください。Silakan isi User ID dan Password</p>
+
+	<form action="" method="POST">
+		<dl>
+			<dt>ユーザーID</dt>
+			<dd>
+				<input type="text" name="username" value="{{resign_result.post.username}}" placeholder="user ID...">
+			</dd>
+			<dt>パスワード</dt>
+			<dd>
+				<input type="text" name="password" value="{{resign_result.post.password}}" placeholder="password...">
+			</dd>
+		</dl>
+
+		{{&ticket}}
+		<div>
+			<button type="submit" name="resign" value="1">退会する</button>
+		</div>
+	</form>
+	{{/^}}
+</section>
+{{/#}}
+
+<!--ログインしてないとき-->
+{{^logged_in_user}}
+<!--successのとき-->
+{{#resign_result.success}}
+<div class="success">
+	<h2>退会完了 Sudah Resign</h2>
+	<p><a href="{{host}}" title="home">home</a></p>
+</div>
+{{/#}}
+<!--successがないときはリダイレクト-->
+{{^resign_result.success}}
+{{~redirect()}}
+{{/^}}
+
+{{/^}}

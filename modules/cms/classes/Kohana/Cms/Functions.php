@@ -259,6 +259,7 @@ class Kohana_Cms_Functions {
 	 * 		'parrent_id' => array(parrent_id1,parrent_id2),
 	 * 		'order_column' => 'order_column',
 	 * 		'order_direction' => 'order_direction',
+	 * 		'order' => array('order_column', 'order_direction'),
 	 * 		'offset' => '2',
 	 * 		'limit' => '5',
 	 * 		'xn' => '4',
@@ -338,6 +339,7 @@ class Kohana_Cms_Functions {
 		$parent_id = Arr::get($params, 'parent_id');
 		$order_column = Arr::get($params, 'order_column');
 		$order_direction = Arr::get($params, 'order_direction', 'ASC');
+		$order = Arr::get($params, 'order', 'id, ASC');
 		$offset = Arr::get($params, 'offset');
 		$limit = Arr::get($params, 'limit');
 
@@ -436,6 +438,13 @@ class Kohana_Cms_Functions {
 		// if there is order_column
 		if ($order_column)
 		{
+			$sql->order_by('items.' . $order_column, $order_direction);
+		}
+
+		// if there is order
+		if ($order)
+		{
+			list($order_column, $order_direction) = explode(',', $order);
 			$sql->order_by('items.' . $order_column, $order_direction);
 		}
 
@@ -1057,6 +1066,7 @@ class Kohana_Cms_Functions {
 		return Date::formatted_time($datetime_str, $timestamp_format);
 	}
 
+	// change to checked or selected
 	public static function form_value($mix, $glue = ', ')
 	{
 		if (is_array($mix))
@@ -1067,6 +1077,34 @@ class Kohana_Cms_Functions {
 		{
 			return 'data-value="' . $mix . '"';
 		}
+	}
+
+	public static function checked($value, $datas)
+	{
+		if (is_array($datas))
+		{
+			$result = (in_array($value, $datas)) ? ' checked' : '';
+		}
+		else
+		{
+			$result = ($value == $datas) ? ' checked' : '';
+		}
+		
+		echo $result;
+	}
+	
+	public static function selected($value, $datas)
+	{
+		if (is_array($datas))
+		{
+			$result = (in_array($value, $datas)) ? ' selected' : '';
+		}
+		else
+		{
+			$result = ($value == $datas) ? ' selected' : '';
+		}
+		
+		echo $result;
 	}
 
 	public static function redirect($url = NULL)
@@ -1303,9 +1341,10 @@ class Kohana_Cms_Functions {
 	{
 		return number_format($number, $decimals, $dec_point, $thousands_sep);
 	}
-	
+
 	public static function replace($subject, $search = array('_', '-', '/'), $replace = ' ')
 	{
 		return str_replace($search, $replace, $subject);
 	}
+
 }

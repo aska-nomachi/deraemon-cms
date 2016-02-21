@@ -1,0 +1,13 @@
+<!--#search_form-->
+<form action="{{host}}search" method="GET">
+	<input type="text" name="string" value="{{search_result.get.string}}" placeholder="string">
+
+	<input type="hidden" name="and_or" value="and">
+	<input type="hidden" name="divisions" value="">
+	<input type="hidden" name="xn" value="3">
+	<input type="hidden" name="paginate" value="10, 2">
+	<input type="hidden" name="order" value="created, DESC">
+
+	<button class="btn" type="submit" name="search" value="search">search</button>
+</form>
+<!--/#search_form-->

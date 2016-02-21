@@ -8,7 +8,7 @@
 		</div>
 	</div>
 
-	<nav class="gnav">
+	<nav class="gnav mar1-b">
 		{{%pages = get_items(division = ['page'], order_column = 'order')}}
 		<ul class="gnav-list">
 			{{*pages.items: page}}
@@ -26,18 +26,30 @@
 		</ul>
 	</nav>
 
-	<div class="">
+	{{^item.is_login}}
+	<div class="txr pad2">
+		{{#logged_in_user}}
+		<div class="mar1-b">wellcome {{logged_in_user.username}}</div>
+		<div class="mar1-b"><a href="{{host}}?logout=1">logout</a></div>
+		{{/#}}
+		{{^logged_in_user}}
 		<form action="{{host}}login" method="POST">
-			<input type="text" name="username" value="{{login_result.post.username}}" placeholder="user ID...">&nbsp;
-			<input type="password" name="password" value="" placeholder="password...">
-			<label><input type="checkbox" name="remember" value="1" {{~form_value(login_result.post.remember)}}> keep login</label>
+			<div class="mar1-b">
+				<input class="pad1-lr" type="text" name="username" value="{{login_result.post.username}}" placeholder="user ID...">
+			</div>
+			<div class="mar1-b">
+				<input class="pad1-lr" type="password" name="password" value="" placeholder="password...">
+			</div>
+			<div class="mar1-b">
+				<label><input type="checkbox" name="remember" value="1"> keep login</label>
+				<button class="btn" type="submit" name="login" value="1">login</button>
+			</div>
+			<div class="mar1-b">
+			</div>
 			<label><a href="{{host}}author/forgot" title="forgot">If you forgot password.</a></label>
-			<button type="submit" name="login" value="1">login</button>
 		</form>
+		{{/^}}
 	</div>
-
-	{{!?
-			echo Debug::vars(json_decode(json_encode($item), true)); 
-	}}
-
+	{{/^}}
+	
 </header>

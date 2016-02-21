@@ -1,0 +1,58 @@
+<header id="header" class="header mar3-b box">
+
+	<div class="header_top box">
+		<a class="header_top-logo gri6-1" href="{{host}}">{{site_title}}</a>
+		<h1 class="header_top-catch gri6-3">{{item.catch}}</h1>
+		<div class="header_contact gri6-2 pad2-rt">
+			<a href="{{host}}contact">contact</a>
+		</div>
+	</div>
+
+	<div class="box">
+		<div class="txl pad2 gri2-1">
+			{{>search_form}} 
+		</div>
+		
+		{{^item.is_login}}
+		<div class="txr pad2 gri2-1">
+			{{#logged_in_user}}
+			<div class="mar1-b">wellcome {{logged_in_user.username}}</div>
+			<div class="mar1-b"><a class="btn" href="{{host}}?logout=1">logout</a></div>
+			{{/#}}
+			{{^logged_in_user}}
+			<form action="{{host}}login" method="POST">
+				<div class="mar1-b">
+					<input class="pad1-lr" type="text" name="username" value="{{login_result.post.username}}" placeholder="user ID...">
+				</div>
+				<div class="mar1-b">
+					<input class="pad1-lr" type="password" name="password" value="" placeholder="password...">
+				</div>
+				<div class="mar1-b">
+					<label><input type="checkbox" name="remember" value="1"> keep login</label>
+					<button class="btn" type="submit" name="login" value="1">login</button>
+				</div>
+			</form>
+			{{/^}}
+		</div>
+		{{/^}}
+	</div>
+
+	<nav class="gnav mar1-b bor-tb">
+		{{%pages = get_items(division = ['page'], order_column = 'order')}}
+		<ul class="gnav-list">
+			{{*pages.items: page}}
+			<li class="gnav-list-item">
+				<div>
+					{{#page.current}}
+					<span>{{page.title}}</span>
+					{{/#}}
+					{{^page.current}}
+					<a href="{{host}}{{page.segment}}" title="{{page.title}}">{{page.title}}</a>
+					{{/^}}
+				</div>
+			</li>
+			{{/*}}
+		</ul>
+	</nav>
+
+</header>
