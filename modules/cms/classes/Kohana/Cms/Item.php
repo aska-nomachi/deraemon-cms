@@ -12,136 +12,77 @@ class Kohana_Cms_Item {
 	 */
 	public static function build_html($item)
 	{
-		/*
-		 *  :TODO aaaaaaaaaaaaaaaaaaaaaaa
-		 */
-
-		// Get settings
-//		$settings = Cms_Helper::settings();
-//
-//		$wrapper_file_path = Kohana::find_file($settings->front_tpl_dir . '/wrapper', $item->wrapper->segment, 'html');
-//		$wrapper_content = file_get_contents($wrapper_file_path);
-//
-//		$division_file_path = Kohana::find_file($settings->front_tpl_dir . '/division', $item->division->segment, 'html');
-//		$division_content = file_get_contents($division_file_path);
-//
-//		$wd = str_replace('{{>division_content}}', $division_content, $wrapper_content);
-//
-//		$shape_file_path = Kohana::find_file($settings->front_tpl_dir . '/shape', $item->shape_segment, 'html');
-//		$shape_content = $shape_file_path ? file_get_contents($shape_file_path) : '{{>item_content}}';
-//
-//		$wds = str_replace('{{>shape_content}}', $shape_content, $wd);
-//
-//		$item_file_path = Kohana::find_file($settings->item_dir . '/' . $item->division->segment, $item->segment, 'html');
-//		$item_content = file_get_contents($item_file_path);
-//
-//		$wdsi = str_replace('{{>item_content}}', $item_content, $wds);
-//		
-//		$replacements = array();
-//		preg_match_all("/{{>(.[^{}]*)}}/", $wdsi, $replacements, PREG_SET_ORDER);
-//
-//		// dirからpart名を取得
-//		
-//		
-//		// $replacementsにpartがあれば置換え
-//		
-//		
-//		// Get others $replacementsにあれば置換え
-//		$others = array(
-//			'search_form', 'search_result',
-//			'comment_form', 'comment_result',
-//			'comment_form', 'comment_result',
-//			'author_login', 'author_register', 'author_activate', 'author_forgot', 'author_reset', 'author_resign', 'author_account', 'author_password', 'author_detail'
-//		);
-//		
-//		// mailも
-//		
-//
-//		$wdsip = $wdsi;
-//		foreach ($parts as $part)
-//		{
-//			list($search, $replace_segment) = $part;
-//			$part_file_path = Kohana::find_file($settings->front_tpl_dir . '/part', $replace_segment, 'html');
-//			$part_content = file_get_contents($part_file_path);
-//			$wdsip = str_replace($search, $part_content, $wdsip);
-//		}
-//		
-//					echo Debug::vars($wdsip);
-//
-//		
-//		die;
-
-		/*
-		 *  :TODO aaaaaaaaaaaaaaaaaaaaaaa
-		 */
-
-
 		// Get settings
 		$settings = Cms_Helper::settings();
 
-		// shapeを使っている時
-		if ($item->shape_segment)
+		$wrapper_file_path = Kohana::find_file($settings->front_tpl_dir . '/wrapper', $item->wrapper->segment, 'html');
+		$wrapper_content = file_get_contents($wrapper_file_path);
+
+		$division_file_path = Kohana::find_file($settings->front_tpl_dir . '/division', $item->division->segment, 'html');
+		$division_content = file_get_contents($division_file_path);
+
+		$wd = str_replace('{{>division_content}}', $division_content, $wrapper_content);
+
+		$shape_file_path = Kohana::find_file($settings->front_tpl_dir . '/shape', $item->shape_segment, 'html');
+		$shape_content = $shape_file_path ? file_get_contents($shape_file_path) : '{{>item_content}}';
+
+		$wds = str_replace('{{>shape_content}}', $shape_content, $wd);
+
+		$item_file_path = Kohana::find_file($settings->item_dir . '/' . $item->division->segment, $item->segment, 'html');
+		$item_content = file_get_contents($item_file_path);
+
+		$wdsi = str_replace('{{>item_content}}', $item_content, $wds);
+
+		// get replacements from wdsi
+		$replacements = array();
+		preg_match_all("/{{>(.[^{}]*)}}/", $wdsi, $replacements, PREG_SET_ORDER);
+
+		// First replace part
+		$part_dir = new DirectoryIterator(APPPATH . $settings->front_tpl_dir . '/part');
+		$part_list = array();
+		foreach ($part_dir as $file)
 		{
-			// Todo::-1 content考える！ パーシャルは先に変更しておく！？
-			$shape_content = Tpl::get_file($item->shape_segment, $settings->front_tpl_dir . '/shape');
-			$item->content = Tpl::get_file($item->segment, $settings->item_dir . '/' . $item->division->segment);
-		}
-		else
-		{
-			$shape_content = Tpl::get_file($item->segment, $settings->item_dir . '/' . $item->division->segment);
-			$item->content = '';
-		}
-
-		$division_content = Tpl::get_file($item->division->segment, $settings->front_tpl_dir . '/division', array('shape_content' => $shape_content));
-
-		$wrapper_content = Tpl::get_file($item->wrapper->segment, $settings->front_tpl_dir . '/wrapper', array('division_content' => $division_content));
-
-		// Search parts
-		preg_match_all("/{{>(.[^{}]*)}}/", $wrapper_content, $matches, PREG_SET_ORDER);
-
-		// Get others
-		$others = array(
-			'search_form', 'search_result',
-			'comment_form', 'comment_result',
-			'comment_form', 'comment_result',
-			'author_login', 'author_register', 'author_activate', 'author_forgot', 'author_reset', 'author_resign', 'author_account', 'author_password', 'author_detail'
-		);
-
-		// Get email segments
-		$emails = Tbl::factory('emails')
-				->read()
-				->as_array(NULL, 'segment');
-
-		$parts = array();
-		foreach ($matches as $matche)
-		{
-			$key = $matche[0];
-			$segment_string = $matche[1];
-
-			// If parts tag in others
-			if (in_array($segment_string, $others))
+			if ($file->isFile())
 			{
-				list($dir, $file) = explode('_', $segment_string);
-				$parts[$key] = Tpl::get_file($file, $settings->front_tpl_dir . '/' . $dir);
-			}
-			// If parts tag in emails array
-			elseif (in_array(str_replace('email_', '', $segment_string), $emails))
-			{
-				$segment = str_replace('email_', '', $segment_string);
-				// {{@segment}}をsegmentに変更
-				$email_content = Tpl::get_file($segment, $settings->front_tpl_dir . '/email');
-				$parts[$key] = str_replace('{{@segment}}', $segment, $email_content);
-			}
-			else
-			{
-				$parts[$key] = Tpl::get_file($matche[1], $settings->front_tpl_dir . '/part');
+				$part_list[] = $file->getBasename('.html');
 			}
 		}
 
-		// Replace parts
-		$html = str_replace(array_keys($parts), array_values($parts), $wrapper_content);
+		$wdsip = $wdsi;
+		foreach ($replacements as $replacement)
+		{
+			if (in_array(end($replacement), $part_list))
+			{
+				$part_file_path = Kohana::find_file($settings->front_tpl_dir . '/part', end($replacement), 'html');
 
-		return $html;
+				if ($part_file_path)
+				{
+					$part_content = file_get_contents($part_file_path);
+					$wdsip = str_replace(reset($replacement), $part_content, $wdsip);
+				}
+			}
+		}
+
+		// replace others
+		$wdsipo = $wdsip;
+		foreach ($replacements as $replacement)
+		{
+			$replacement_segment = explode('_', end($replacement));
+
+			if (count($replacement_segment) >= 2)
+			{
+				$other_file_path = Kohana::find_file($settings->front_tpl_dir . '/' . reset($replacement_segment), end($replacement_segment), 'html');
+
+				if ($other_file_path)
+				{
+					$other_content = file_get_contents($other_file_path);
+					$other_content = str_replace('{{@segment}}', end($replacement_segment), $other_content);
+					$wdsipo = str_replace(reset($replacement), $other_content, $wdsip);
+				}
+			}
+		}
+
+		return $wdsipo;
 	}
 
 	/**

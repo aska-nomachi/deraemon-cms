@@ -90,7 +90,7 @@ Kohana::$environment = Kohana::PRODUCTION;
  * - boolean  expose      set the X-Powered-By header                        FALSE
  */
 Kohana::init(array(
-	'base_url' => '/',
+	'base_url' => '/deraemon-cms/',
 	'caching' => TRUE,
 	'profile' => FALSE,
 	'index_file' => FALSE,

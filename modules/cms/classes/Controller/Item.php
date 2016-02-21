@@ -352,8 +352,10 @@ class Controller_Item extends Controller {
 		 * First view render
 		 */
 		// <editor-fold defaultstate="collapsed" desc="First view render">
+		
+		// Itemをすべてarrayに変換		
 		$first_html = Cms_Item::build_html($item);
-		$first_view = Tpl::factory($first_html, array('item' => $item))
+		$first_view = Tpl::factory($first_html, array('item' => json_decode(json_encode($item), true)))
 			->set('login_result', Session::instance()->get('login_result'))
 			->set('logout_result', Session::instance()->get('logout_result'))
 			->set('register_result', Session::instance()->get('register_result'))

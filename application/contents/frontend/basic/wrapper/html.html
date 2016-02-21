@@ -54,18 +54,22 @@
 				<main id="main" class="main">
 
 					{{>division_content}}
-					
+
 				</main>
 				<!--/#.main-->
-				
+
 			</div>
 			<!--/.content-->
-			
+
 			<!--#.footer-->
 			{{>footer}}
 			<!--#.footer-->
 
 		</div>
 		<!--/.wrapper-->
+
+		<!--profiler-->
+		{{? echo View::factory('profiler/stats'); }}
+		<!--/profiler-->
     </body>
 </html>

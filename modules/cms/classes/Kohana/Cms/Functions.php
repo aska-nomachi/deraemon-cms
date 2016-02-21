@@ -741,7 +741,7 @@ class Kohana_Cms_Functions {
 	 * @param bool $use_main
 	 * @return type
 	 */
-	public static function image_filter($images, $string = NULL, $use_main = 'true')
+	public static function image_filter($images, $string = NULL, $use_main = FALSE)
 	{
 		// リターンの配列宣言
 		$return = array();
@@ -823,14 +823,7 @@ class Kohana_Cms_Functions {
 			}
 			else
 			{
-				$column = trim(substr($string, 0, $equal_pos));
-				$search_value = trim(substr($string, $equal_pos + 1));
-				foreach ($images as $image)
-				{
-					$column_value = isset($image[$column]) ? $image[$column] : NULL;
-					if ($search_value === $column_value)
-						$return[$image['segment']] = $image;
-				}
+				$return = $images;
 			}
 		}
 

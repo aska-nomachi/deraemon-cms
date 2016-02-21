@@ -14,8 +14,8 @@ class Kohana_Cms_Helper {
 	public static function settings($key = NULL)
 	{
 		$settings = (object) Tbl::factory('settings')
-				->read()
-				->as_array('key', 'value');
+						->read()
+						->as_array('key', 'value');
 
 		return $key ? $settings->{$key} : $settings;
 	}
@@ -65,7 +65,7 @@ class Kohana_Cms_Helper {
 		{
 			$return = $num * $expiration;
 		}
-		if ($num AND !$str)
+		if ($num AND ! $str)
 		{
 			$return = $num;
 		}
@@ -92,15 +92,16 @@ class Kohana_Cms_Helper {
 		{
 			if (substr($path, -1, 1) !== '/')
 			{
-				$path = $path.'/';
+				$path = $path . '/';
 			}
 		}
 
-		$dir = 'application/'.$path.$dirname;
+		$dir = 'application/' . $path . $dirname;
 
 		if (!(file_exists($dir) && is_dir($dir)))
 		{
-			$return = mkdir($dir);
+			$return = mkdir($dir, 0777, TRUE);
+			chmod($dir, 0777);
 		}
 
 		return $return;
@@ -122,16 +123,16 @@ class Kohana_Cms_Helper {
 		{
 			if (substr($path, -1, 1) !== '/')
 			{
-				$path = 'application/'.$path.'/';
+				$path = 'application/' . $path . '/';
 			}
 			else
 			{
-				$path = 'application/'.$path;
+				$path = 'application/' . $path;
 			}
 		}
 
-		$old = $path.$oldname;
-		$new = $path.$newname;
+		$old = $path . $oldname;
+		$new = $path . $newname;
 
 		if (file_exists($old) && is_dir($old))
 		{
@@ -157,15 +158,15 @@ class Kohana_Cms_Helper {
 		{
 			if (substr($path, -1, 1) !== '/')
 			{
-				$path = 'application/'.$path.'/';
+				$path = 'application/' . $path . '/';
 			}
 			else
 			{
-				$path = 'application/'.$path;
+				$path = 'application/' . $path;
 			}
 		}
 
-		$dir = $path.$dirname;
+		$dir = $path . $dirname;
 
 		if (file_exists($dir) && is_dir($dir))
 		{
@@ -177,7 +178,7 @@ class Kohana_Cms_Helper {
 				{
 					if (!is_dir($file))
 					{
-						$return = unlink($dir.'/'.$file);
+						$return = unlink($dir . '/' . $file);
 					}
 				}
 			}
@@ -205,11 +206,11 @@ class Kohana_Cms_Helper {
 		{
 			if (substr($path, -1, 1) !== '/')
 			{
-				$path = 'application/'.$path.'/';
+				$path = 'application/' . $path . '/';
 			}
 			else
 			{
-				$path = 'application/'.$path;
+				$path = 'application/' . $path;
 			}
 		}
 
@@ -217,11 +218,19 @@ class Kohana_Cms_Helper {
 		if (!(file_exists($path) && is_dir($path)))
 		{
 			mkdir(substr($path, 0, -1), 0777, TRUE);
+			chmod(substr($path, 0, -1), 0777);
 		}
 
 		$file_path = "{$path}{$filename}.{$ext}";
+		
+		$result = file_put_contents($file_path, $content);
+		
+		if($result)
+		{
+			chmod($file_path, 0777);
+		}
 
-		return file_put_contents($file_path, $content);
+		return $result;
 	}
 
 	/**
@@ -240,15 +249,15 @@ class Kohana_Cms_Helper {
 		{
 			if (substr($path, -1, 1) !== '/')
 			{
-				$path = 'application/'.$path.'/';
+				$path = 'application/' . $path . '/';
 			}
 			else
 			{
-				$path = 'application/'.$path;
+				$path = 'application/' . $path;
 			}
 		}
 
-		$dir = $path.$dirname;
+		$dir = $path . $dirname;
 
 		if (file_exists($dir) && is_dir($dir))
 		{
@@ -256,11 +265,11 @@ class Kohana_Cms_Helper {
 			foreach ($files as $file)
 			{
 				$segment = basename($file, ".{$ext}");
-				
+
 				if (!is_dir($file))
 				{
 					$return[$segment] = (object) array(
-						'segment' => $segment,
+								'segment' => $segment,
 					);
 				}
 			}
@@ -288,11 +297,11 @@ class Kohana_Cms_Helper {
 		{
 			if (substr($path, -1, 1) !== '/')
 			{
-				$path = 'application/'.$path.'/';
+				$path = 'application/' . $path . '/';
 			}
 			else
 			{
-				$path = 'application/'.$path;
+				$path = 'application/' . $path;
 			}
 		}
 
@@ -325,11 +334,11 @@ class Kohana_Cms_Helper {
 		{
 			if (substr($path, -1, 1) !== '/')
 			{
-				$path = 'application/'.$path.'/';
+				$path = 'application/' . $path . '/';
 			}
 			else
 			{
-				$path = 'application/'.$path;
+				$path = 'application/' . $path;
 			}
 		}
 
