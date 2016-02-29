@@ -146,7 +146,7 @@ class Controller_Backend_Template extends Controller {
 					'settings' => array(
 						'name' => 'settings',
 						'controller' => 'settings',
-						'actions' => array('index', 'frontend'),
+						'actions' => array('index', 'frontend', 'backend'),
 						'url' => URL::site("{$this->settings->backend_name}/settings/index", 'http'),
 						'allow' => FALSE,
 						'roles' => array('direct'),

@@ -559,6 +559,30 @@ content：{{return}}
 		$email->confirm_url = URL::site("{$this->settings->backend_name}/emails/confirm/{$email->id}", 'http');
 		$email->receive_url = URL::site("{$this->settings->backend_name}/emails/receive/{$email->id}", 'http');
 		$email->rule_url = NULL;
+		
+		$vaids = array(
+			array('callback' => 'not_empty', 'param' => ''),
+			array('callback' => 'regex', 'param' => 'regular expression'),
+			array('callback' => 'min_length', 'param' => 'minimum number'),
+			array('callback' => 'max_length', 'param' => 'maximum number'),
+			array('callback' => 'exact_length', 'param' => 'exact number'),
+			array('callback' => 'email', 'param' => ''),
+			array('callback' => 'email_domain', 'param' => ''),
+			array('callback' => 'url', 'param' => '-'),
+			array('callback' => 'ip', 'param' => ''),
+			array('callback' => 'phone', 'param' => ''),
+			array('callback' => 'credit_card', 'param' => ''),
+			array('callback' => 'date', 'param' => ''),
+			array('callback' => 'alpha', 'param' => ''),
+			array('callback' => 'alpha_dash', 'param' => ''),
+			array('callback' => 'alpha_numeric', 'param' => ''),
+			array('callback' => 'digit', 'param' => ''),
+			array('callback' => 'decimal', 'param' => ''),
+			array('callback' => 'numeric', 'param' => ''),
+			array('callback' => 'range', 'param' => 'min number and max number'),
+			array('callback' => 'matches', 'param' => ':value, :field, :mache field'),
+			array('callback' => 'equals', 'param' => 'exactly the value required'),
+		);
 
 		$create = array();
 
@@ -700,6 +724,7 @@ content：{{return}}
 		$content_file = Tpl::get_file('rule', $this->settings->back_tpl_dir.'/emails', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
+			->set('vaids', $vaids)
 			->set('local_menus', $this->local_menus)
 			->set('email', $email)
 			->set('rules', $rules)

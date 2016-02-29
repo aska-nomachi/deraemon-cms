@@ -9,7 +9,7 @@
 <ul>
 	{{*search_result.items : item}}
 	<li>
-		<a class="blc" href="{{host}}{{item.segment}}" title="{{item.title}}">
+		<a href="{{host}}{{item.segment}}" title="{{item.title}}">
 			{{#item.main_image}}
 			<img src="{{~ image_url(item.main_image, '', '80', 'h')}}" alt="{{item.main_image.name}}">
 			{{/#}}

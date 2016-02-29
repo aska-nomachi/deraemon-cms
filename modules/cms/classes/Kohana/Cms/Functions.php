@@ -343,7 +343,7 @@ class Kohana_Cms_Functions {
 		$offset = Arr::get($params, 'offset');
 		$limit = Arr::get($params, 'limit');
 
-		$paginate = strtolower(Arr::get($params, 'paginate')) == 'true' ? TRUE : FALSE;
+		$paginate = strtolower(Arr::get($params, 'paginate')) == 'true' OR true ? TRUE : FALSE;
 		$items_per_page = Arr::get($params, 'items_per_page');
 		$follow = Arr::get($params, 'follow');
 
@@ -354,7 +354,7 @@ class Kohana_Cms_Functions {
 		$fields_flag = in_array('fields', $flags);
 		$comments_flag = in_array('comments', $flags);
 
-		$get_one = strtolower(Arr::get($params, 'get_one')) == 'true' ? TRUE : FALSE;
+		$get_one = strtolower(Arr::get($params, 'get_one')) == 'true' OR true ? TRUE : FALSE;
 
 		// カレンダーとかの日付でフィルタするときに使う　?issued = 2013-7-7 or ?issued = 2013-7 or ?issued = 2013
 		$issued = Request::current()->query('issued');
@@ -384,10 +384,24 @@ class Kohana_Cms_Functions {
 			$sql->where('items.id', 'IN', $id);
 
 		if ($segment)
-			$sql->where('items.segment', 'IN', $segment);
+		{
+			foreach ($segment as $seg)
+			{
+				if (strpos($seg, '!') === FALSE)
+				{
+					$sql->where('items.segment', '=', $seg);
+				}
+				else
+				{
+					$sql->where('items.segment', '!=', str_replace('!', '', $seg));
+				}
+			}
+		}
 
 		if ($division)
+		{
 			$sql->where('divisions.segment', 'IN', $division);
+		}
 
 		if ($user)
 			$sql->where('users.username', 'IN', $user);
@@ -459,7 +473,7 @@ class Kohana_Cms_Functions {
 		{
 			$sql->limit($limit);
 		}
-
+		
 		// Items sqlを実行
 		$items = $sql->read()->as_array('segment');
 
@@ -1089,10 +1103,10 @@ class Kohana_Cms_Functions {
 		{
 			$result = ($value == $datas) ? ' checked' : '';
 		}
-		
+
 		echo $result;
 	}
-	
+
 	public static function selected($value, $datas)
 	{
 		if (is_array($datas))
@@ -1103,7 +1117,7 @@ class Kohana_Cms_Functions {
 		{
 			$result = ($value == $datas) ? ' selected' : '';
 		}
-		
+
 		echo $result;
 	}
 

@@ -15,7 +15,7 @@
 	<section class="main_cont gla10 prlb3">
 
 		<!--Title-->
-		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">{{~__('settings')}} - {{~__('frontend')}}</h1>
+		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">{{~__('settings')}} - {{~__('backend')}}</h1>
 		<!--/Title-->
 
 		<!--Notice-->
@@ -26,31 +26,68 @@
 		<form action="" method="POST">
 
 			<dl class="hor">
-				<dt class="mb1">{{~__('frontend theme')}}</dt>
+				<dt class="mb1">{{~__('direct key')}}<br />direct_key</dt>
 				<dd class="mb1">
-					<input class="frm" type="text" name="frontend_theme" value="{{settings.frontend_theme}}" placeholder="{{~__('frontend theme')}}...">
-					<p class="note pt1">テーマフォルダの名前を入力します。</p>
+					<input class="frm" type="text" name="direct_key" value="{{settings.direct_key}}" placeholder="{{~__('direct key')}}...">
+					<p class="note pt1">最初のユーザをつくる時のキーです。</p>
 				</dd>
-				<dt class="mb1">{{~__('lang')}}</dt>
+				<dt class="mb1">{{~__('temp pre')}}<br />temp_pre</dt>
 				<dd class="mb1">
-					<input class="frm" type="text" name="lang" value="{{settings.lang}}" placeholder="{{~__('lang')}}...">
-					<p class="note pt1">サイトの使用言語を選びます。ja、en、id etc.</p>
+					<input class="frm" type="text" name="temp_pre" value="{{settings.temp_pre}}" placeholder="{{~__('temp pre')}}...">
+					<p class="note pt1">tempfileのprefixです。</p>
 				</dd>
-				<dt class="mb1">{{~__('home page')}}</dt>
+				<dt class="mb1">{{~__('temp dir')}}<br />temp_dir</dt>
 				<dd class="mb1">
-					<input class="frm" type="text" name="home_page" value="{{settings.home_page}}" placeholder="{{~__('home page')}}...">
-					<p class="note pt1">最初に表示する、itemのsegmentを入力します。</p>
+					<input class="frm" type="text" name="temp_dir" value="{{settings.temp_dir}}" placeholder="{{~__('temp dir')}}...">
+					<p class="note pt1">tempディレクトリの位置です。</p>
 				</dd>
-				<dt class="mb1">{{~__('site details')}}</dt>
+				<dt class="mb1">{{~__('tpl func')}}<br />tpl_func</dt>
 				<dd class="mb1">
-					<textarea class="frm" rows="10" name="site_details" placeholder="{{~__('site details')}}...">{{settings.site_details}}</textarea>
-					<p class="note pt1">
-						コロン「：」で区切ってキーとバリューを入力、改行で次の項目を追加できます。<br />
-						example)<br />
-						name : sitename<br />
-						phone : 000 0000<br />
-						address : aaa bbb ccc
-					</p>
+					<input class="frm" rows="10" name="tpl_func" placeholder="{{~__('tpl func')}}...">{{settings.tpl_func}}</textarea>
+					<input class="frm" type="text" name="tpl_func" value="{{settings.tpl_func}}" placeholder="{{~__('tpl func')}}...">
+				</dd>
+				<dt class="mb1">{{~__('item dir')}}<br />item_dir</dt>
+				<dd class="mb1">
+					<input class="frm" type="text" name="item_dir" value="{{settings.item_dir}}" placeholder="{{~__('item dir')}}...">
+					<p class="note pt1">itemディレクトリの位置です。</p>
+				</dd>
+				
+				<dt class="mb1">{{~__('image dir')}}<br />image_dir</dt>
+				<dd class="mb1">
+					<textarea class="frm" rows="10" name="image_dir" placeholder="{{~__('image dir')}}...">{{settings.image_dir}}</textarea>
+					<p class="note pt1">temのimageディレクトリの位置です。</p>
+				</dd>
+				<dt class="mb1">{{~__('back tpl dir')}}<br />back_tpl_dir</dt>
+				<dd class="mb1">
+					<textarea class="frm" rows="10" name="back_tpl_dir" placeholder="{{~__('back_tpl dir')}}...">{{settings.back_tpl_dir}}</textarea>
+					<p class="note pt1">バックエンドのtplディレクトリの位置です。</p>
+				</dd>
+				<dt class="mb1">{{~__('front tpl dir')}}<br />front_tpl_dir</dt>
+				<dd class="mb1">
+					<textarea class="frm" rows="10" name="front_tpl_dir" placeholder="{{~__('front tpl dir')}}...">{{settings.front_tpl_dir}}</textarea>
+					<p class="note pt1">フロントエンドのtplディレクトリの位置です。</p>
+				</dd>
+				<dt class="mb1">{{~__('backend name')}}<br />backend_name</dt>
+				<dd class="mb1">
+					<textarea class="frm" rows="10" name="backend_name" placeholder="{{~__('backend name')}}...">{{settings.backend_name}}</textarea>
+					<p class="note pt1">管理画面の名前、url部分です。</p>
+				</dd>
+				
+				<dt class="mb1">{{~__('xxx')}}<br />xxx</dt>
+				<dd class="mb1">
+					<textarea class="frm" rows="10" name="xxx" placeholder="{{~__('xxx')}}...">{{settings.xxx}}</textarea>
+					<p class="note pt1">バックエンドの言語</p>
+				</dd>
+				
+				<dt class="mb1">{{~__('xxx')}}<br />xxx</dt>
+				<dd class="mb1">
+					<textarea class="frm" rows="10" name="xxx" placeholder="{{~__('xxx')}}...">{{settings.xxx}}</textarea>
+					<p class="note pt1">xxx</p>
+				</dd>
+				<dt class="mb1">{{~__('xxx')}}<br />xxx</dt>
+				<dd class="mb1">
+					<textarea class="frm" rows="10" name="xxx" placeholder="{{~__('xxx')}}...">{{settings.xxx}}</textarea>
+					<p class="note pt1">xxx</p>
 				</dd>
 			</dl>
 

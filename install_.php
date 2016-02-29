@@ -266,11 +266,11 @@ if (session('deraemon_step') == 2)
     </head>
 
     <body>
+		<h1>DERAEMON CMS</h1>
 		<?php
 		if (session('deraemon_step', 1) == 1)
 		{
 			?>
-			<h1>DERAEMON CMS</h1>
 			<div class="freame">
 				<h2>インストール</h2>
 				<ul>
@@ -291,13 +291,13 @@ if (session('deraemon_step') == 2)
 				</ul>
 				<form action="" method="post">
 					<dl>
-						<dt><label for="host">データベースサーバホ ストネーム</label></dt>
+						<dt><label for="host">データベース<br />サーバホストネーム</label></dt>
 						<dd><input type="text" name="hostname" value="<?php echo $hostname; ?>" placeholder="database server hostname" /></dd>
 						<dt><label for="dbname">データベースネーム</label></dt>
 						<dd><input type="text" name="database" value="<?php echo $database; ?>" placeholder="database name" /></dd>
-						<dt><label for="username">データベースユーザーネーム</label></dt>
+						<dt><label for="username">データベース<br />ユーザーネーム</label></dt>
 						<dd><input type="text" name="username" value="<?php echo $username; ?>" placeholder="database user name" /></dd>
-						<dt><label for="password">データベースパスワード</label></dt>
+						<dt><label for="password">データベース<br />パスワード</label></dt>
 						<dd><input type="text" name="password" value="<?php echo $password; ?>" placeholder="database password" /></dd>
 					</dl>
 					<div class="button"><button type="post" name="ticket" value="stap1">送信<br />send</button></div>
@@ -311,8 +311,8 @@ if (session('deraemon_step') == 2)
 		if (session('deraemon_step') == 2)
 		{
 			?>
-			<h2>設定</h2>
 			<div class="freame">
+				<h2>設定</h2>
 				<form action="" method="post">
 					<dl>
 						<dt><label for="rootdirectory">ルート ディレクトリ</label></dt>
@@ -347,15 +347,15 @@ if (session('deraemon_step') == 2)
 	</body>
 </html>
 
-		<?php
+<?php
 
-		function post($key, $default = NULL)
-		{
-			return isset($_POST[$key]) ? $_POST[$key] : $default;
-		}
+function post($key, $default = NULL)
+{
+	return isset($_POST[$key]) ? $_POST[$key] : $default;
+}
 
-		function session($key, $default = NULL)
-		{
-			return isset($_SESSION[$key]) ? $_SESSION[$key] : $default;
-		}
-		?>
+function session($key, $default = NULL)
+{
+	return isset($_SESSION[$key]) ? $_SESSION[$key] : $default;
+}
+?>

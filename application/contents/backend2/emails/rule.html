@@ -34,7 +34,11 @@
 
 				<dt class="mb1">{{~__('callback')}}</dt>
 				<dd class="mb1">
-					<input class="frm" type="text" name="create_callback" value="{{create.callback}}" placeholder="{{~__('callback')}}...">
+					<select class="frm" name="create_callback">
+						{{*vaids: valid}}
+						<option value="{{valid.callback}}"{{~selected(valid.callback, create.callback)}}>{{valid.callback}} [ {{~__(valid.param)}} ]</option>
+						{{/*}}
+					</select>
 				</dd>
 
 				<dt class="mb1">{{~__('param')}}</dt>
@@ -73,7 +77,16 @@
 					<tr>
 						<td>{{rule.id}}</td>
 						<td><input class="frm" type="text" name="field[{{rule.id}}]" value="{{rule.field}}" placeholder="{{~__('field')}}..."></td>
-						<td><input class="frm" type="text" name="callback[{{rule.id}}]" value="{{rule.callback}}" placeholder="{{~__('callback')}}..."></td>
+						<td>
+							<!--<input class="frm" type="text" name="callback[{{rule.id}}]" value="{{rule.callback}}" placeholder="{{~__('callback')}}...">-->
+
+							<select class="frm" name="callback[{{rule.id}}]">
+								{{*vaids: valid}}
+								<option value="{{valid.callback}}"{{~selected(valid.callback, rule.callback)}}>{{valid.callback}} [ {{~__(valid.param)}} ]</option>
+								{{/*}}
+							</select>
+						</td>
+
 						<td><input class="frm" type="text" name="param[{{rule.id}}]" value="{{rule.param}}" placeholder="{{~__('param')}}..."></td>
 						<td><input class="frm" type="text" name="label[{{rule.id}}]" value="{{rule.label}}" placeholder="{{~__('label')}}..."></td>
 						<td class="txr"><a class="delete btn red" href="{{rule.delete_url}}" title="delete"><i class="fa fa-minus-square"></i> {{~__('delete')}}</a></td>

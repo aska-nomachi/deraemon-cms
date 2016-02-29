@@ -17,6 +17,7 @@ class Controller_Backend_Settings extends Controller_Backend_Template {
 		$this->local_menus = array(
 			'index' => array('name' => 'index', 'url' => URL::site("{$this->settings->backend_name}/settings", 'http')),
 			'frontend' => array('name' => 'frontend', 'url' => URL::site("{$this->settings->backend_name}/settings/frontend", 'http')),
+			'backend' => array('name' => 'backend', 'url' => URL::site("{$this->settings->backend_name}/settings/backend", 'http')),
 		);
 
 		// local menus set current
@@ -45,9 +46,9 @@ class Controller_Backend_Settings extends Controller_Backend_Template {
 	{
 		// Get settings
 		$settings = Tbl::factory('settings')
-			->order_by('id')
-			->read()
-			->as_array('key');
+				->order_by('id')
+				->read()
+				->as_array('key');
 
 		// If there are post
 		if ($this->request->post())
@@ -55,7 +56,8 @@ class Controller_Backend_Settings extends Controller_Backend_Template {
 			// Set post to settings
 			foreach ($this->request->post() as $key => $value)
 			{
-				if (isset($settings[$key])) $settings[$key]->value = $value;
+				if (isset($settings[$key]))
+					$settings[$key]->value = $value;
 			}
 
 			// Database transaction start
@@ -68,10 +70,10 @@ class Controller_Backend_Settings extends Controller_Backend_Template {
 				foreach ($this->request->post() as $key => $value)
 				{
 					Tbl::factory('settings')
-						->where('key', '=', $key)
-						->get()
-						->update(array(
-							'value' => $value,
+							->where('key', '=', $key)
+							->get()
+							->update(array(
+								'value' => $value,
 					));
 				}
 
@@ -107,7 +109,7 @@ class Controller_Backend_Settings extends Controller_Backend_Template {
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
@@ -116,10 +118,10 @@ class Controller_Backend_Settings extends Controller_Backend_Template {
 		 * View
 		 */
 		// Get content file
-		$content_file = Tpl::get_file('index', $this->settings->back_tpl_dir.'/settings', $this->partials);
+		$content_file = Tpl::get_file('index', $this->settings->back_tpl_dir . '/settings', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('settings', $settings);
+				->set('settings', $settings);
 	}
 
 	// Todo::3 これ以降はvalidationをつける！
@@ -152,13 +154,13 @@ class Controller_Backend_Settings extends Controller_Backend_Template {
 			try
 			{
 				$validation = Validation::factory($settings)
-					->rule('frontend_theme', 'not_empty')
-					->rule('frontend_theme', 'alpha_numeric')
-					->rule('lang', 'not_empty')
-					->rule('home_page', 'not_empty')
-					->label('front_theme', 'Front theme')
-					->label('lang', 'Lang')
-					->label('home_page', 'Home page')
+						->rule('frontend_theme', 'not_empty')
+						->rule('frontend_theme', 'alpha_numeric')
+						->rule('lang', 'not_empty')
+						->rule('home_page', 'not_empty')
+						->label('front_theme', 'Front theme')
+						->label('lang', 'Lang')
+						->label('home_page', 'Home page')
 				;
 
 				// Check validation
@@ -169,7 +171,7 @@ class Controller_Backend_Settings extends Controller_Backend_Template {
 
 				// Build frontend data
 				$frontend_data = array(
-					'front_tpl_dir' => 'contents/frontend/'.Arr::get($settings, 'frontend_theme'),
+					'front_tpl_dir' => 'contents/frontend/' . Arr::get($settings, 'frontend_theme'),
 					'lang' => Arr::get($settings, 'lang'),
 					'home_page' => Arr::get($settings, 'home_page'),
 					'site_details' => Arr::get($settings, 'site_details'),
@@ -178,10 +180,10 @@ class Controller_Backend_Settings extends Controller_Backend_Template {
 				foreach ($frontend_data as $key => $value)
 				{
 					Tbl::factory('settings')
-						->where('key', '=', $key)
-						->get()
-						->update(array(
-							'value' => $value,
+							->where('key', '=', $key)
+							->get()
+							->update(array(
+								'value' => $value,
 					));
 				}
 
@@ -210,7 +212,7 @@ class Controller_Backend_Settings extends Controller_Backend_Template {
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
@@ -219,10 +221,111 @@ class Controller_Backend_Settings extends Controller_Backend_Template {
 		 * View
 		 */
 		// Get content file
-		$content_file = Tpl::get_file('frontend', $this->settings->back_tpl_dir.'/settings', $this->partials);
+		$content_file = Tpl::get_file('frontend', $this->settings->back_tpl_dir . '/settings', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('settings', $settings);
+				->set('settings', $settings);
+	}
+
+	/**
+	 * Backend
+	 */
+	public function action_backend()
+	{
+		$settings = array(
+			'frontend_theme' => basename($this->settings->front_tpl_dir),
+			'lang' => $this->settings->lang,
+			'home_page' => $this->settings->home_page,
+			'site_details' => $this->settings->site_details,
+		);
+
+		// If there are post
+		if ($this->request->post())
+		{
+			// Set post to email
+			$settings['frontend_theme'] = Arr::get($this->request->post(), 'frontend_theme');
+			$settings['lang'] = Arr::get($this->request->post(), 'lang');
+			$settings['home_page'] = Arr::get($this->request->post(), 'home_page');
+			$settings['site_details'] = Arr::get($this->request->post(), 'site_details');
+
+			// Database transaction start
+			Database::instance()->begin();
+
+			// Try
+			try
+			{
+				$validation = Validation::factory($settings)
+						->rule('frontend_theme', 'not_empty')
+						->rule('frontend_theme', 'alpha_numeric')
+						->rule('lang', 'not_empty')
+						->rule('home_page', 'not_empty')
+						->label('front_theme', 'Front theme')
+						->label('lang', 'Lang')
+						->label('home_page', 'Home page')
+				;
+
+				// Check validation
+				if (!$validation->check())
+				{
+					throw new Validation_Exception($validation);
+				}
+
+				// Build frontend data
+				$frontend_data = array(
+					'front_tpl_dir' => 'contents/frontend/' . Arr::get($settings, 'frontend_theme'),
+					'lang' => Arr::get($settings, 'lang'),
+					'home_page' => Arr::get($settings, 'home_page'),
+					'site_details' => Arr::get($settings, 'site_details'),
+				);
+
+				foreach ($frontend_data as $key => $value)
+				{
+					Tbl::factory('settings')
+							->where('key', '=', $key)
+							->get()
+							->update(array(
+								'value' => $value,
+					));
+				}
+
+				// Database commit
+				Database::instance()->commit();
+
+				// Add success notice
+				Notice::add(Notice::SUCCESS, Kohana::message('general', 'update_success'));
+			}
+			catch (HTTP_Exception_302 $e)
+			{
+				$this->redirect($e->location());
+			}
+			catch (Validation_Exception $e)
+			{
+				// Database rollback
+				Database::instance()->rollback();
+
+				// Add validation notice
+				Notice::add(Notice::VALIDATION, Kohana::message('general', 'update_failed'), NULL, $e->errors('validation'));
+			}
+			catch (Exception $e)
+			{
+				// Database rollback
+				Database::instance()->rollback();
+
+				// Add error notice
+				Notice::add(
+						Notice::ERROR, $e->getMessage()
+				);
+			}
+		}
+
+		/**
+		 * View
+		 */
+		// Get content file
+		$content_file = Tpl::get_file('backend', $this->settings->back_tpl_dir . '/settings', $this->partials);
+
+		$this->content = Tpl::factory($content_file)
+				->set('settings', $settings);
 	}
 
 	/**
