@@ -45,7 +45,7 @@ class Controller_Backend_Divisions extends Controller_Backend_Template {
 			{
 				// Create
 				$division = Tbl::factory('divisions')
-					->create($this->request->post());
+						->create($this->request->post());
 
 				// Check items division directory and create items division directory
 				// これはitemを入れるとこを作る
@@ -53,10 +53,10 @@ class Controller_Backend_Divisions extends Controller_Backend_Template {
 
 				// Check images division directory and create images division directory
 				// これはimageを入れるとこを作る
-				Cms_Helper::make_dir($division->segment, $this->settings->image_dir.'/item');
+				Cms_Helper::make_dir($division->segment, $this->settings->image_dir . '/item');
 
 				// Create division file これはディビジョンテンプレート
-				Cms_Helper::set_file($division->segment, $this->settings->front_tpl_dir.'/division', '{{>shape_content}}');
+				Cms_Helper::set_file($division->segment, $this->settings->front_tpl_dir . $this->settings->front_theme . '/division', '{{>shape_content}}');
 
 				// Database commit
 				Database::instance()->commit();
@@ -66,6 +66,9 @@ class Controller_Backend_Divisions extends Controller_Backend_Template {
 
 				// Add success notice
 				Notice::add(Notice::SUCCESS, Kohana::message('general', 'create_success'));
+				
+				// Redirect for new division
+				$this->redirect(Request::current()->url('http'));
 			}
 			catch (HTTP_Exception_302 $e)
 			{
@@ -86,20 +89,20 @@ class Controller_Backend_Divisions extends Controller_Backend_Template {
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
 
 		// Get divisions
 		$divisions = Tbl::factory('divisions')
-			->select('divisions.*')
-			->select(array('wrappers.segment', 'wrapper_segment'))
-			->select(array('wrappers.name', 'wrapper_name'))
-			->select(array('wrappers.content_type', 'wrapper_content_type'))
-			->join('wrappers')->on('divisions.wrapper_id', '=', 'wrappers.id')
-			->read()
-			->as_array();
+				->select('divisions.*')
+				->select(array('wrappers.segment', 'wrapper_segment'))
+				->select(array('wrappers.name', 'wrapper_name'))
+				->select(array('wrappers.content_type', 'wrapper_content_type'))
+				->join('wrappers')->on('divisions.wrapper_id', '=', 'wrappers.id')
+				->read()
+				->as_array();
 
 		foreach ($divisions as $division)
 		{
@@ -108,18 +111,18 @@ class Controller_Backend_Divisions extends Controller_Backend_Template {
 
 		// Get wrappers
 		$wrappers = Tbl::factory('wrappers')
-			->read()
-			->as_array();
-
+				->read()
+				->as_array();
+		
 		/**
 		 * View
 		 */
-		$content_file = Tpl::get_file('index', $this->settings->back_tpl_dir.'/divisions', $this->partials);
+		$content_file = Tpl::get_file('index', $this->settings->back_tpl_dir . '/divisions', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('divisions', $divisions)
-			->set('wrappers', $wrappers)
-			->set('post', $this->request->post());
+				->set('divisions', $divisions)
+				->set('wrappers', $wrappers)
+				->set('post', $this->request->post());
 	}
 
 	/**
@@ -143,8 +146,8 @@ class Controller_Backend_Divisions extends Controller_Backend_Template {
 
 		// Get wrapper
 		$wrapper = Tbl::factory('wrappers')
-			->where('id', '=', $division->wrapper_id)
-			->read(1);
+				->where('id', '=', $division->wrapper_id)
+				->read(1);
 
 		// Direct set to division
 		$division->wrapper_segment = $wrapper->segment;
@@ -152,7 +155,7 @@ class Controller_Backend_Divisions extends Controller_Backend_Template {
 		$division->wrapper_content_type = $wrapper->content_type;
 
 		// Get content from file and direct set to division
-		$division->content = Tpl::get_file($division->segment, $this->settings->front_tpl_dir.'/division');
+		$division->content = Tpl::get_file($division->segment, $this->settings->front_tpl_dir . $this->settings->front_theme . '/division');
 		$division->delete_url = URL::site("{$this->settings->backend_name}/divisions/delete/{$division->id}", 'http');
 
 		// Save old name
@@ -160,8 +163,8 @@ class Controller_Backend_Divisions extends Controller_Backend_Template {
 
 		// Get wrappers
 		$wrappers = Tbl::factory('wrappers')
-			->read()
-			->as_array();
+				->read()
+				->as_array();
 
 		// If there are post
 		if ($this->request->post())
@@ -180,11 +183,11 @@ class Controller_Backend_Divisions extends Controller_Backend_Template {
 			{
 				// Update
 				Tbl::factory('divisions')
-					->get($division->id)
-					->update(array(
-						'wrapper_id' => $this->request->post('wrapper_id'),
-						'segment' => $this->request->post('segment'),
-						'name' => $this->request->post('name'),
+						->get($division->id)
+						->update(array(
+							'wrapper_id' => $this->request->post('wrapper_id'),
+							'segment' => $this->request->post('segment'),
+							'name' => $this->request->post('name'),
 				));
 
 				// New name
@@ -194,13 +197,13 @@ class Controller_Backend_Divisions extends Controller_Backend_Template {
 				Cms_Helper::rename_dir($oldname, $newname, $this->settings->item_dir);
 
 				// Rename images/division/directory name
-				Cms_Helper::rename_dir($oldname, $newname, $this->settings->image_dir.'/item');
+				Cms_Helper::rename_dir($oldname, $newname, $this->settings->image_dir . '/item');
 
 				// rename theme/.../division/division file
-				Cms_Helper::rename_file($oldname, $newname, $this->settings->front_tpl_dir.'/division');
+				Cms_Helper::rename_file($oldname, $newname, $this->settings->front_tpl_dir . $this->settings->front_theme . '/division');
 
 				// Update file
-				Cms_Helper::set_file($newname, $this->settings->front_tpl_dir.'/division', $this->request->post('content'));
+				Cms_Helper::set_file($newname, $this->settings->front_tpl_dir . $this->settings->front_theme . '/division', $this->request->post('content'));
 
 				// Database commit
 				Database::instance()->commit();
@@ -230,7 +233,7 @@ class Controller_Backend_Divisions extends Controller_Backend_Template {
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
@@ -238,11 +241,11 @@ class Controller_Backend_Divisions extends Controller_Backend_Template {
 		/**
 		 * View
 		 */
-		$content_file = Tpl::get_file('edit', $this->settings->back_tpl_dir.'/divisions', $this->partials);
+		$content_file = Tpl::get_file('edit', $this->settings->back_tpl_dir . '/divisions', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('division', $division)
-			->set('wrappers', $wrappers);
+				->set('division', $division)
+				->set('wrappers', $wrappers);
 	}
 
 	/**
@@ -255,11 +258,13 @@ class Controller_Backend_Divisions extends Controller_Backend_Template {
 
 		// Get id from param, if there is nothing then throw to 404
 		$id = $this->request->param('key');
-		if (!$id) throw HTTP_Exception::factory(404);
+		if (!$id)
+			throw HTTP_Exception::factory(404);
 
 		// Get division, if there is nothing then throw to 404
 		$division = Tbl::factory('divisions')->get($id);
-		if (!$division) throw HTTP_Exception::factory(404);
+		if (!$division)
+			throw HTTP_Exception::factory(404);
 
 		// Database transaction start
 		Database::instance()->begin();
@@ -272,27 +277,30 @@ class Controller_Backend_Divisions extends Controller_Backend_Template {
 			 */
 			// used by items
 			$used_items = (bool) Tbl::factory('items')
-					->where('division_id', '=', $division->id)
-					->read()
-					->count();
+							->where('division_id', '=', $division->id)
+							->read()
+							->count();
 
 			// used by categories
 			$used_categories = (bool) Tbl::factory('categories')
-					->where('division_id', '=', $division->id)
-					->read()
-					->count();
+							->where('division_id', '=', $division->id)
+							->read()
+							->count();
 
 			// used by fields
 			$used_fields = (bool) Tbl::factory('fields')
-					->where('division_id', '=', $division->id)
-					->read()
-					->count();
+							->where('division_id', '=', $division->id)
+							->read()
+							->count();
 
 			// Build tables array
 			$tables = array();
-			if ($used_items) $tables[] = 'items';
-			if ($used_categories) $tables[] = 'categories';
-			if ($used_fields) $tables[] = 'fields';
+			if ($used_items)
+				$tables[] = 'items';
+			if ($used_categories)
+				$tables[] = 'categories';
+			if ($used_fields)
+				$tables[] = 'fields';
 
 			// If this division is used when throw to warning
 			if ($used_items OR $used_categories OR $used_fields)
@@ -304,11 +312,11 @@ class Controller_Backend_Divisions extends Controller_Backend_Template {
 			 * Delete
 			 */
 			// Delete file まずファイルを消す！
-			$file_delete_success = Cms_Helper::delete_file($division->segment, $this->settings->front_tpl_dir.'/division');
+			$file_delete_success = Cms_Helper::delete_file($division->segment, $this->settings->front_tpl_dir . $this->settings->front_theme . '/division');
 			if ($file_delete_success)
 			{
 				Cms_Helper::delete_dir($division->segment, $this->settings->item_dir);
-				Cms_Helper::delete_dir($division->segment, $this->settings->image_dir.'/item');
+				Cms_Helper::delete_dir($division->segment, $this->settings->image_dir . '/item');
 			}
 
 			// Delete
@@ -349,7 +357,7 @@ class Controller_Backend_Divisions extends Controller_Backend_Template {
 
 			// Add error notice
 			Notice::add(
-				Notice::ERROR, $e->getMessage()//.'<br>'.$e->getFile().'<br>'.$e->getLine().'<br>'
+					Notice::ERROR, $e->getMessage()//.'<br>'.$e->getFile().'<br>'.$e->getLine().'<br>'
 			);
 		}
 

@@ -46,7 +46,7 @@ class Controller_Media extends Controller {
 
 			$staff = $this->request->param('stuff');
 
-			$front_tpl_dir = Cms_Helper::settings('front_tpl_dir');
+			$front_tpl_dir = Cms_Helper::settings('front_tpl_dir') . Cms_Helper::settings('front_theme');
 			$full_path = $front_tpl_dir.'/media/'.$staff;
 
 			// full_pathからファイルを探す

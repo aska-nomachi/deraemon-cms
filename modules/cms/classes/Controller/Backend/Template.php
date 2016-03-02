@@ -146,7 +146,7 @@ class Controller_Backend_Template extends Controller {
 					'settings' => array(
 						'name' => 'settings',
 						'controller' => 'settings',
-						'actions' => array('index', 'frontend', 'backend'),
+						'actions' => array('index', 'frontend', 'backend', 'paginate', 'image', 'email', 'comment', 'auth', 'other'),
 						'url' => URL::site("{$this->settings->backend_name}/settings/index", 'http'),
 						'allow' => FALSE,
 						'roles' => array('direct'),
@@ -216,7 +216,7 @@ class Controller_Backend_Template extends Controller {
 					'search' => array(
 						'name' => 'search',
 						'controller' => 'search',
-						'actions' => array('form', 'result', 'delete'),
+						'actions' => array('index', 'form', 'result', 'delete'),
 						'url' => URL::site("{$this->settings->backend_name}/search/form", 'http'),
 						'allow' => FALSE,
 						'roles' => array('direct', 'admin'),
@@ -224,31 +224,31 @@ class Controller_Backend_Template extends Controller {
 					'emails' => array(
 						'name' => 'emails',
 						'controller' => 'emails',
-						'actions' => array('setting', 'index', 'edit', 'confirm', 'receive', 'rule', 'rule_delete', 'delete'),
-						'url' => URL::site("{$this->settings->backend_name}/emails/setting", 'http'),
+						'actions' => array('index', 'edit', 'confirm', 'receive', 'rule', 'rule_delete', 'delete'),
+						'url' => URL::site("{$this->settings->backend_name}/emails", 'http'),
 						'allow' => FALSE,
 						'roles' => array('direct', 'admin'),
 					),
 					'comment' => array(
 						'name' => 'comment',
 						'controller' => 'comment',
-						'actions' => array('setting', 'form', 'result'),
-						'url' => URL::site("{$this->settings->backend_name}/comment/setting", 'http'),
+						'actions' => array('index', 'form', 'result'),
+						'url' => URL::site("{$this->settings->backend_name}/comment", 'http'),
 						'allow' => FALSE,
 						'roles' => array('direct', 'admin'),
 					),
 					'author' => array(
 						'name' => 'author',
 						'controller' => 'author',
-						'actions' => array('setting', 'login', 'register', 'activate_mail', 'activate', 'forgot', 'reset_mail', 'reset', 'resign', 'account', 'password', 'detail'),
-						'url' => URL::site("{$this->settings->backend_name}/author/setting", 'http'),
+						'actions' => array('index', 'login', 'register', 'activate_mail', 'activate', 'forgot', 'reset_mail', 'reset', 'resign', 'account', 'password', 'detail'),
+						'url' => URL::site("{$this->settings->backend_name}/author", 'http'),
 						'allow' => FALSE,
 						'roles' => array('direct', 'admin'),
 					),
 					'errors' => array(
 						'name' => 'errors',
 						'controller' => 'errors',
-						'actions' => array('404', '500', 'default'),
+						'actions' => array('index', '404', '500', 'default'),
 						'url' => URL::site("{$this->settings->backend_name}/errors/404", 'http'),
 						'allow' => FALSE,
 						'roles' => array('direct', 'admin'),
@@ -456,10 +456,10 @@ class Controller_Backend_Template extends Controller {
 			}
 
 			// Get parts for snippets part. 下の$this->snippetsのpartsに入れるように取得する
-			$snippet_parts = Cms_Helper::get_dirfiles('part', $this->settings->front_tpl_dir);
+			$snippet_parts = Cms_Helper::get_dirfiles('part', $this->settings->front_tpl_dir . $this->settings->front_theme);
 			foreach ($snippet_parts as $snippet_part)
 			{
-				$snippet_part->content = Tpl::get_file($snippet_part->segment, $this->settings->front_tpl_dir.'/part');
+				$snippet_part->content = Tpl::get_file($snippet_part->segment, $this->settings->front_tpl_dir . $this->settings->front_theme.'/part');
 			}
 
 			// Set snippets

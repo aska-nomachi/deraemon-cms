@@ -19,7 +19,6 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 
 		// Local menus
 		$this->local_menus = array(
-			'setting' => array('name' => 'setting', 'url' => URL::site("{$this->settings->backend_name}/author/setting", 'http')),
 			'login' => array('name' => 'login', 'url' => URL::site("{$this->settings->backend_name}/author/login", 'http')),
 			'register' => array('name' => 'register', 'url' => URL::site("{$this->settings->backend_name}/author/register", 'http')),
 			'activate_mail' => array('name' => 'activate mail', 'url' => URL::site("{$this->settings->backend_name}/author/activate_mail", 'http')),
@@ -57,91 +56,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 	 */
 	public function action_index()
 	{
-		$this->redirect(URL::site("{$this->settings->backend_name}/author/setting", 'http'));
-	}
-
-	/**
-	 * Action setting
-	 */
-	public function action_setting()
-	{
-		$author_settings = new stdClass();
-		$author_settings->author_login_is_on = $this->settings->author_login_is_on;
-		$author_settings->author_register_is_on = $this->settings->author_register_is_on;
-		$author_settings->author_register_default_is_block = $this->settings->author_register_default_is_block;
-		$author_settings->author_register_activate_is_on = $this->settings->author_register_activate_is_on;
-		$author_settings->author_password_forgot_is_on = $this->settings->author_password_forgot_is_on;
-		$author_settings->author_password_is_on = $this->settings->author_password_is_on;
-		$author_settings->author_account_is_on = $this->settings->author_account_is_on;
-		$author_settings->author_detail_is_on = $this->settings->author_detail_is_on;
-
-		// If there are post
-		if ($this->request->post())
-		{
-			// Set post to settings
-			$author_settings->author_login_is_on = Arr::get($this->request->post(), 'author_login_is_on', 0);
-			$author_settings->author_register_is_on = Arr::get($this->request->post(), 'author_register_is_on', 0);
-			$author_settings->author_register_default_is_block = Arr::get($this->request->post(), 'author_register_default_is_block', 0);
-			$author_settings->author_register_activate_is_on = Arr::get($this->request->post(), 'author_register_activate_is_on', 0);
-			$author_settings->author_password_forgot_is_on = Arr::get($this->request->post(), 'author_password_forgot_is_on', 0);
-			$author_settings->author_password_is_on = Arr::get($this->request->post(), 'author_password_is_on', 0);
-			$author_settings->author_account_is_on = Arr::get($this->request->post(), 'author_account_is_on', 0);
-			$author_settings->author_detail_is_on = Arr::get($this->request->post(), 'author_detail_is_on', 0);
-
-			// Database transaction start
-			Database::instance()->begin();
-
-			// Try
-			try
-			{
-				foreach ($author_settings as $key => $value)
-				{
-					Tbl::factory('settings')
-						->where('key', '=', $key)
-						->get()
-						->update(array(
-							'value' => $value,
-					));
-				}
-
-				// Database commit
-				Database::instance()->commit();
-
-				// Add success notice
-				Notice::add(Notice::SUCCESS, Kohana::message('general', 'update_success'));
-			}
-			catch (HTTP_Exception_302 $e)
-			{
-				$this->redirect($e->location());
-			}
-			catch (Validation_Exception $e)
-			{
-				// Database rollback
-				Database::instance()->rollback();
-
-				// Add validation notice
-				Notice::add(Notice::VALIDATION, Kohana::message('general', 'update_failed'), NULL, $e->errors('validation'));
-			}
-			catch (Exception $e)
-			{
-				// Database rollback
-				Database::instance()->rollback();
-
-				// Add error notice
-				Notice::add(
-					Notice::ERROR, $e->getMessage()
-				);
-			}
-		}
-
-		/**
-		 * View
-		 */
-		// Get content file
-		$content_file = Tpl::get_file('setting', $this->settings->back_tpl_dir.'/author', $this->partials);
-
-		$this->content = Tpl::factory($content_file)
-			->set('author_settings', $author_settings);
+		$this->redirect(URL::site("{$this->settings->backend_name}/author/login", 'http'));
 	}
 
 	/**
@@ -151,7 +66,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 	{
 		// Get content from file and direct set to login
 		$login = new stdClass();
-		$login->content = Tpl::get_file('login', $this->settings->front_tpl_dir.'/author');
+		$login->content = Tpl::get_file('login', $this->settings->front_tpl_dir . $this->settings->front_theme . '/author');
 
 		// If there are post
 		if ($this->request->post())
@@ -166,7 +81,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 			try
 			{
 				// Update file
-				Cms_Helper::set_file("author/login", $this->settings->front_tpl_dir, $this->request->post('content'));
+				Cms_Helper::set_file("author/login", $this->settings->front_tpl_dir . $this->settings->front_theme, $this->request->post('content'));
 
 				// Database commit
 				Database::instance()->commit();
@@ -193,7 +108,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
@@ -201,10 +116,10 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 		/**
 		 * View
 		 */
-		$content_file = Tpl::get_file('login', $this->settings->back_tpl_dir.'/author', $this->partials);
+		$content_file = Tpl::get_file('login', $this->settings->back_tpl_dir . '/author', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('login', $login);
+				->set('login', $login);
 	}
 
 	/**
@@ -214,7 +129,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 	{
 		// Get content from file and direct set to register
 		$register = new stdClass();
-		$register->content = Tpl::get_file('register', $this->settings->front_tpl_dir.'/author');
+		$register->content = Tpl::get_file('register', $this->settings->front_tpl_dir . $this->settings->front_theme . '/author');
 
 		// If there are post
 		if ($this->request->post())
@@ -229,7 +144,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 			try
 			{
 				// Update file
-				Cms_Helper::set_file("author/register", $this->settings->front_tpl_dir, $this->request->post('content'));
+				Cms_Helper::set_file("author/register", $this->settings->front_tpl_dir . $this->settings->front_theme, $this->request->post('content'));
 
 				// Database commit
 				Database::instance()->commit();
@@ -256,7 +171,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
@@ -264,10 +179,10 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 		/**
 		 * View
 		 */
-		$content_file = Tpl::get_file('register', $this->settings->back_tpl_dir.'/author', $this->partials);
+		$content_file = Tpl::get_file('register', $this->settings->back_tpl_dir . '/author', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('register', $register);
+				->set('register', $register);
 	}
 
 	/**
@@ -282,7 +197,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 		$activate_settings->author_register_activate_from_name = $this->settings->author_register_activate_from_name;
 
 		$activate_mail = new stdClass();
-		$activate_mail->content = Tpl::get_file('activate_mail', $this->settings->front_tpl_dir.'/author');
+		$activate_mail->content = Tpl::get_file('activate_mail', $this->settings->front_tpl_dir . $this->settings->front_theme . '/author');
 
 		// If there are post
 		if ($this->request->post())
@@ -304,15 +219,15 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 				foreach ($activate_settings as $key => $value)
 				{
 					Tbl::factory('settings')
-						->where('key', '=', $key)
-						->get()
-						->update(array(
-							'value' => $value,
+							->where('key', '=', $key)
+							->get()
+							->update(array(
+								'value' => $value,
 					));
 				}
 
 				// Update activate_mail file
-				Cms_Helper::set_file("activate_mail", $this->settings->front_tpl_dir.'/author', $activate_mail->content);
+				Cms_Helper::set_file("activate_mail", $this->settings->front_tpl_dir . $this->settings->front_theme . '/author', $activate_mail->content);
 
 				// Database commit
 				Database::instance()->commit();
@@ -339,7 +254,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
@@ -347,12 +262,12 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 		/**
 		 * View
 		 */
-		$content_file = Tpl::get_file('activate_mail', $this->settings->back_tpl_dir.'/author', $this->partials);
+		$content_file = Tpl::get_file('activate_mail', $this->settings->back_tpl_dir . '/author', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('activate_settings', $activate_settings)
-			->set('activate_mail', $activate_mail)
-			->set('email_types', $this->email_types);
+				->set('activate_settings', $activate_settings)
+				->set('activate_mail', $activate_mail)
+				->set('email_types', $this->email_types);
 	}
 
 	/**
@@ -362,7 +277,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 	{
 		// Get content from file and direct set to activate
 		$activate = new stdClass();
-		$activate->content = Tpl::get_file('activate', $this->settings->front_tpl_dir.'/author');
+		$activate->content = Tpl::get_file('activate', $this->settings->front_tpl_dir . $this->settings->front_theme . '/author');
 
 		// If there are post
 		if ($this->request->post())
@@ -377,7 +292,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 			try
 			{
 				// Update file
-				Cms_Helper::set_file('activate', $this->settings->front_tpl_dir.'/author', $this->request->post('content'));
+				Cms_Helper::set_file('activate', $this->settings->front_tpl_dir . $this->settings->front_theme . '/author', $this->request->post('content'));
 
 				// Database commit
 				Database::instance()->commit();
@@ -404,7 +319,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
@@ -412,10 +327,10 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 		/**
 		 * View
 		 */
-		$content_file = Tpl::get_file('activate', $this->settings->back_tpl_dir.'/author', $this->partials);
+		$content_file = Tpl::get_file('activate', $this->settings->back_tpl_dir . '/author', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('activate', $activate);
+				->set('activate', $activate);
 	}
 
 	/**
@@ -425,7 +340,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 	{
 		// Get content from file and direct set to forgot
 		$forgot = new stdClass();
-		$forgot->content = Tpl::get_file('forgot', $this->settings->front_tpl_dir.'/author');
+		$forgot->content = Tpl::get_file('forgot', $this->settings->front_tpl_dir . $this->settings->front_theme . '/author');
 
 		// If there are post
 		if ($this->request->post())
@@ -440,7 +355,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 			try
 			{
 				// Update file
-				Cms_Helper::set_file('forgot', $this->settings->front_tpl_dir.'/author', $this->request->post('content'));
+				Cms_Helper::set_file('forgot', $this->settings->front_tpl_dir . $this->settings->front_theme . '/author', $this->request->post('content'));
 
 				// Database commit
 				Database::instance()->commit();
@@ -467,7 +382,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
@@ -475,10 +390,10 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 		/**
 		 * View
 		 */
-		$content_file = Tpl::get_file('forgot', $this->settings->back_tpl_dir.'/author', $this->partials);
+		$content_file = Tpl::get_file('forgot', $this->settings->back_tpl_dir . '/author', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('forgot', $forgot);
+				->set('forgot', $forgot);
 	}
 
 	/**
@@ -494,7 +409,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 		$reset_settings->author_password_reset_from_name = $this->settings->author_password_reset_from_name;
 
 		$reset_mail = new stdClass();
-		$reset_mail->content = Tpl::get_file('reset_mail', $this->settings->front_tpl_dir.'/author');
+		$reset_mail->content = Tpl::get_file('reset_mail', $this->settings->front_tpl_dir . $this->settings->front_theme . '/author');
 
 		// If there are post
 		if ($this->request->post())
@@ -516,15 +431,15 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 				foreach ($reset_settings as $key => $value)
 				{
 					Tbl::factory('settings')
-						->where('key', '=', $key)
-						->get()
-						->update(array(
-							'value' => $value,
+							->where('key', '=', $key)
+							->get()
+							->update(array(
+								'value' => $value,
 					));
 				}
 
 				// Update reset file
-				Cms_Helper::set_file("reset_mail", $this->settings->front_tpl_dir.'/author', $reset_mail->content);
+				Cms_Helper::set_file("reset_mail", $this->settings->front_tpl_dir . $this->settings->front_theme . '/author', $reset_mail->content);
 
 				// Database commit
 				Database::instance()->commit();
@@ -551,7 +466,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
@@ -559,12 +474,12 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 		/**
 		 * View
 		 */
-		$content_file = Tpl::get_file('reset_mail', $this->settings->back_tpl_dir.'/author', $this->partials);
+		$content_file = Tpl::get_file('reset_mail', $this->settings->back_tpl_dir . '/author', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('reset_settings', $reset_settings)
-			->set('reset_mail', $reset_mail)
-			->set('email_types', $this->email_types);
+				->set('reset_settings', $reset_settings)
+				->set('reset_mail', $reset_mail)
+				->set('email_types', $this->email_types);
 	}
 
 	/**
@@ -574,7 +489,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 	{
 		// Get content from file and direct set to reset
 		$reset = new stdClass();
-		$reset->content = Tpl::get_file('reset', $this->settings->front_tpl_dir.'/author');
+		$reset->content = Tpl::get_file('reset', $this->settings->front_tpl_dir . $this->settings->front_theme . '/author');
 
 		// If there are post
 		if ($this->request->post())
@@ -589,7 +504,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 			try
 			{
 				// Update file
-				Cms_Helper::set_file('reset', $this->settings->front_tpl_dir.'/author', $this->request->post('content'));
+				Cms_Helper::set_file('reset', $this->settings->front_tpl_dir . $this->settings->front_theme . '/author', $this->request->post('content'));
 
 				// Database commit
 				Database::instance()->commit();
@@ -616,7 +531,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
@@ -624,10 +539,10 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 		/**
 		 * View
 		 */
-		$content_file = Tpl::get_file('reset', $this->settings->back_tpl_dir.'/author', $this->partials);
+		$content_file = Tpl::get_file('reset', $this->settings->back_tpl_dir . '/author', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('reset', $reset);
+				->set('reset', $reset);
 	}
 
 	/**
@@ -637,7 +552,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 	{
 		// Get content from file and direct set to resign
 		$resign = new stdClass();
-		$resign->content = Tpl::get_file('resign', $this->settings->front_tpl_dir.'/author');
+		$resign->content = Tpl::get_file('resign', $this->settings->front_tpl_dir . $this->settings->front_theme . '/author');
 
 		// If there are post
 		if ($this->request->post())
@@ -652,7 +567,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 			try
 			{
 				// Update file
-				Cms_Helper::set_file('resign', $this->settings->front_tpl_dir.'/author', $this->request->post('content'));
+				Cms_Helper::set_file('resign', $this->settings->front_tpl_dir . $this->settings->front_theme . '/author', $this->request->post('content'));
 
 				// Database commit
 				Database::instance()->commit();
@@ -679,7 +594,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
@@ -687,10 +602,10 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 		/**
 		 * View
 		 */
-		$content_file = Tpl::get_file('resign', $this->settings->back_tpl_dir.'/author', $this->partials);
+		$content_file = Tpl::get_file('resign', $this->settings->back_tpl_dir . '/author', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('resign', $resign);
+				->set('resign', $resign);
 	}
 
 	/**
@@ -700,7 +615,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 	{
 		// Get content from file and direct set to password
 		$password = new stdClass();
-		$password->content = Tpl::get_file('password', $this->settings->front_tpl_dir.'/author');
+		$password->content = Tpl::get_file('password', $this->settings->front_tpl_dir . $this->settings->front_theme . '/author');
 
 		// If there are post
 		if ($this->request->post())
@@ -715,7 +630,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 			try
 			{
 				// Update file
-				Cms_Helper::set_file('password', $this->settings->front_tpl_dir.'/author', $this->request->post('content'));
+				Cms_Helper::set_file('password', $this->settings->front_tpl_dir . $this->settings->front_theme . '/author', $this->request->post('content'));
 
 				// Database commit
 				Database::instance()->commit();
@@ -742,7 +657,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
@@ -750,10 +665,10 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 		/**
 		 * View
 		 */
-		$content_file = Tpl::get_file('password', $this->settings->back_tpl_dir.'/author', $this->partials);
+		$content_file = Tpl::get_file('password', $this->settings->back_tpl_dir . '/author', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('password', $password);
+				->set('password', $password);
 	}
 
 	/**
@@ -763,7 +678,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 	{
 		// Get content from file and direct set to account
 		$account = new stdClass();
-		$account->content = Tpl::get_file('account', $this->settings->front_tpl_dir.'/author');
+		$account->content = Tpl::get_file('account', $this->settings->front_tpl_dir . $this->settings->front_theme . '/author');
 
 		// If there are post
 		if ($this->request->post())
@@ -778,7 +693,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 			try
 			{
 				// Update file
-				Cms_Helper::set_file('account', $this->settings->front_tpl_dir.'/author', $this->request->post('content'));
+				Cms_Helper::set_file('account', $this->settings->front_tpl_dir . $this->settings->front_theme . '/author', $this->request->post('content'));
 
 				// Database commit
 				Database::instance()->commit();
@@ -805,7 +720,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
@@ -813,10 +728,10 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 		/**
 		 * View
 		 */
-		$content_file = Tpl::get_file('account', $this->settings->back_tpl_dir.'/author', $this->partials);
+		$content_file = Tpl::get_file('account', $this->settings->back_tpl_dir . '/author', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('account', $account);
+				->set('account', $account);
 	}
 
 	/**
@@ -826,7 +741,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 	{
 		// Get content from file and direct set to detail
 		$detail = new stdClass();
-		$detail->content = Tpl::get_file('detail', $this->settings->front_tpl_dir.'/author');
+		$detail->content = Tpl::get_file('detail', $this->settings->front_tpl_dir . $this->settings->front_theme . '/author');
 
 		// If there are post
 		if ($this->request->post())
@@ -841,7 +756,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 			try
 			{
 				// Update file
-				Cms_Helper::set_file('detail', $this->settings->front_tpl_dir.'/author', $this->request->post('content'));
+				Cms_Helper::set_file('detail', $this->settings->front_tpl_dir . $this->settings->front_theme . '/author', $this->request->post('content'));
 
 				// Database commit
 				Database::instance()->commit();
@@ -868,24 +783,24 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
 
 		// usable details
 		$usable_details = Tbl::factory('details')
-			->read()
-			->as_array('segment');
+				->read()
+				->as_array('segment');
 
 		/**
 		 * View
 		 */
-		$content_file = Tpl::get_file('detail', $this->settings->back_tpl_dir.'/author', $this->partials);
+		$content_file = Tpl::get_file('detail', $this->settings->back_tpl_dir . '/author', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('usable_details', $usable_details)
-			->set('detail', $detail);
+				->set('usable_details', $usable_details)
+				->set('detail', $detail);
 	}
 
 	/**
@@ -894,7 +809,7 @@ class Controller_Backend_Author extends Controller_Backend_Template {
 	public function after()
 	{
 		$this->content
-			->set('local_menus', $this->local_menus);
+				->set('local_menus', $this->local_menus);
 
 		parent::after();
 	}

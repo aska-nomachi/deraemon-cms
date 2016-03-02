@@ -324,14 +324,20 @@ class Controller_Backend_Settings extends Controller_Backend_Template {
 			'direct_key' => [
 				'message' => '初めてログインするユーザの設定につかいます。',
 				'type' => 'text',
+				'rule' => ['min_length' => array(':value', '32')],
+				'label' => 'direct key',
 			],
 			'backend_name' => [
 				'message' => '管理画面のurlの部分を入力します。',
 				'type' => 'text',
+				'rule' => ['alpha_numeric' => ''],
+				'label' => 'backend name',
 			],
 			'backend_lang' => [
 				'message' => '管理画面で使用する言語を入力します。 現在、「en」、「ja」、「kr」',
 				'type' => 'text',
+				'rule' => ['in_array' => array(':value', array('en', 'ja', 'kr'))],
+				'label' => 'backend lang',
 			],
 		];
 
@@ -374,15 +380,37 @@ class Controller_Backend_Settings extends Controller_Backend_Template {
 			// Try
 			try
 			{
-				$validation = Validation::factory($posts)
-						->rule('direct_key', 'min_length', array(':value', '32'))
-						->rule('backend_name', 'alpha_numeric')
-						->rule('backend_lang', 'not_empty')
-						->rule('backend_lang', 'in_array', array(':value', array('en', 'ja', 'kr')))
-						->label('direct_key', 'direct key')
-						->label('backend_name', 'backend name')
-						->label('backend_lang', 'backend lang')
-				;
+				// Validation
+//				$validation = Validation::factory($posts)
+//						->rule('direct_key', 'min_length', array(':value', '32'))
+//						->rule('backend_name', 'alpha_numeric')
+//						->rule('backend_lang', 'not_empty')
+//						->rule('backend_lang', 'in_array', array(':value', array('en', 'ja', 'kr')))
+//						->label('direct_key', 'direct key')
+//						->label('backend_name', 'backend name')
+//						->label('backend_lang', 'backend lang')
+//				;
+				
+				$validation = Validation::factory($posts);
+
+				foreach ($additions as $addition_key => $addition_val)
+				{
+					foreach ($addition_val['rule'] as $key => $value)
+					{
+						if ($key)
+						{
+							if ($value)
+							{
+								$validation->rule($addition_key, $key, $value);
+							}
+							else
+							{
+								$validation->rule($addition_key, $key);
+							}
+							$validation->label($addition_key, __($addition_val['label']));
+						}
+					}
+				}
 
 				// Check validation
 				if (!$validation->check())

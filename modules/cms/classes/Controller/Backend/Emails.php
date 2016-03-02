@@ -15,7 +15,6 @@ class Controller_Backend_Emails extends Controller_Backend_Template {
 
 		// Local menus
 		$this->local_menus = array(
-			'setting' => array('name' => 'setting', 'url' => URL::site("{$this->settings->backend_name}/emails/setting", 'http')),
 			'index' => array('name' => 'index', 'url' => URL::site("{$this->settings->backend_name}/emails", 'http')),
 			'edit' => array('name' => 'edit', 'url' => URL::site("{$this->settings->backend_name}/emails/edit/{$this->request->param('key')}", 'http')),
 			'receive' => array('name' => 'receive', 'url' => URL::site("{$this->settings->backend_name}/emails/receive/{$this->request->param('key')}", 'http')),
@@ -43,103 +42,6 @@ class Controller_Backend_Emails extends Controller_Backend_Template {
 	}
 
 	/**
-	 * Action setting
-	 */
-	public function action_setting()
-	{
-		$settings = new stdClass();
-		$settings->send_email_is_on = $this->settings->send_email_is_on;
-		$settings->send_email_save_is_on = $this->settings->send_email_save_is_on;
-		$settings->send_email_confirm_is_on = $this->settings->send_email_confirm_is_on;
-		$settings->send_email_allowable_tags = $this->settings->send_email_allowable_tags;
-
-		$settings->send_email_defult_receive_subject = $this->settings->send_email_defult_receive_subject;
-		$settings->send_email_defult_user_name = $this->settings->send_email_defult_user_name;
-		$settings->send_email_defult_user_address = $this->settings->send_email_defult_user_address;
-
-		$settings->send_email_defult_confirm_subject = $this->settings->send_email_defult_confirm_subject;
-		$settings->send_email_defult_admin_name = $this->settings->send_email_defult_admin_name;
-		$settings->send_email_defult_admin_address = $this->settings->send_email_defult_admin_address;
-
-		// If there are post
-		if ($this->request->post())
-		{
-			// Set post to email
-			$settings->send_email_is_on = Arr::get($this->request->post(), 'send_email_is_on', 0);
-			$settings->send_email_save_is_on = Arr::get($this->request->post(), 'send_email_save_is_on', 0);
-			$settings->send_email_confirm_is_on = Arr::get($this->request->post(), 'send_email_confirm_is_on', 0);
-			$settings->send_email_allowable_tags = Arr::get($this->request->post(), 'send_email_allowable_tags');
-
-			$settings->send_email_defult_receive_subject = Arr::get($this->request->post(), 'send_email_defult_receive_subject');
-			$settings->send_email_defult_user_name = Arr::get($this->request->post(), 'send_email_defult_user_name');
-			$settings->send_email_defult_user_address = Arr::get($this->request->post(), 'send_email_defult_user_address');
-
-			$settings->send_email_defult_confirm_subject = Arr::get($this->request->post(), 'send_email_defult_confirm_subject');
-			$settings->send_email_defult_admin_name = Arr::get($this->request->post(), 'send_email_defult_admin_name');
-			$settings->send_email_defult_admin_address = Arr::get($this->request->post(), 'send_email_defult_admin_address');
-
-			// Database transaction start
-			Database::instance()->begin();
-
-			// Try
-			try
-			{
-				foreach ($settings as $key => $value)
-				{
-					Tbl::factory('settings')
-						->where('key', '=', $key)
-						->get()
-						->update(array(
-							'value' => $value,
-					));
-				}
-
-				// Database commit
-				Database::instance()->commit();
-
-				// Add success notice
-				Notice::add(Notice::SUCCESS, Kohana::message('general', 'update_success'));
-			}
-			catch (HTTP_Exception_302 $e)
-			{
-				$this->redirect($e->location());
-			}
-			catch (Validation_Exception $e)
-			{
-				// Database rollback
-				Database::instance()->rollback();
-
-				// Add validation notice
-				Notice::add(Notice::VALIDATION, Kohana::message('general', 'update_failed'), NULL, $e->errors('validation'));
-			}
-			catch (Exception $e)
-			{
-				// Database rollback
-				Database::instance()->rollback();
-
-				// Add error notice
-				Notice::add(
-					Notice::ERROR, $e->getMessage()
-				);
-			}
-		}
-
-		// local_menusの修正
-		$this->local_menus = array(
-			$this->local_menus['setting'],
-			$this->local_menus['index']
-		);
-
-		/**
-		 * View
-		 */
-		$content_file = Tpl::get_file('setting', $this->settings->back_tpl_dir.'/emails', $this->partials);
-
-		$this->content = Tpl::factory($content_file)
-			->set('settings', $settings);
-	}
-
-	/**
 	 * Action index
 	 */
 	public function action_index()
@@ -163,7 +65,7 @@ class Controller_Backend_Emails extends Controller_Backend_Template {
 				$data['admin_name'] = $this->settings->send_email_defult_admin_name;
 				$data['admin_address'] = $this->settings->send_email_defult_admin_address;
 				$email = Tbl::factory('emails')
-					->create($data);
+						->create($data);
 
 				// Create email fiel
 				$email_content = '<form method="POST" action="">
@@ -172,7 +74,7 @@ class Controller_Backend_Emails extends Controller_Backend_Template {
 	<input type="hidden" name="[email segment]" value="content">
 	<button type="submit" name="send_email" value="1">send</button>
 </form>';
-				Cms_Helper::set_file($email->segment, $this->settings->front_tpl_dir.'/email', $email_content);
+				Cms_Helper::set_file($email->segment, $this->settings->front_tpl_dir . $this->settings->front_theme . '/email', $email_content);
 
 				// Create email receive file
 				$receive_content = '{{post.type}}メールが届きました。{{return}}
@@ -185,7 +87,7 @@ content：{{return}}
 {{content}}{{return}}
 {{return}}
 ---------------------------------------------------------';
-				Cms_Helper::set_file("email/receive/{$email->segment}", $this->settings->front_tpl_dir, $receive_content);
+				Cms_Helper::set_file("email/receive/{$email->segment}", $this->settings->front_tpl_dir . $this->settings->front_theme, $receive_content);
 
 				// Create email confirm file
 				$confirm_content = '以下の内容でメールを受け取りました。{{return}}
@@ -198,7 +100,7 @@ content：{{return}}
 {{content}}{{return}}
 {{return}}
 ---------------------------------------------------------';
-				Cms_Helper::set_file("email/confirm/{$email->segment}", $this->settings->front_tpl_dir, $confirm_content);
+				Cms_Helper::set_file("email/confirm/{$email->segment}", $this->settings->front_tpl_dir . $this->settings->front_theme, $confirm_content);
 
 				// Database commit
 				Database::instance()->commit();
@@ -228,15 +130,15 @@ content：{{return}}
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
 
 		// Get emails
 		$emails = Tbl::factory('emails')
-			->read()
-			->as_array();
+				->read()
+				->as_array();
 
 		foreach ($emails as $email)
 		{
@@ -245,18 +147,17 @@ content：{{return}}
 
 		// local_menusの修正
 		$this->local_menus = array(
-			$this->local_menus['setting'],
 			$this->local_menus['index']
 		);
 
 		/**
 		 * View
 		 */
-		$content_file = Tpl::get_file('index', $this->settings->back_tpl_dir.'/emails', $this->partials);
+		$content_file = Tpl::get_file('index', $this->settings->back_tpl_dir . '/emails', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('emails', $emails)
-			->set('post', $this->request->post());
+				->set('emails', $emails)
+				->set('post', $this->request->post());
 	}
 
 	/**
@@ -266,14 +167,16 @@ content：{{return}}
 	{
 		// Get id from param, if there is nothing then throw to 404
 		$id = $this->request->param('key');
-		if (!$id) throw HTTP_Exception::factory(404);
+		if (!$id)
+			throw HTTP_Exception::factory(404);
 
 		// Get email, if there is nothing then throw to 404
 		$email = Tbl::factory('emails')->get($id);
-		if (!$email) throw HTTP_Exception::factory(404);
+		if (!$email)
+			throw HTTP_Exception::factory(404);
 
 		// Get content from file and direct set to email
-		$email->content = Tpl::get_file($email->segment, $this->settings->front_tpl_dir.'/email');
+		$email->content = Tpl::get_file($email->segment, $this->settings->front_tpl_dir . $this->settings->front_theme . '/email');
 		$email->delete_url = URL::site("{$this->settings->backend_name}/emails/delete/{$email->id}", 'http');
 
 		// Save old name
@@ -301,28 +204,28 @@ content：{{return}}
 			{
 				// Update
 				Tbl::factory('emails')
-					->get($email->id)
-					->update(array(
-						'segment' => $this->request->post('segment'),
-						'name' => $this->request->post('name'),
-						'description' => $this->request->post('description'),
-						'admin_name' => $this->request->post('admin_name'),
-						'admin_address' => $this->request->post('admin_address'),
-						'receive_subject' => $this->request->post('receive_subject'),
-						'user_name_field' => $this->request->post('user_name_field'),
-						'user_address_field' => $this->request->post('user_address_field'),
+						->get($email->id)
+						->update(array(
+							'segment' => $this->request->post('segment'),
+							'name' => $this->request->post('name'),
+							'description' => $this->request->post('description'),
+							'admin_name' => $this->request->post('admin_name'),
+							'admin_address' => $this->request->post('admin_address'),
+							'receive_subject' => $this->request->post('receive_subject'),
+							'user_name_field' => $this->request->post('user_name_field'),
+							'user_address_field' => $this->request->post('user_address_field'),
 				));
 
 				// New name
 				$newname = $email->segment;
 
 				// rename email file
-				Cms_Helper::rename_file($oldname, $newname, $this->settings->front_tpl_dir.'/email');
-				Cms_Helper::rename_file($oldname, $newname, $this->settings->front_tpl_dir.'/email/confirm');
-				Cms_Helper::rename_file($oldname, $newname, $this->settings->front_tpl_dir.'/email/receive');
+				Cms_Helper::rename_file($oldname, $newname, $this->settings->front_tpl_dir . $this->settings->front_theme . '/email');
+				Cms_Helper::rename_file($oldname, $newname, $this->settings->front_tpl_dir . $this->settings->front_theme . '/email/confirm');
+				Cms_Helper::rename_file($oldname, $newname, $this->settings->front_tpl_dir . $this->settings->front_theme . '/email/receive');
 
 				// Update file
-				Cms_Helper::set_file($newname, $this->settings->front_tpl_dir.'/email', $this->request->post('content'));
+				Cms_Helper::set_file($newname, $this->settings->front_tpl_dir . $this->settings->front_theme . '/email', $this->request->post('content'));
 
 				// Database commit
 				Database::instance()->commit();
@@ -352,7 +255,7 @@ content：{{return}}
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
@@ -362,11 +265,11 @@ content：{{return}}
 		 */
 		$this->partials['local_menu'] = Tpl::get_file('local_menu', $this->settings->back_tpl_dir);
 
-		$content_file = Tpl::get_file('edit', $this->settings->back_tpl_dir.'/emails', $this->partials);
+		$content_file = Tpl::get_file('edit', $this->settings->back_tpl_dir . '/emails', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('local_menus', $this->local_menus)
-			->set('email', $email);
+				->set('local_menus', $this->local_menus)
+				->set('email', $email);
 	}
 
 	/**
@@ -376,14 +279,16 @@ content：{{return}}
 	{
 		// Get id from param, if there is nothing then throw to 404
 		$id = $this->request->param('key');
-		if (!$id) throw HTTP_Exception::factory(404);
+		if (!$id)
+			throw HTTP_Exception::factory(404);
 
 		// Get email, if there is nothing then throw to 404
 		$email = Tbl::factory('emails')->get($id);
-		if (!$email) throw HTTP_Exception::factory(404);
+		if (!$email)
+			throw HTTP_Exception::factory(404);
 
 		// Get content from file and direct set to email
-		$email->receive_content = Tpl::get_file($email->segment, $this->settings->front_tpl_dir.'/email/receive');
+		$email->receive_content = Tpl::get_file($email->segment, $this->settings->front_tpl_dir . $this->settings->front_theme . '/email/receive');
 
 		// If there are post
 		if ($this->request->post())
@@ -401,14 +306,14 @@ content：{{return}}
 			{
 				// Update
 				Tbl::factory('emails')
-					->get($email->id)
-					->update(array(
-						'receive_subject' => $this->request->post('receive_subject'),
-						'receive_email_type' => $this->request->post('receive_email_type'),
+						->get($email->id)
+						->update(array(
+							'receive_subject' => $this->request->post('receive_subject'),
+							'receive_email_type' => $this->request->post('receive_email_type'),
 				));
 
 				// Update file
-				Cms_Helper::set_file($email->segment, $this->settings->front_tpl_dir.'/email/receive', $this->request->post('receive_content'));
+				Cms_Helper::set_file($email->segment, $this->settings->front_tpl_dir . $this->settings->front_theme . '/email/receive', $this->request->post('receive_content'));
 
 				// Database commit
 				Database::instance()->commit();
@@ -435,7 +340,7 @@ content：{{return}}
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
@@ -445,12 +350,12 @@ content：{{return}}
 		 */
 		$this->partials['local_menu'] = Tpl::get_file('local_menu', $this->settings->back_tpl_dir);
 
-		$content_file = Tpl::get_file('receive', $this->settings->back_tpl_dir.'/emails', $this->partials);
+		$content_file = Tpl::get_file('receive', $this->settings->back_tpl_dir . '/emails', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('local_menus', $this->local_menus)
-			->set('email_types', $this->email_types)
-			->set('email', $email);
+				->set('local_menus', $this->local_menus)
+				->set('email_types', $this->email_types)
+				->set('email', $email);
 	}
 
 	/**
@@ -460,14 +365,16 @@ content：{{return}}
 	{
 		// Get id from param, if there is nothing then throw to 404
 		$id = $this->request->param('key');
-		if (!$id) throw HTTP_Exception::factory(404);
+		if (!$id)
+			throw HTTP_Exception::factory(404);
 
 		// Get email, if there is nothing then throw to 404
 		$email = Tbl::factory('emails')->get($id);
-		if (!$email) throw HTTP_Exception::factory(404);
+		if (!$email)
+			throw HTTP_Exception::factory(404);
 
 		// Get content from file and direct set to email
-		$email->confirm_content = Tpl::get_file($email->segment, $this->settings->front_tpl_dir.'/email/confirm');
+		$email->confirm_content = Tpl::get_file($email->segment, $this->settings->front_tpl_dir . $this->settings->front_theme . '/email/confirm');
 
 		// If there are post
 		if ($this->request->post())
@@ -487,16 +394,16 @@ content：{{return}}
 			{
 				// Update
 				Tbl::factory('emails')
-					->get($email->id)
-					->update(array(
-						'confirm_subject' => $this->request->post('confirm_subject'),
-						'confirm_email_type' => $this->request->post('confirm_email_type'),
-						'admin_name' => $this->request->post('admin_name'),
-						'admin_address' => $this->request->post('admin_address'),
+						->get($email->id)
+						->update(array(
+							'confirm_subject' => $this->request->post('confirm_subject'),
+							'confirm_email_type' => $this->request->post('confirm_email_type'),
+							'admin_name' => $this->request->post('admin_name'),
+							'admin_address' => $this->request->post('admin_address'),
 				));
 
 				// Update file
-				Cms_Helper::set_file($email->segment, $this->settings->front_tpl_dir.'/email/confirm', $this->request->post('confirm_content'));
+				Cms_Helper::set_file($email->segment, $this->settings->front_tpl_dir . $this->settings->front_theme . '/email/confirm', $this->request->post('confirm_content'));
 
 				// Database commit
 				Database::instance()->commit();
@@ -523,7 +430,7 @@ content：{{return}}
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
@@ -533,12 +440,12 @@ content：{{return}}
 		 */
 		$this->partials['local_menu'] = Tpl::get_file('local_menu', $this->settings->back_tpl_dir);
 
-		$content_file = Tpl::get_file('confirm', $this->settings->back_tpl_dir.'/emails', $this->partials);
+		$content_file = Tpl::get_file('confirm', $this->settings->back_tpl_dir . '/emails', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('local_menus', $this->local_menus)
-			->set('email_types', $this->email_types)
-			->set('email', $email);
+				->set('local_menus', $this->local_menus)
+				->set('email_types', $this->email_types)
+				->set('email', $email);
 	}
 
 	/**
@@ -548,18 +455,20 @@ content：{{return}}
 	{
 		// Get id from param, if there is nothing then throw to 404
 		$id = $this->request->param('key');
-		if (!$id) throw HTTP_Exception::factory(404);
+		if (!$id)
+			throw HTTP_Exception::factory(404);
 
 		// Get email, if there is nothing then throw to 404
 		$email = Tbl::factory('emails')->get($id);
-		if (!$email) throw HTTP_Exception::factory(404);
+		if (!$email)
+			throw HTTP_Exception::factory(404);
 
 		// Get content from file and direct set to email
 		$email->edit_url = URL::site("{$this->settings->backend_name}/emails/edit/{$email->id}", 'http');
 		$email->confirm_url = URL::site("{$this->settings->backend_name}/emails/confirm/{$email->id}", 'http');
 		$email->receive_url = URL::site("{$this->settings->backend_name}/emails/receive/{$email->id}", 'http');
 		$email->rule_url = NULL;
-		
+
 		$vaids = array(
 			array('callback' => 'not_empty', 'param' => ''),
 			array('callback' => 'regex', 'param' => 'regular expression'),
@@ -604,7 +513,7 @@ content：{{return}}
 			{
 				// Create
 				Tbl::factory('email_rules')
-					->create($create);
+						->create($create);
 
 				// Database commit
 				Database::instance()->commit();
@@ -637,16 +546,16 @@ content：{{return}}
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
 
 		// Get email rules
 		$rules = Tbl::factory('email_rules')
-			->where('email_id', '=', $email->id)
-			->read()
-			->as_array();
+				->where('email_id', '=', $email->id)
+				->read()
+				->as_array();
 
 		foreach ($rules as $rule)
 		{
@@ -677,12 +586,12 @@ content：{{return}}
 				foreach ($rules as $rule)
 				{
 					Tbl::factory('email_rules')
-						->get($rule->id)
-						->update(array(
-							'field' => $post['field'][$rule->id],
-							'callback' => $post['callback'][$rule->id],
-							'param' => $post['param'][$rule->id],
-							'label' => $post['label'][$rule->id],
+							->get($rule->id)
+							->update(array(
+								'field' => $post['field'][$rule->id],
+								'callback' => $post['callback'][$rule->id],
+								'param' => $post['param'][$rule->id],
+								'label' => $post['label'][$rule->id],
 					));
 				}
 
@@ -711,7 +620,7 @@ content：{{return}}
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
@@ -721,14 +630,14 @@ content：{{return}}
 		 */
 		$this->partials['local_menu'] = Tpl::get_file('local_menu', $this->settings->back_tpl_dir);
 
-		$content_file = Tpl::get_file('rule', $this->settings->back_tpl_dir.'/emails', $this->partials);
+		$content_file = Tpl::get_file('rule', $this->settings->back_tpl_dir . '/emails', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('vaids', $vaids)
-			->set('local_menus', $this->local_menus)
-			->set('email', $email)
-			->set('rules', $rules)
-			->set('create', $create);
+				->set('vaids', $vaids)
+				->set('local_menus', $this->local_menus)
+				->set('email', $email)
+				->set('rules', $rules)
+				->set('create', $create);
 	}
 
 	/**
@@ -741,17 +650,20 @@ content：{{return}}
 
 		// Get ids, if When it is smaller than 2 then throw to 404
 		$ids = explode('_', $this->request->param('key'));
-		if (!count($ids) == 2) throw HTTP_Exception::factory(404);
+		if (!count($ids) == 2)
+			throw HTTP_Exception::factory(404);
 
 		list($email_id, $rule_id) = $ids;
 
 		// Get email, if there is nothing then throw to 404
 		$email = Tbl::factory('emails')->get($email_id);
-		if (!$email) throw HTTP_Exception::factory(404);
+		if (!$email)
+			throw HTTP_Exception::factory(404);
 
 		// Get email rule, if there is nothing then throw to 404
 		$email_rule = Tbl::factory('email_rules')->get($rule_id);
-		if (!$email_rule) throw HTTP_Exception::factory(404);
+		if (!$email_rule)
+			throw HTTP_Exception::factory(404);
 
 		// Database transaction start
 		Database::instance()->begin();
@@ -792,7 +704,7 @@ content：{{return}}
 
 			// Add error notice
 			Notice::add(
-				Notice::ERROR//, $e->getMessage()
+					Notice::ERROR//, $e->getMessage()
 			);
 		}
 
@@ -810,11 +722,13 @@ content：{{return}}
 
 		// Get id from param, if there is nothing then throw to 404
 		$id = $this->request->param('key');
-		if (!$id) throw HTTP_Exception::factory(404);
+		if (!$id)
+			throw HTTP_Exception::factory(404);
 
 		// Get email, if there is nothing then throw to 404
 		$email = Tbl::factory('emails')->get($id);
-		if (!$email) throw HTTP_Exception::factory(404);
+		if (!$email)
+			throw HTTP_Exception::factory(404);
 
 		// Database transaction start
 		Database::instance()->begin();
@@ -827,24 +741,24 @@ content：{{return}}
 			 */
 			// used by email
 			$used_rule_ids = Tbl::factory('email_rules')
-				->where('email_id', '=', $email->id)
-				->read()
-				->as_array(NULL, 'id');
+					->where('email_id', '=', $email->id)
+					->read()
+					->as_array(NULL, 'id');
 
 			if ($used_rule_ids)
 			{
 				foreach ($used_rule_ids as $used_rule_id)
 				{
 					Tbl::factory('email_rules')
-						->get($used_rule_id)
-						->delete();
+							->get($used_rule_id)
+							->delete();
 				}
 			}
 
 			// Delete file
-			Cms_Helper::delete_file($email->segment, "{$this->settings->front_tpl_dir}/email");
-			Cms_Helper::delete_file($email->segment, "{$this->settings->front_tpl_dir}/email/confirm");
-			Cms_Helper::delete_file($email->segment, "{$this->settings->front_tpl_dir}/email/receive");
+			Cms_Helper::delete_file($email->segment, $this->settings->front_tpl_dir . $this->settings->front_theme . '/email');
+			Cms_Helper::delete_file($email->segment, $this->settings->front_tpl_dir . $this->settings->front_theme . '/email/confirm');
+			Cms_Helper::delete_file($email->segment, $this->settings->front_tpl_dir . $this->settings->front_theme . '/email/receive');
 
 			// Delete
 			$email->delete();
@@ -876,7 +790,7 @@ content：{{return}}
 
 			// Add error notice
 			Notice::add(
-				Notice::ERROR//, $e->getMessage()
+					Notice::ERROR//, $e->getMessage()
 			);
 		}
 

@@ -497,9 +497,9 @@ class Kohana_Cms_Functions {
 		// </editor-fold>
 
 		/**
-		 * Pagenate：ページネートを作成、itemsをフィルター
+		 * Paginate：ページネートを作成、itemsをフィルター
 		 */
-		// <editor-fold defaultstate="collapsed" desc="Pagenate">
+		// <editor-fold defaultstate="collapsed" desc="Paginate">
 		if ($paginate)
 		{
 			// Paginate
@@ -586,11 +586,8 @@ class Kohana_Cms_Functions {
 		/**
 		 * Return get_oneの時は一個だけとる
 		 *
-		 * Todo:: これでOK?
-		 * 削除
 		 */
 		return $get_one == 1 ? reset($return->items) : $return;
-//		return $return;
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="削除">

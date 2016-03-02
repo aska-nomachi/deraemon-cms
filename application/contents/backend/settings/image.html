@@ -15,7 +15,7 @@
 	<section class="main_cont gla10 prlb3">
 
 		<!--Title-->
-		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">{{~__('settings')}} - {{~__('index')}}</h1>
+		<h1 class="ttl1 prl2 ptb1 mb3 nlr3 txr">{{~__('settings')}} - {{~__('image')}}</h1>
 		<!--/Title-->
 
 		<!--Notice-->
@@ -26,18 +26,21 @@
 		<form action="" method="POST">
 
 			<dl class="hor">
-				{{*settings : setting}}
-				<dt class="mb1">{{~__(setting.name)}}</dt>
+				{{*settings: setting}}
+				<dt class="mb1">{{~__(setting.name)}}<br />{{setting.key}}</dt>
 				<dd class="mb1">
-					<textarea class="frm sma" name="{{setting.key}}" placeholder="{{setting.segment}}...">{{setting.value}}</textarea>
+					{{~type = is(setting.type, '==', 'text')}}
+					{{#type}}
+					<input class="frm" type="text" name="{{setting.key}}" value="{{setting.value}}" placeholder="{{~__(setting.name)}}...">
+					{{/#}}
 				</dd>
 				{{/*}}
 			</dl>
 
-			<div class="txr"><button class="btn blue" type="submit" name=""><i class="fa fa-refresh"></i> {{~__('update')}}</button></div>
+			<div class="txr"><button class="btn blue" type="submit" name="update" value="1"><i class="fa fa-refresh"></i> {{~__('update')}}</button></div>
 
 		</form>
-		<!--Update-->
+		<!--/Update-->
 
 	</section>
 	<!--/.main_cont-->

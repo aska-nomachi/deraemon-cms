@@ -45,10 +45,10 @@ class Controller_Backend_Wrappers extends Controller_Backend_Template {
 			{
 				// Create
 				$warapper = Tbl::factory('wrappers')
-					->create($this->request->post());
+						->create($this->request->post());
 
 				// Create file
-				Cms_Helper::set_file("wrapper/{$warapper->segment}", $this->settings->front_tpl_dir, '{{>division_content}}');
+				Cms_Helper::set_file("wrapper/{$warapper->segment}", $this->settings->front_tpl_dir . $this->settings->front_theme, '{{>division_content}}');
 
 				// Database commit
 				Database::instance()->commit();
@@ -78,15 +78,15 @@ class Controller_Backend_Wrappers extends Controller_Backend_Template {
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage().'|'.$e->getFile().'|'.$e->getLine()
+						Notice::ERROR, $e->getMessage() . '|' . $e->getFile() . '|' . $e->getLine()
 				);
 			}
 		}
 
 		// Get wrappers
 		$wrappers = Tbl::factory('wrappers')
-			->read()
-			->as_array();
+				->read()
+				->as_array();
 
 		foreach ($wrappers as $wrapper)
 		{
@@ -96,11 +96,11 @@ class Controller_Backend_Wrappers extends Controller_Backend_Template {
 		/**
 		 * View
 		 */
-		$content_file = Tpl::get_file('index', $this->settings->back_tpl_dir.'/wrappers', $this->partials);
+		$content_file = Tpl::get_file('index', $this->settings->back_tpl_dir . '/wrappers', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('wrappers', $wrappers)
-			->set('post', $this->request->post());
+				->set('wrappers', $wrappers)
+				->set('post', $this->request->post());
 	}
 
 	/**
@@ -110,16 +110,18 @@ class Controller_Backend_Wrappers extends Controller_Backend_Template {
 	{
 		// Get id from param, if there is nothing then throw to 404
 		$id = $this->request->param('key');
-		if (!$id) throw HTTP_Exception::factory(404);
+		if (!$id)
+			throw HTTP_Exception::factory(404);
 
 		// Get wrapper, if there is nothing then throw to 404
 		$wrapper = Tbl::factory('wrappers')
-			->where('id', '=', $id)
-			->read(1);
-		if (!$wrapper) throw HTTP_Exception::factory(404);
+				->where('id', '=', $id)
+				->read(1);
+		if (!$wrapper)
+			throw HTTP_Exception::factory(404);
 
 		// Get content from file and direct set to wrppaer
-		$wrapper->content = Tpl::get_file($wrapper->segment, $this->settings->front_tpl_dir.'/wrapper');
+		$wrapper->content = Tpl::get_file($wrapper->segment, $this->settings->front_tpl_dir . $this->settings->front_theme . '/wrapper');
 		$wrapper->delete_url = URL::site("{$this->settings->backend_name}/wrappers/delete/{$wrapper->id}", 'http');
 
 		// Save present segment
@@ -142,21 +144,21 @@ class Controller_Backend_Wrappers extends Controller_Backend_Template {
 			{
 				// Update
 				Tbl::factory('wrappers')
-					->get($wrapper->id)
-					->update(array(
-						'segment' => $this->request->post('segment'),
-						'name' => $this->request->post('name'),
-						'content_type' => $this->request->post('content_type'),
+						->get($wrapper->id)
+						->update(array(
+							'segment' => $this->request->post('segment'),
+							'name' => $this->request->post('name'),
+							'content_type' => $this->request->post('content_type'),
 				));
 
 				// New file
 				$newfile = "wrapper/{$wrapper->segment}";
 
 				// rename file
-				Cms_Helper::rename_file($oldfile, $newfile, $this->settings->front_tpl_dir);
+				Cms_Helper::rename_file($oldfile, $newfile, $this->settings->front_tpl_dir . $this->settings->front_theme);
 
 				// Update file
-				Cms_Helper::set_file($newfile, $this->settings->front_tpl_dir, $this->request->post('content'));
+				Cms_Helper::set_file($newfile, $this->settings->front_tpl_dir . $this->settings->front_theme, $this->request->post('content'));
 
 				// Database commit
 				Database::instance()->commit();
@@ -183,7 +185,7 @@ class Controller_Backend_Wrappers extends Controller_Backend_Template {
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
@@ -191,10 +193,10 @@ class Controller_Backend_Wrappers extends Controller_Backend_Template {
 		/**
 		 * View
 		 */
-		$content_file = Tpl::get_file('edit', $this->settings->back_tpl_dir.'/wrappers', $this->partials);
+		$content_file = Tpl::get_file('edit', $this->settings->back_tpl_dir . '/wrappers', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('wrapper', $wrapper);
+				->set('wrapper', $wrapper);
 	}
 
 	/**
@@ -207,11 +209,13 @@ class Controller_Backend_Wrappers extends Controller_Backend_Template {
 
 		// Get id from param, if there is nothing then throw to 404
 		$id = $this->request->param('key');
-		if (!$id) throw HTTP_Exception::factory(404);
+		if (!$id)
+			throw HTTP_Exception::factory(404);
 
 		// Get wrapper, if there is nothing then throw to 404
 		$wrapper = Tbl::factory('wrappers')->get($id);
-		if (!$wrapper) throw HTTP_Exception::factory(404);
+		if (!$wrapper)
+			throw HTTP_Exception::factory(404);
 
 		// Database transaction start
 		Database::instance()->begin();
@@ -224,19 +228,22 @@ class Controller_Backend_Wrappers extends Controller_Backend_Template {
 			 */
 			// used by divisions
 			$used_divisions = (bool) Tbl::factory('divisions')
-					->where('wrapper_id', '=', $wrapper->id)
-					->read()
-					->count();
+							->where('wrapper_id', '=', $wrapper->id)
+							->read()
+							->count();
 
 			// If this warpper is used by division
-			if ($used_divisions) throw new Warning_Exception(Kohana::message('general', 'wrapper_is_used'));
+			if ($used_divisions)
+			{
+				throw new Warning_Exception(Kohana::message('general', 'wrapper_is_used'));
+			}
 
 			/**
 			 * Delete
 			 */
 			// Delete file
 			$file = "wrapper/{$wrapper->segment}";
-			Cms_Helper::delete_file($file, $this->settings->front_tpl_dir);
+			Cms_Helper::delete_file($file, $this->settings->front_tpl_dir . $this->settings->front_theme);
 
 			// Delete
 			$wrapper->delete();

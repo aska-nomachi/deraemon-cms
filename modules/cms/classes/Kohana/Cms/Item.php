@@ -15,15 +15,15 @@ class Kohana_Cms_Item {
 		// Get settings
 		$settings = Cms_Helper::settings();
 
-		$wrapper_file_path = Kohana::find_file($settings->front_tpl_dir . '/wrapper', $item->wrapper->segment, 'html');
+		$wrapper_file_path = Kohana::find_file($settings->front_tpl_dir . $settings->front_theme . '/wrapper', $item->wrapper->segment, 'html');
 		$wrapper_content = file_get_contents($wrapper_file_path);
 
-		$division_file_path = Kohana::find_file($settings->front_tpl_dir . '/division', $item->division->segment, 'html');
+		$division_file_path = Kohana::find_file($settings->front_tpl_dir . $settings->front_theme . '/division', $item->division->segment, 'html');
 		$division_content = file_get_contents($division_file_path);
 
 		$wd = str_replace('{{>division_content}}', $division_content, $wrapper_content);
 
-		$shape_file_path = Kohana::find_file($settings->front_tpl_dir . '/shape', $item->shape_segment, 'html');
+		$shape_file_path = Kohana::find_file($settings->front_tpl_dir . $settings->front_theme . '/shape', $item->shape_segment, 'html');
 		$shape_content = $shape_file_path ? file_get_contents($shape_file_path) : '{{>item_content}}';
 
 		$wds = str_replace('{{>shape_content}}', $shape_content, $wd);
@@ -38,7 +38,7 @@ class Kohana_Cms_Item {
 		preg_match_all("/{{>(.[^{}]*)}}/", $wdsi, $replacements, PREG_SET_ORDER);
 
 		// First replace part
-		$part_dir = new DirectoryIterator(APPPATH . $settings->front_tpl_dir . '/part');
+		$part_dir = new DirectoryIterator(APPPATH . $settings->front_tpl_dir . $settings->front_theme . '/part');
 		$part_list = array();
 		foreach ($part_dir as $file)
 		{
@@ -53,7 +53,7 @@ class Kohana_Cms_Item {
 		{
 			if (in_array(end($replacement), $part_list))
 			{
-				$part_file_path = Kohana::find_file($settings->front_tpl_dir . '/part', end($replacement), 'html');
+				$part_file_path = Kohana::find_file($settings->front_tpl_dir . $settings->front_theme . '/part', end($replacement), 'html');
 
 				if ($part_file_path)
 				{
@@ -74,7 +74,7 @@ class Kohana_Cms_Item {
 
 			if (count($replacement_segment) >= 2)
 			{
-				$other_file_path = Kohana::find_file($settings->front_tpl_dir . '/' . reset($replacement_segment), end($replacement_segment), 'html');
+				$other_file_path = Kohana::find_file($settings->front_tpl_dir . $settings->front_theme . '/' . reset($replacement_segment), end($replacement_segment), 'html');
 
 				if ($other_file_path)
 				{
@@ -322,7 +322,7 @@ class Kohana_Cms_Item {
 				);
 
 				// Get message and clean return
-				$activate_content = preg_replace('/(\r\n|\n|\r)/', '', Tpl::get_file('activate_mail', $settings->front_tpl_dir . '/author'));
+				$activate_content = preg_replace('/(\r\n|\n|\r)/', '', Tpl::get_file('activate_mail', $settings->front_tpl_dir . $settings->front_theme . '/author'));
 
 				$activate_message = Tpl::factory($activate_content)
 						->set('username', $username)
@@ -584,7 +584,7 @@ class Kohana_Cms_Item {
 			$reset_key = '?reset_key=' . urlencode(Encrypt::instance()->encode($reset_key . $delimiter . $user->email));
 
 			// Get message and clean return
-			$reset_content = preg_replace('/(\r\n|\n|\r)/', '', Tpl::get_file('reset_mail', $settings->front_tpl_dir . '/author'));
+			$reset_content = preg_replace('/(\r\n|\n|\r)/', '', Tpl::get_file('reset_mail', $settings->front_tpl_dir . $settings->front_theme . '/author'));
 
 			$reset_message = Tpl::factory($reset_content)
 					->set('user', $user)
@@ -1563,7 +1563,7 @@ class Kohana_Cms_Item {
 			$receive_subject = $receive_subject_factory->render();
 
 			// Get confirm message and clean return 改行は{{return}}でコントロールするためリターンを削除
-			$receive_message_string = preg_replace('/(\r\n|\n|\r)/', '', Tpl::get_file($email->segment, $settings->front_tpl_dir . '/email/receive'));
+			$receive_message_string = preg_replace('/(\r\n|\n|\r)/', '', Tpl::get_file($email->segment, $settings->front_tpl_dir . $settings->front_theme . '/email/receive'));
 
 			// Get receive content ここでpostの値をpost名で使えるようにする。
 			$receive_content_factory = Tpl::factory($receive_message_string);
@@ -1613,7 +1613,7 @@ class Kohana_Cms_Item {
 				$confirm_subject = $confirm_subject_factory->render();
 
 				// Get confirm message and clean return
-				$confirm_message_string = preg_replace('/(\r\n|\n|\r)/', '', Tpl::get_file($email->segment, $settings->front_tpl_dir . '/email/confirm'));
+				$confirm_message_string = preg_replace('/(\r\n|\n|\r)/', '', Tpl::get_file($email->segment, $settings->front_tpl_dir . $settings->front_theme . '/email/confirm'));
 
 				// Get confirm content ここでpostの値をpost名で使えるようにする。
 				$confirm_content_factory = Tpl::factory($confirm_message_string);
@@ -1810,7 +1810,7 @@ class Kohana_Cms_Item {
 	 * @return object
 	 * 					query
 	 * 					total
-	 * 					pagenate
+	 * 					paginate
 	 * 					items
 	 *
 	 * <form action="{{host}}test_search" method="GET">
@@ -1852,7 +1852,7 @@ class Kohana_Cms_Item {
 		// kohanaのqueryだけどgetに入れる
 		$result->get = $get;
 		$result->total = NULL;
-		$result->pagenate = NULL;
+		$result->paginate = NULL;
 		$result->items = NULL;
 
 		// パラメータを準備
@@ -2024,14 +2024,14 @@ class Kohana_Cms_Item {
 
 			// Paginate resultに入れる
 			//items_per_pageとfollow(前後のリンクの数)もgetでおくる
-			$result->pagenate = Pgn::factory(array(
+			$result->paginate = Pgn::factory(array(
 						'total_items' => $result->total,
 						'items_per_page' => $items_per_page,
 						'follow' => $follow,
 			));
 
 			// Paginated items resultに入れる
-			$result->items = array_slice($items, $result->pagenate->offset, $result->pagenate->items_per_page);
+			$result->items = array_slice($items, $result->paginate->offset, $result->paginate->items_per_page);
 		}
 		else
 		{

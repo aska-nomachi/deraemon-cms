@@ -281,17 +281,17 @@ class Controller_Backend_Users extends Controller_Backend_Template {
 		array_multisort($key_id, $sort, $all_users);
 
 		/*
-		 * Pagenate
+		 * Paginate
 		 */
-		// <editor-fold defaultstate="collapsed" desc="Pagenate">
-		$pagenate = Pgn::factory(array(
+		// <editor-fold defaultstate="collapsed" desc="Paginate">
+		$paginate = Pgn::factory(array(
 				'total_items' => count($all_users),
-				'items_per_page' => $this->settings->pagenate_items_per_page_for_users,
-				'follow' => $this->settings->pagenate_items_follow_for_users,
+				'items_per_page' => $this->settings->paginate_items_per_page_for_users,
+				'follow' => $this->settings->paginate_items_follow_for_users,
 		));
 
 		// Paginated items
-		$users = array_slice($all_users, $pagenate->offset, $pagenate->items_per_page);
+		$users = array_slice($all_users, $paginate->offset, $paginate->items_per_page);
 		// </editor-fold>
 		// add edit
 		foreach ($users as $user)
@@ -373,14 +373,14 @@ class Controller_Backend_Users extends Controller_Backend_Template {
 			$this->local_menus['index']
 		);
 
-		$this->partials['pagenate'] = Tpl::get_file('pagenate', $this->settings->back_tpl_dir);
+		$this->partials['paginate'] = Tpl::get_file('paginate', $this->settings->back_tpl_dir);
 
 		$content_file = Tpl::get_file('index', $this->settings->back_tpl_dir.'/users', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
 			->set('columns', $columns)
 			->set('users', $users)
-			->set('pagenate', $pagenate)
+			->set('paginate', $paginate)
 			->set('create', $create);
 		// </editor-fold>
 	}

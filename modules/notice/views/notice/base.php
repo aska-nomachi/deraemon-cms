@@ -7,21 +7,21 @@
 				<?php foreach ($notification as $notice): ?>
 					<div class="<?php echo $type ?>">
 						<div class="inner">
-							<h6><?php echo __(UTF8::ucfirst($type)) ?></h6>
+							<h6><?php echo __(UTF8::ucfirst($type)); ?></h6>
 
 							<?php if ($notice['message'] !== NULL): ?>
-								<p><?php echo $notice['message'] ?></p>
+								<p><?php echo __($notice['message']); ?></p>
 							<?php endif; ?>
 
 							<?php if (!empty($notice['items'])): ?>
 								<ul>
 									<?php foreach ($notice['items'] as $item): ?>
-										<li><?php echo __($item) ?></li>
+										<li><?php echo __($item); ?></li>
 									<?php endforeach; ?>
 								</ul>
 							<?php endif; ?>
 
-								<div class="close"><i class="ico_times-circle"></i></div>
+								<div class="close"><i class="fa fa-times"></i></div>
 						</div>
 					</div>
 				<?php endforeach; ?>

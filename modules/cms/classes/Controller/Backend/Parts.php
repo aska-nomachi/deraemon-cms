@@ -11,12 +11,12 @@ class Controller_Backend_Parts extends Controller_Backend_Template {
 	{
 		parent::before();
 
-		// Local menus
+// Local menus
 		$this->local_menus = array(
 			'index' => array('name' => 'index', 'url' => URL::site("{$this->settings->backend_name}/parts", 'http')),
 		);
 
-		// local menus set current
+// local menus set current
 		foreach ($this->local_menus as $key => &$value)
 		{
 			if ($key == strtolower($this->request->action()))
@@ -25,7 +25,7 @@ class Controller_Backend_Parts extends Controller_Backend_Template {
 			}
 		}
 
-		// Set partial
+// Set partial
 		$this->partials['local_menu'] = Tpl::get_file('local_menu', $this->settings->back_tpl_dir);
 	}
 
@@ -34,45 +34,46 @@ class Controller_Backend_Parts extends Controller_Backend_Template {
 	 */
 	public function action_index()
 	{
-		// If there are post
+// If there are post
 		if ($this->request->post())
 		{
-			// Try
+// Try
 			try
 			{
-				// Validation
+// Validation
 				$validation = Validation::factory($this->request->post())
-					// rule
-					->rule('segment', 'not_empty')
-					->rule('segment', 'max_length', array(':value', '200'))
-					->rule('segment', 'regex', array(':value', '/^[a-z0-9_]+$/'))
-					->rule('segment', function(Validation $array, $field, $value) {
-						$segments = array_keys((array) Cms_Helper::get_dirfiles('part', $this->settings->front_tpl_dir));
-
-						if (in_array($value, $segments))
+// rule
+						->rule('segment', 'not_empty')
+						->rule('segment', 'max_length', array(':value', '200'))
+						->rule('segment', 'regex', array(':value', '/^[a-z0-9_]+$/'))
+						->rule('segment', function(Validation $array, $field, $value)
 						{
-							$array->error($field, 'uniquely');
+							$segments = array_keys((array) Cms_Helper::get_dirfiles('part', $this->settings->front_tpl_dir . $this->settings->front_theme));
+
+							if (in_array($value, $segments))
+							{
+								$array->error($field, 'uniquely');
+							}
 						}
-					 }
-						, array(':validation', ':field', ':value')
-					)
-					// Lavel
-					->label('segment', __('Segment'))
+								, array(':validation', ':field', ':value')
+						)
+// Lavel
+						->label('segment', __('Segment'))
 				;
 
-				// Check validation
+// Check validation
 				if (!$validation->check())
 				{
 					throw new Validation_Exception($validation);
 				}
 
-				// Create file
-				Cms_Helper::set_file($this->request->post('segment'), $this->settings->front_tpl_dir.'/part', 'part');
+// Create file
+				Cms_Helper::set_file($this->request->post('segment'), $this->settings->front_tpl_dir . $this->settings->front_theme . '/part', 'part');
 
-				// Clear post
+// Clear post
 				$this->request->post(array());
 
-				// Add success notice
+// Add success notice
 				Notice::add(Notice::SUCCESS, Kohana::message('general', 'create_success'));
 			}
 			catch (HTTP_Exception_302 $e)
@@ -81,20 +82,20 @@ class Controller_Backend_Parts extends Controller_Backend_Template {
 			}
 			catch (Validation_Exception $e)
 			{
-				// Add validation notice
+// Add validation notice
 				Notice::add(Notice::VALIDATION, Kohana::message('general', 'create_failed'), NULL, $e->errors('validation'));
 			}
 			catch (Exception $e)
 			{
-				// Add error notice
+// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
 
-		// Get parts フォルダから取得
-		$parts = Cms_Helper::get_dirfiles('part', $this->settings->front_tpl_dir);
+// Get parts フォルダから取得
+		$parts = Cms_Helper::get_dirfiles('part', $this->settings->front_tpl_dir . $this->settings->front_theme);
 
 		foreach ($parts as $part)
 		{
@@ -104,11 +105,11 @@ class Controller_Backend_Parts extends Controller_Backend_Template {
 		/**
 		 * View
 		 */
-		$content_file = Tpl::get_file('index', $this->settings->back_tpl_dir.'/parts', $this->partials);
+		$content_file = Tpl::get_file('index', $this->settings->back_tpl_dir . '/parts', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('parts', $parts)
-			->set('post', $this->request->post());
+				->set('parts', $parts)
+				->set('post', $this->request->post());
 	}
 
 	/**
@@ -116,72 +117,75 @@ class Controller_Backend_Parts extends Controller_Backend_Template {
 	 */
 	public function action_edit()
 	{
-		// Get id from param, if there is nothing then throw to 404
+// Get id from param, if there is nothing then throw to 404
 		$segment = strtolower($this->request->param('key'));
-		if (!$segment) throw HTTP_Exception::factory(404);
+		if (!$segment)
+			throw HTTP_Exception::factory(404);
 
-		// Make part and get content from file and direct set to part
+// Make part and get content from file and direct set to part
 		$part = new stdClass;
 		$part->segment = strtolower($segment);
-		$part->content = Tpl::get_file($segment, $this->settings->front_tpl_dir.'/part');
+		$part->content = Tpl::get_file($segment, $this->settings->front_tpl_dir . $this->settings->front_theme . '/part');
 
-		// If there is nothing then throw to 404
-		if ($part->content === FALSE) throw HTTP_Exception::factory(404);
+// If there is nothing then throw to 404
+		if ($part->content === FALSE)
+			throw HTTP_Exception::factory(404);
 
-		// Set delete url
+// Set delete url
 		$part->delete_url = URL::site("{$this->settings->backend_name}/parts/delete/{$part->segment}", 'http');
 
-		// Save present segment
+// Save present segment
 		$oldname = $part->segment;
 
-		// If there are post
+// If there are post
 		if ($this->request->post())
 		{
-			// Try
+// Try
 			try
 			{
-				// Validation
+// Validation
 				$validation = Validation::factory($this->request->post())
-					// rule
-					->rule('segment', 'not_empty')
-					->rule('segment', 'max_length', array(':value', '200'))
-					->rule('segment', 'regex', array(':value', '/^[a-z0-9_]+$/'))
-					->rule('segment', function(Validation $array, $field, $value, $present_segment) {
-						$segments = array_keys((array) Cms_Helper::get_dirfiles('part', $this->settings->front_tpl_dir));
-
-						if (in_array($value, $segments))
+// rule
+						->rule('segment', 'not_empty')
+						->rule('segment', 'max_length', array(':value', '200'))
+						->rule('segment', 'regex', array(':value', '/^[a-z0-9_]+$/'))
+						->rule('segment', function(Validation $array, $field, $value, $present_segment)
 						{
-							if ($value !== $present_segment)
+							$segments = array_keys((array) Cms_Helper::get_dirfiles('part', $this->settings->front_tpl_dir . $this->settings->front_theme));
+
+							if (in_array($value, $segments))
 							{
-								$array->error($field, 'uniquely');
+								if ($value !== $present_segment)
+								{
+									$array->error($field, 'uniquely');
+								}
 							}
 						}
-					 }
-						, array(':validation', ':field', ':value', $part->segment)
-					)
-					// Lavel
-					->label('segment', __('Segment'))
+								, array(':validation', ':field', ':value', $part->segment)
+						)
+// Lavel
+						->label('segment', __('Segment'))
 				;
 
-				// Check validation
+// Check validation
 				if (!$validation->check())
 				{
 					throw new Validation_Exception($validation);
 				}
 
-				// new name
+// new name
 				$newname = $this->request->post('segment');
 
-				// Update file これが先じゃないとダメ
-				Cms_Helper::set_file($oldname, "{$this->settings->front_tpl_dir}/part", $this->request->post('content'));
+// Update file これが先じゃないとダメ
+				Cms_Helper::set_file($oldname, $this->settings->front_tpl_dir . $this->settings->front_theme . '/part', $this->request->post('content'));
 
-				// rename file
-				Cms_Helper::rename_file($oldname, $newname, "{$this->settings->front_tpl_dir}/part");
+// rename file
+				Cms_Helper::rename_file($oldname, $newname, $this->settings->front_tpl_dir . $this->settings->front_theme . '/part');
 
-				// Add success notice
+// Add success notice
 				Notice::add(Notice::SUCCESS, Kohana::message('general', 'update_success'));
 
-				// Redirect
+// Redirect
 				$this->redirect("{$this->settings->backend_name}/parts/edit/{$newname}");
 			}
 			catch (HTTP_Exception_302 $e)
@@ -190,14 +194,14 @@ class Controller_Backend_Parts extends Controller_Backend_Template {
 			}
 			catch (Validation_Exception $e)
 			{
-				// Add validation notice
+// Add validation notice
 				Notice::add(Notice::VALIDATION, Kohana::message('general', 'update_failed'), NULL, $e->errors('validation'));
 			}
 			catch (Exception $e)
 			{
-				// Add error notice
+// Add error notice
 				Notice::add(
-					Notice::ERROR//, $e->getMessage()
+						Notice::ERROR//, $e->getMessage()
 				);
 			}
 		}
@@ -205,10 +209,10 @@ class Controller_Backend_Parts extends Controller_Backend_Template {
 		/**
 		 * View
 		 */
-		$content_file = Tpl::get_file('edit', $this->settings->back_tpl_dir.'/parts', $this->partials);
+		$content_file = Tpl::get_file('edit', $this->settings->back_tpl_dir . '/parts', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('part', $part);
+				->set('part', $part);
 	}
 
 	/**
@@ -216,29 +220,31 @@ class Controller_Backend_Parts extends Controller_Backend_Template {
 	 */
 	public function action_delete()
 	{
-		// Auto render off
+// Auto render off
 		$this->auto_render = FALSE;
 
-		// Get id from param, if there is nothing then throw to 404
+// Get id from param, if there is nothing then throw to 404
 		$segment = $this->request->param('key');
-		if (!$segment) throw HTTP_Exception::factory(404);
+		if (!$segment)
+			throw HTTP_Exception::factory(404);
 
-		// Make part and get content from file and direct set to part
+// Make part and get content from file and direct set to part
 		$part = new stdClass;
 		$part->segment = $segment;
-		$part->content = Tpl::get_file($segment, $this->settings->front_tpl_dir.'/part');
+		$part->content = Tpl::get_file($segment, $this->settings->front_tpl_dir . $this->settings->front_theme . '/part');
 
-		// If there is nothing then throw to 404
-		if ($part->content === FALSE) throw HTTP_Exception::factory(404);
+// If there is nothing then throw to 404
+		if ($part->content === FALSE)
+			throw HTTP_Exception::factory(404);
 
-		// Try
+// Try
 		try
 		{
 			/**
 			 * Delete
 			 */
-			// Delete file
-			Cms_Helper::delete_file($part->segment, "{$this->settings->front_tpl_dir}/part");
+// Delete file
+			Cms_Helper::delete_file($part->segment, $this->settings->front_tpl_dir . $this->settings->front_theme . '/part');
 
 			// Add success notice
 			Notice::add(Notice::SUCCESS, Kohana::message('general', 'delete_success'));
@@ -258,7 +264,7 @@ class Controller_Backend_Parts extends Controller_Backend_Template {
 		{
 			// Add error notice
 			Notice::add(
-				Notice::ERROR//, $e->getMessage()
+					Notice::ERROR//, $e->getMessage()
 			);
 		}
 

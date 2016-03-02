@@ -51,7 +51,7 @@ class Controller_Backend_Errors extends Controller_Backend_Template
 	{
 		// Get content from file and direct set to _404
 		$_404 = new stdClass();
-		$_404->content = Tpl::get_file('404', $this->settings->front_tpl_dir . '/error');
+		$_404->content = Tpl::get_file('404', $this->settings->front_tpl_dir . $this->settings->front_theme . '/error');
 
 		// If there are post
 		if ($this->request->post())
@@ -66,7 +66,7 @@ class Controller_Backend_Errors extends Controller_Backend_Template
 			try
 			{
 				// Update file
-				Cms_Helper::set_file("404", $this->settings->front_tpl_dir . '/error', $this->request->post('content'));
+				Cms_Helper::set_file("404", $this->settings->front_tpl_dir . $this->settings->front_theme . '/error', $this->request->post('content'));
 
 				// Database commit
 				Database::instance()->commit();
@@ -114,7 +114,7 @@ class Controller_Backend_Errors extends Controller_Backend_Template
 	{
 		// Get content from file and direct set to _500
 		$_500 = new stdClass();
-		$_500->content = Tpl::get_file('500', $this->settings->front_tpl_dir . '/error');
+		$_500->content = Tpl::get_file('500', $this->settings->front_tpl_dir . $this->settings->front_theme . '/error');
 
 		// If there are post
 		if ($this->request->post())
@@ -129,7 +129,7 @@ class Controller_Backend_Errors extends Controller_Backend_Template
 			try
 			{
 				// Update file
-				Cms_Helper::set_file("500", $this->settings->front_tpl_dir . '/error', $this->request->post('content'));
+				Cms_Helper::set_file("500", $this->settings->front_tpl_dir . $this->settings->front_theme . '/error', $this->request->post('content'));
 
 				// Database commit
 				Database::instance()->commit();
@@ -177,7 +177,7 @@ class Controller_Backend_Errors extends Controller_Backend_Template
 	{
 		// Get content from file and direct set to _default
 		$_default = new stdClass();
-		$_default->content = Tpl::get_file('default', $this->settings->front_tpl_dir . '/error');
+		$_default->content = Tpl::get_file('default', $this->settings->front_tpl_dir . $this->settings->front_theme . '/error');
 
 		// If there are post
 		if ($this->request->post())
@@ -192,7 +192,7 @@ class Controller_Backend_Errors extends Controller_Backend_Template
 			try
 			{
 				// Update file
-				Cms_Helper::set_file("default", $this->settings->front_tpl_dir . '/error', $this->request->post('content'));
+				Cms_Helper::set_file("default", $this->settings->front_tpl_dir . $this->settings->front_theme . '/error', $this->request->post('content'));
 
 				// Database commit
 				Database::instance()->commit();

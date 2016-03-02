@@ -26,11 +26,11 @@
 {{% links = get_items(segment = [home])}}
 {{!~ debug(links.items.home)}}
 
-{{% archive = get_items(division = [page, new], order_column = id, order_direction = ASC, pagenate=true, items_per_page = 2, follow = 1)}}
+{{% archive = get_items(division = [page, new], order_column = id, order_direction = ASC, paginate=true, items_per_page = 2, follow = 1)}}
 
-<p>{{#archive.pagenate1}}page1{{/#}}</p>
-<p>{{#archive.pagenate2}}page2{{/#}}</p>
-<p>{{#archive.pagenate3}}page3{{/#}}</p>
+<p>{{#archive.paginate1}}page1{{/#}}</p>
+<p>{{#archive.paginate2}}page2{{/#}}</p>
+<p>{{#archive.paginate3}}page3{{/#}}</p>
 <p>{{archive.total}}</p>
 <ul>
 	{{*archive.items : result}}
@@ -41,30 +41,30 @@
 	{{/*}}
 </ul>
 
-{{#archive.pagenate : pagenate}}
-{{#pagenate.exist}}
+{{#archive.paginate : paginate}}
+{{#paginate.exist}}
 <p>
-	{{#pagenate.first_page : first_page}}
+	{{#paginate.first_page : first_page}}
 	{{#first_page.current}}<span>&Lt;</span>{{/#}}
 	{{^first_page.current}}<a href="{{first_page.url}}" title="{{first_page.index}}">&Lt;</a>{{/^}}
 	{{/#}}
 
-	{{#pagenate.prev_page : prev_page}}
+	{{#paginate.prev_page : prev_page}}
 	{{#prev_page.current}}<span>&lt;</span>{{/#}}
 	{{^prev_page.current}}<a href="{{prev_page.url}}" title="{{prev_page.index}}">&lt;</a>{{/^}}
 	{{/#}}
 
-	{{*pagenate.pages : page}}
+	{{*paginate.pages : page}}
 	{{#page.current}}<span>{{page.index}}</span>{{/#}}
 	{{^page.current}}<a href="{{page.url}}" title="{{page.index}}">{{page.index}}</a>{{/^}}
 	{{/*}}
 
-	{{#pagenate.next_page : next_page}}
+	{{#paginate.next_page : next_page}}
 	{{#next_page.current}}<span>&gt;</span>{{/#}}
 	{{^next_page.current}}<a href="{{next_page.url}}" title="{{next_page.index}}">&gt;</a>{{/^}}
 	{{/#}}
 
-	{{#pagenate.last_page : last_page}}
+	{{#paginate.last_page : last_page}}
 	{{#last_page.current}}<span>&Gt;</span>{{/#}}
 	{{^last_page.current}}<a href="{{last_page.url}}" title="{{last_page.index}}">&Gt;</a>{{/^}}
 	{{/#}}
@@ -72,14 +72,14 @@
 {{/#}}
 {{/#}}
 
-{{#archive.pagenate : pagenate}}
+{{#archive.paginate : paginate}}
 <p>
-	{{#pagenate.follow_pre}}...{{/#}}
-	{{*pagenate.follow_pages : page}}
+	{{#paginate.follow_pre}}...{{/#}}
+	{{*paginate.follow_pages : page}}
 	{{#page.current}}<span>{{page.index}}</span>{{/#}}
 	{{^page.current}}<a href="{{page.url}}" title="{{page.index}}">{{page.index}}</a>{{/^}}
 	{{/*}}
-	{{#pagenate.follow_suf}}...{{/#}}
+	{{#paginate.follow_suf}}...{{/#}}
 </p>
 {{/#}}
 

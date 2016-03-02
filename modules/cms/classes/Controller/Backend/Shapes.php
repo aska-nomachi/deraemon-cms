@@ -42,22 +42,23 @@ class Controller_Backend_Shapes extends Controller_Backend_Template {
 			{
 				// Validation
 				$validation = Validation::factory($this->request->post())
-					// rule
-					->rule('segment', 'not_empty')
-					->rule('segment', 'max_length', array(':value', '200'))
-					->rule('segment', 'regex', array(':value', '/^[a-z0-9_]+$/'))
-					->rule('segment', function(Validation $array, $field, $value) {
-						$segments = array_keys((array) Cms_Helper::get_dirfiles('shape', $this->settings->front_tpl_dir));
-
-						if (in_array($value, $segments))
+						// rule
+						->rule('segment', 'not_empty')
+						->rule('segment', 'max_length', array(':value', '200'))
+						->rule('segment', 'regex', array(':value', '/^[a-z0-9_]+$/'))
+						->rule('segment', function(Validation $array, $field, $value)
 						{
-							$array->error($field, 'uniquely');
+							$segments = array_keys((array) Cms_Helper::get_dirfiles('shape', $this->settings->front_tpl_dir . $this->settings->front_theme));
+
+							if (in_array($value, $segments))
+							{
+								$array->error($field, 'uniquely');
+							}
 						}
-					 }
-						, array(':validation', ':field', ':value')
-					)
-					// Lavel
-					->label('segment', __('Segment'))
+								, array(':validation', ':field', ':value')
+						)
+						// Lavel
+						->label('segment', __('Segment'))
 				;
 
 				// Check validation
@@ -67,7 +68,7 @@ class Controller_Backend_Shapes extends Controller_Backend_Template {
 				}
 
 				// Create file
-				Cms_Helper::set_file($this->request->post('segment'), $this->settings->front_tpl_dir.'/shape', 'shape');
+				Cms_Helper::set_file($this->request->post('segment'), $this->settings->front_tpl_dir . $this->settings->front_theme . '/shape', 'shape');
 
 				// Clear post
 				$this->request->post(array());
@@ -88,13 +89,13 @@ class Controller_Backend_Shapes extends Controller_Backend_Template {
 			{
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
 
 		// Get shape フォルダから取得
-		$shapes = Cms_Helper::get_dirfiles('shape', $this->settings->front_tpl_dir);
+		$shapes = Cms_Helper::get_dirfiles('shape', $this->settings->front_tpl_dir . $this->settings->front_theme);
 
 		foreach ($shapes as $shape)
 		{
@@ -104,11 +105,11 @@ class Controller_Backend_Shapes extends Controller_Backend_Template {
 		/**
 		 * View
 		 */
-		$content_file = Tpl::get_file('index', $this->settings->back_tpl_dir.'/shapes', $this->partials);
+		$content_file = Tpl::get_file('index', $this->settings->back_tpl_dir . '/shapes', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('shapes', $shapes)
-			->set('post', $this->request->post());
+				->set('shapes', $shapes)
+				->set('post', $this->request->post());
 	}
 
 	/**
@@ -118,15 +119,17 @@ class Controller_Backend_Shapes extends Controller_Backend_Template {
 	{
 		// Get id from param, if there is nothing then throw to 404
 		$segment = $this->request->param('key');
-		if (!$segment) throw HTTP_Exception::factory(404);
+		if (!$segment)
+			throw HTTP_Exception::factory(404);
 
 		// Make shape and get content from file and direct set to shape
 		$shape = new stdClass;
 		$shape->segment = strtolower($segment);
-		$shape->content = Tpl::get_file($shape->segment, $this->settings->front_tpl_dir.'/shape');
+		$shape->content = Tpl::get_file($shape->segment, $this->settings->front_tpl_dir . $this->settings->front_theme . '/shape');
 
 		// If there is nothing then throw to 404
-		if ($shape->content === FALSE) throw HTTP_Exception::factory(404);
+		if ($shape->content === FALSE)
+			throw HTTP_Exception::factory(404);
 
 		// Set delete url
 		$shape->delete_url = URL::site("{$this->settings->backend_name}/shapes/delete/{$shape->segment}", 'http');
@@ -142,25 +145,26 @@ class Controller_Backend_Shapes extends Controller_Backend_Template {
 			{
 				// Validation
 				$validation = Validation::factory($this->request->post())
-					// rule
-					->rule('segment', 'not_empty')
-					->rule('segment', 'max_length', array(':value', '200'))
-					->rule('segment', 'regex', array(':value', '/^[a-z0-9_]+$/'))
-					->rule('segment', function(Validation $array, $field, $value, $present_segment) {
-						$segments = array_keys((array) Cms_Helper::get_dirfiles('shape', $this->settings->front_tpl_dir));
-
-						if (in_array($value, $segments))
+						// rule
+						->rule('segment', 'not_empty')
+						->rule('segment', 'max_length', array(':value', '200'))
+						->rule('segment', 'regex', array(':value', '/^[a-z0-9_]+$/'))
+						->rule('segment', function(Validation $array, $field, $value, $present_segment)
 						{
-							if ($value !== $present_segment)
+							$segments = array_keys((array) Cms_Helper::get_dirfiles('shape', $this->settings->front_tpl_dir . $this->settings->front_theme));
+
+							if (in_array($value, $segments))
 							{
-								$array->error($field, 'uniquely');
+								if ($value !== $present_segment)
+								{
+									$array->error($field, 'uniquely');
+								}
 							}
 						}
-					 }
-						, array(':validation', ':field', ':value', $shape->segment)
-					)
-					// Lavel
-					->label('segment', __('Segment'))
+								, array(':validation', ':field', ':value', $shape->segment)
+						)
+						// Lavel
+						->label('segment', __('Segment'))
 				;
 
 				// Check validation
@@ -173,10 +177,10 @@ class Controller_Backend_Shapes extends Controller_Backend_Template {
 				$newname = $this->request->post('segment');
 
 				// Update file これが先じゃないとダメ
-				Cms_Helper::set_file($oldname, "{$this->settings->front_tpl_dir}/shape", $this->request->post('content'));
+				Cms_Helper::set_file($oldname, $this->settings->front_tpl_dir . $this->settings->front_theme . '/shape', $this->request->post('content'));
 
 				// rename file
-				Cms_Helper::rename_file($oldname, $newname, "{$this->settings->front_tpl_dir}/shape");
+				Cms_Helper::rename_file($oldname, $newname, $this->settings->front_tpl_dir . $this->settings->front_theme . '/shape');
 
 				// Add success notice
 				Notice::add(Notice::SUCCESS, Kohana::message('general', 'update_success'));
@@ -197,7 +201,7 @@ class Controller_Backend_Shapes extends Controller_Backend_Template {
 			{
 				// Add error notice
 				Notice::add(
-					Notice::ERROR//, $e->getMessage()
+						Notice::ERROR//, $e->getMessage()
 				);
 			}
 		}
@@ -205,10 +209,10 @@ class Controller_Backend_Shapes extends Controller_Backend_Template {
 		/**
 		 * View
 		 */
-		$content_file = Tpl::get_file('edit', $this->settings->back_tpl_dir.'/shapes', $this->partials);
+		$content_file = Tpl::get_file('edit', $this->settings->back_tpl_dir . '/shapes', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('shape', $shape);
+				->set('shape', $shape);
 	}
 
 	/**
@@ -221,15 +225,17 @@ class Controller_Backend_Shapes extends Controller_Backend_Template {
 
 		// Get id from param, if there is nothing then throw to 404
 		$segment = $this->request->param('key');
-		if (!$segment) throw HTTP_Exception::factory(404);
+		if (!$segment)
+			throw HTTP_Exception::factory(404);
 
 		// Make shape and get content from file and direct set to shape
 		$shape = new stdClass;
 		$shape->segment = $segment;
-		$shape->content = Tpl::get_file($segment, $this->settings->front_tpl_dir.'/shape');
+		$shape->content = Tpl::get_file($segment, $this->settings->front_tpl_dir . $this->settings->front_theme . '/shape');
 
 		// If there is nothing then throw to 404
-		if ($shape->content === FALSE) throw HTTP_Exception::factory(404);
+		if ($shape->content === FALSE)
+			throw HTTP_Exception::factory(404);
 
 		// Try
 		try
@@ -239,18 +245,19 @@ class Controller_Backend_Shapes extends Controller_Backend_Template {
 			 */
 			// used by items
 			$used_items = (bool) Tbl::factory('items')
-					->where('shape_segment', '=', $shape->segment)
-					->read()
-					->count();
+							->where('shape_segment', '=', $shape->segment)
+							->read()
+							->count();
 
 			// If this shape is used throw to warning
-			if ($used_items) throw new Warning_Exception(Kohana::message('general', 'shape_is_used'));
+			if ($used_items)
+				throw new Warning_Exception(Kohana::message('general', 'shape_is_used'));
 
 			/**
 			 * Delete
 			 */
 			// Delete file
-			Cms_Helper::delete_file($shape->segment, "{$this->settings->front_tpl_dir}/shape");
+			Cms_Helper::delete_file($shape->segment, $this->settings->front_tpl_dir . $this->settings->front_theme . '/shape');
 
 			// Add success notice
 			Notice::add(Notice::SUCCESS, Kohana::message('general', 'delete_success'));
@@ -275,7 +282,7 @@ class Controller_Backend_Shapes extends Controller_Backend_Template {
 		{
 			// Add error notice
 			Notice::add(
-				Notice::ERROR, $e->getMessage().' : '.$e->getFile().' : '.$e->getLine()
+					Notice::ERROR, $e->getMessage() . ' : ' . $e->getFile() . ' : ' . $e->getLine()
 			);
 		}
 

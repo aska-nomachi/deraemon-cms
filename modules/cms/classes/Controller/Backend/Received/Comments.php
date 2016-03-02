@@ -198,14 +198,14 @@ class Controller_Backend_Received_Comments extends Controller_Backend_Template {
 			->read()
 			->as_array();
 
-		$pagenate = Pgn::factory(array(
+		$paginate = Pgn::factory(array(
 				'total_items' => count($all_received_comments),
-				'items_per_page' => $this->settings->pagenate_items_per_page_for_received_comments,
-				'follow' => $this->settings->pagenate_items_follow_for_received_comments,
+				'items_per_page' => $this->settings->paginate_items_per_page_for_received_comments,
+				'follow' => $this->settings->paginate_items_follow_for_received_comments,
 		));
 
 		// Paginated items
-		$received_comments = array_slice($all_received_comments, $pagenate->offset, $pagenate->items_per_page);
+		$received_comments = array_slice($all_received_comments, $paginate->offset, $paginate->items_per_page);
 
 		foreach ($received_comments as $received_comment)
 		{
@@ -279,14 +279,14 @@ class Controller_Backend_Received_Comments extends Controller_Backend_Template {
 		 * View
 		 */
 		// <editor-fold defaultstate="collapsed" desc="View">
-		$this->partials['pagenate'] = Tpl::get_file('pagenate', $this->settings->back_tpl_dir);
+		$this->partials['paginate'] = Tpl::get_file('paginate', $this->settings->back_tpl_dir);
 
 		$content_file = Tpl::get_file('index', $this->settings->back_tpl_dir.'/received_comments', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
 			->set('columns', $columns)
 			->set('received_comments', $received_comments)
-			->set('pagenate', $pagenate)
+			->set('paginate', $paginate)
 			->set('post', $this->request->post());
 		// </editor-fold>
 	}

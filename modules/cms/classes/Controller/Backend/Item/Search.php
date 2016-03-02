@@ -238,15 +238,15 @@ class Controller_Backend_Item_Search extends Controller_Backend_Template {
 			->execute()
 			->as_array('segment');
 
-		// Pagenate
-		$pagenate = Pgn::factory(array(
+		// Paginate
+		$paginate = Pgn::factory(array(
 				'total_items' => count($all_items),
-				'items_per_page' => $this->settings->pagenate_items_per_page_for_items,
-				'follow' => $this->settings->pagenate_items_follow_for_items,
+				'items_per_page' => $this->settings->paginate_items_per_page_for_items,
+				'follow' => $this->settings->paginate_items_follow_for_items,
 		));
 
 		// Paginated items
-		$items = array_slice($all_items, $pagenate->offset, $pagenate->items_per_page);
+		$items = array_slice($all_items, $paginate->offset, $paginate->items_per_page);
 
 		foreach ($items as $item)
 		{
@@ -292,7 +292,7 @@ class Controller_Backend_Item_Search extends Controller_Backend_Template {
 		 * View
 		 */
 		// <editor-fold defaultstate="collapsed" desc="View">
-		$this->partials['pagenate'] = Tpl::get_file('pagenate', $this->settings->back_tpl_dir);
+		$this->partials['paginate'] = Tpl::get_file('paginate', $this->settings->back_tpl_dir);
 
 		$content_file = Tpl::get_file('index', $this->settings->back_tpl_dir.'/item_search', $this->partials);
 
@@ -302,7 +302,7 @@ class Controller_Backend_Item_Search extends Controller_Backend_Template {
 			->set('category_list', $category_list)
 			->set('tag_list', $tag_list)
 			->set('items', $items)
-			->set('pagenate', $pagenate)
+			->set('paginate', $paginate)
 			->set('get', $get);
 		// </editor-fold>
 	}

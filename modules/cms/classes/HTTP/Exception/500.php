@@ -23,7 +23,7 @@ class HTTP_Exception_500 extends Kohana_HTTP_Exception_500 {
 		else
 		{
 			// Get tpl directory
-			$front_tpl_dir = Cms_Helper::settings('front_tpl_dir');
+			$front_tpl_dir = Cms_Helper::settings('front_tpl_dir') . Cms_Helper::settings('front_theme');
 
 			// Get file
 			$content_file = Tpl::get_file($this->code, $front_tpl_dir.'/error');

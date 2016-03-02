@@ -24,7 +24,7 @@ class HTTP_Exception extends Kohana_HTTP_Exception {
 		{
 			// Generate a nicer looking "Oops" page.
 			// Get tpl directory
-			$front_tpl_dir = Cms_Helper::settings('front_tpl_dir');
+			$front_tpl_dir = Cms_Helper::settings('front_tpl_dir') . Cms_Helper::settings('front_theme');
 
 			// Get file
 			$content_file = Tpl::get_file('default', $front_tpl_dir.'/error');

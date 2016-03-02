@@ -158,14 +158,14 @@ class Controller_Backend_Received_Emails extends Controller_Backend_Template {
 			->read()
 			->as_array();
 
-		$pagenate = Pgn::factory(array(
+		$paginate = Pgn::factory(array(
 				'total_items' => count($all_received_emails),
-				'items_per_page' => $this->settings->pagenate_items_per_page_for_received_emails,
-				'follow' => $this->settings->pagenate_items_follow_for_received_emails,
+				'items_per_page' => $this->settings->paginate_items_per_page_for_received_emails,
+				'follow' => $this->settings->paginate_items_follow_for_received_emails,
 		));
 
 		// Paginated items
-		$received_emails = array_slice($all_received_emails, $pagenate->offset, $pagenate->items_per_page);
+		$received_emails = array_slice($all_received_emails, $paginate->offset, $paginate->items_per_page);
 
 		foreach ($received_emails as $received_email)
 		{
@@ -189,14 +189,14 @@ class Controller_Backend_Received_Emails extends Controller_Backend_Template {
 		 * View
 		 */
 		// <editor-fold defaultstate="collapsed" desc="View">
-		$this->partials['pagenate'] = Tpl::get_file('pagenate', $this->settings->back_tpl_dir);
+		$this->partials['paginate'] = Tpl::get_file('paginate', $this->settings->back_tpl_dir);
 
 		$content_file = Tpl::get_file('index', $this->settings->back_tpl_dir.'/received_emails', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
 		->set('columns', $columns)
 		->set('received_emails', $received_emails)
-		->set('pagenate', $pagenate)
+		->set('paginate', $paginate)
 		->set('post', $this->request->post());
 		// </editor-fold>
 	}

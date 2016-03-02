@@ -293,15 +293,15 @@ class Controller_Backend_Items extends Controller_Backend_Template {
 			$all_items = array();
 		}
 
-		// Pagenate
-		$pagenate = Pgn::factory(array(
+		// paginate
+		$paginate = Pgn::factory(array(
 				'total_items' => count($all_items),
-				'items_per_page' => $this->settings->pagenate_items_per_page_for_items,
-				'follow' => $this->settings->pagenate_items_follow_for_items,
+				'items_per_page' => $this->settings->paginate_items_per_page_for_items,
+				'follow' => $this->settings->paginate_items_follow_for_items,
 		));
 
 		// Paginated items
-		$items = array_slice($all_items, $pagenate->offset, $pagenate->items_per_page);
+		$items = array_slice($all_items, $paginate->offset, $paginate->items_per_page);
 
 		foreach ($items as $item)
 		{
@@ -418,7 +418,7 @@ class Controller_Backend_Items extends Controller_Backend_Template {
 		 * View
 		 */
 		// <editor-fold defaultstate="collapsed" desc="View">
-		$this->partials['pagenate'] = Tpl::get_file('pagenate', $this->settings->back_tpl_dir);
+		$this->partials['paginate'] = Tpl::get_file('paginate', $this->settings->back_tpl_dir);
 
 		$content_file = Tpl::get_file('index', $this->settings->back_tpl_dir.'/items', $this->partials);
 
@@ -427,7 +427,7 @@ class Controller_Backend_Items extends Controller_Backend_Template {
 			->set('columns', $columns)
 			->set('items', $items)
 			->set('create', $create)
-			->set('pagenate', $pagenate);
+			->set('paginate', $paginate);
 		// </editor-fold>
 	}
 
@@ -853,7 +853,7 @@ class Controller_Backend_Items extends Controller_Backend_Template {
 			->as_array();
 
 		// Get shapes
-		$shapes = Cms_Helper::get_dirfiles('shape', $this->settings->front_tpl_dir);
+		$shapes = Cms_Helper::get_dirfiles('shape', $this->settings->front_tpl_dir . $this->settings->front_theme);
 		// </editor-fold>
 
 		/**
@@ -1842,14 +1842,14 @@ class Controller_Backend_Items extends Controller_Backend_Template {
 			->read()
 			->as_array();
 
-		$pagenate = Pgn::factory(array(
+		$paginate = Pgn::factory(array(
 				'total_items' => count($all_received_comments),
-				'items_per_page' => $this->settings->pagenate_items_per_page_for_received_comments,
-				'follow' => $this->settings->pagenate_items_follow_for_received_comments,
+				'items_per_page' => $this->settings->paginate_items_per_page_for_received_comments,
+				'follow' => $this->settings->paginate_items_follow_for_received_comments,
 		));
 
 		// Paginated items
-		$received_comments = array_slice($all_received_comments, $pagenate->offset, $pagenate->items_per_page);
+		$received_comments = array_slice($all_received_comments, $paginate->offset, $paginate->items_per_page);
 
 		foreach ($received_comments as $received_comment)
 		{
@@ -1923,7 +1923,7 @@ class Controller_Backend_Items extends Controller_Backend_Template {
 		 */
 		// <editor-fold defaultstate="collapsed" desc="View">
 		$this->partials['local_menu'] = Tpl::get_file('local_menu', $this->settings->back_tpl_dir);
-		$this->partials['pagenate'] = Tpl::get_file('pagenate', $this->settings->back_tpl_dir);
+		$this->partials['paginate'] = Tpl::get_file('paginate', $this->settings->back_tpl_dir);
 
 		$content_file = Tpl::get_file('received_comments', $this->settings->back_tpl_dir.'/items', $this->partials);
 
@@ -1931,7 +1931,7 @@ class Controller_Backend_Items extends Controller_Backend_Template {
 			->set('item', $this->item)
 			->set('columns', $columns)
 			->set('received_comments', $received_comments)
-			->set('pagenate', $pagenate)
+			->set('paginate', $paginate)
 			->set('post', $this->request->post());
 		// </editor-fold>
 	}

@@ -45,7 +45,7 @@ class Controller_Backend_Search extends Controller_Backend_Template {
 	{
 		// Get form from file and direct set to search
 		$form = new stdClass();
-		$form->content = Tpl::get_file('form', $this->settings->front_tpl_dir.'/search');
+		$form->content = Tpl::get_file('form', $this->settings->front_tpl_dir . $this->settings->front_theme . '/search');
 
 		// If there are post
 		if ($this->request->post())
@@ -60,7 +60,7 @@ class Controller_Backend_Search extends Controller_Backend_Template {
 			try
 			{
 				// Update file
-				Cms_Helper::set_file("form", $this->settings->front_tpl_dir.'/search', $this->request->post('content'));
+				Cms_Helper::set_file("form", $this->settings->front_tpl_dir . $this->settings->front_theme . '/search', $this->request->post('content'));
 
 				// Database commit
 				Database::instance()->commit();
@@ -87,7 +87,7 @@ class Controller_Backend_Search extends Controller_Backend_Template {
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
@@ -95,10 +95,10 @@ class Controller_Backend_Search extends Controller_Backend_Template {
 		/**
 		 * View
 		 */
-		$content_file = Tpl::get_file('form', $this->settings->back_tpl_dir.'/search', $this->partials);
+		$content_file = Tpl::get_file('form', $this->settings->back_tpl_dir . '/search', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('form', $form);
+				->set('form', $form);
 	}
 
 	/**
@@ -108,7 +108,7 @@ class Controller_Backend_Search extends Controller_Backend_Template {
 	{
 		// Get result from file and direct set to search
 		$result = new stdClass();
-		$result->content = Tpl::get_file('result', $this->settings->front_tpl_dir.'/search');
+		$result->content = Tpl::get_file('result', $this->settings->front_tpl_dir . $this->settings->front_theme . '/search');
 
 		// If there are post
 		if ($this->request->post())
@@ -123,7 +123,7 @@ class Controller_Backend_Search extends Controller_Backend_Template {
 			try
 			{
 				// Update file
-				Cms_Helper::set_file("result", $this->settings->front_tpl_dir.'/search', $this->request->post('content'));
+				Cms_Helper::set_file("result", $this->settings->front_tpl_dir . $this->settings->front_theme . '/search', $this->request->post('content'));
 
 				// Database commit
 				Database::instance()->commit();
@@ -150,7 +150,7 @@ class Controller_Backend_Search extends Controller_Backend_Template {
 
 				// Add error notice
 				Notice::add(
-					Notice::ERROR, $e->getMessage()
+						Notice::ERROR, $e->getMessage()
 				);
 			}
 		}
@@ -158,10 +158,10 @@ class Controller_Backend_Search extends Controller_Backend_Template {
 		/**
 		 * View
 		 */
-		$content_file = Tpl::get_file('result', $this->settings->back_tpl_dir.'/search', $this->partials);
+		$content_file = Tpl::get_file('result', $this->settings->back_tpl_dir . '/search', $this->partials);
 
 		$this->content = Tpl::factory($content_file)
-			->set('result', $result);
+				->set('result', $result);
 	}
 
 	/**
@@ -170,7 +170,7 @@ class Controller_Backend_Search extends Controller_Backend_Template {
 	public function after()
 	{
 		$this->content
-			->set('local_menus', $this->local_menus);
+				->set('local_menus', $this->local_menus);
 
 		parent::after();
 	}
