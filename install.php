@@ -347,15 +347,17 @@ if (session('deraemon_step') == 2)
 	</body>
 </html>
 
-		<?php
+<?php
 
-		function post($key, $default = NULL)
-		{
-			return isset($_POST[$key]) ? $_POST[$key] : $default;
-		}
+function post($key, $default = NULL)
+{
+	$str = isset($_POST[$key]) ? $_POST[$key] : $default;
+	
+	return htmlspecialchars(strip_tags($str), ENT_QUOTES, 'UTF-8');
+}
 
-		function session($key, $default = NULL)
-		{
-			return isset($_SESSION[$key]) ? $_SESSION[$key] : $default;
-		}
-		?>
+function session($key, $default = NULL)
+{
+	return isset($_SESSION[$key]) ? $_SESSION[$key] : $default;
+}
+?>
